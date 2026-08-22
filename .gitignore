@@ -1,0 +1,21 @@
+# Python & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# PyInstaller & Build artifacts
+build/
+dist/
+dist_debian/
+dist_macos/
+nexus_1.0.0_all/
+nexus_1.0.0_all.deb
+*.spec
+*.exe
+
+# System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
