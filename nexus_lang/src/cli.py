@@ -5,8 +5,16 @@ import sys
 import os
 import argparse
 
-# Add parent directory to sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Resolve the directory that contains this file (i.e. nexus_lang/src/)
+_SRC_DIR = os.path.abspath(os.path.dirname(__file__))
+# Resolve nexus_lang/ (parent of src/)
+_NEXUS_LANG_DIR = os.path.abspath(os.path.join(_SRC_DIR, '..'))
+
+# Make sure both dirs are on the path so imports work regardless of cwd or
+# how the script is invoked (direct script vs. python -m module).
+for _p in (_NEXUS_LANG_DIR, _SRC_DIR):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
