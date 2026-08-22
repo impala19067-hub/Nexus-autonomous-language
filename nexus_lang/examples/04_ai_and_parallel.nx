@@ -1,0 +1,22 @@
+// 04_ai_and_parallel.nx - Parallel Concurrency & AI Autonomous Agent Tasks
+
+fn main() {
+    print("🤖 Demonstrating AI Agents & Parallel Execution in Nexus...");
+
+    // 1. First-Class AI Prompt & Summarization
+    let system_log = "ERROR [10:14:02] Database Connection Timeout on host db-1. \nWARN [10:14:05] High Memory load 94%. \nINFO [10:15:00] Backup started.";
+    let summary = ai.prompt("Summarize the critical issues in these logs: {system_log}");
+    print("AI Summary: {summary}");
+
+    // 2. Colorless Concurrency: Parallel Block Execution
+    print("⚡ Starting Parallel Async Tasks...");
+    parallel {
+        print("  -> Parallel Task 1: Fetching external server metrics...");
+        print("  -> Parallel Task 2: Compiling diagnostic telemetry...");
+        print("  -> Parallel Task 3: Verifying disk health index...");
+    }
+
+    print("✨ All parallel tasks completed concurrently!");
+}
+
+main();

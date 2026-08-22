@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+NEXUS_SHARE="/usr/share/nexus_lang"
+PYTHON_BIN="$(which python3 || which python)"
+
+if [ "$1" = "tutor" ]; then
+    exec "${PYTHON_BIN}" "${NEXUS_SHARE}/nexus_voice_tutor.py" "$@"
+elif [ "$1" = "studio" ] || [ "$1" = "ide" ]; then
+    exec "${PYTHON_BIN}" "${NEXUS_SHARE}/nexus_studio.py" "$@"
+else
+    exec "${PYTHON_BIN}" "${NEXUS_SHARE}/nexus_cli.py" "$@"
+fi

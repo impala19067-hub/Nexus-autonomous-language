@@ -1,0 +1,526 @@
+('C:\\Users\\Dhairya Gadhavi\\Documents\\Nexus\\build\\nexus\\nexus.pkg',
+ {'BINARY': True,
+  'DATA': True,
+  'EXECUTABLE': True,
+  'EXTENSION': True,
+  'PYMODULE': True,
+  'PYSOURCE': True,
+  'PYZ': False,
+  'SPLASH': True,
+  'SYMLINK': False},
+ [('pyi-contents-directory _internal', '', 'OPTION'),
+  ('PYZ-00.pyz',
+   'C:\\Users\\Dhairya Gadhavi\\Documents\\Nexus\\build\\nexus\\PYZ-00.pyz',
+   'PYZ'),
+  ('struct',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\build\\nexus\\localpycs\\struct.pyc',
+   'PYMODULE'),
+  ('pyimod01_archive',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\build\\nexus\\localpycs\\pyimod01_archive.pyc',
+   'PYMODULE'),
+  ('pyimod02_importers',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\build\\nexus\\localpycs\\pyimod02_importers.pyc',
+   'PYMODULE'),
+  ('pyimod03_ctypes',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\build\\nexus\\localpycs\\pyimod03_ctypes.pyc',
+   'PYMODULE'),
+  ('pyimod04_pywin32',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\build\\nexus\\localpycs\\pyimod04_pywin32.pyc',
+   'PYMODULE'),
+  ('pyiboot01_bootstrap',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
+   'PYSOURCE'),
+  ('pyi_rth_inspect',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
+   'PYSOURCE'),
+  ('pyi_rth_pkgutil',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgutil.py',
+   'PYSOURCE'),
+  ('pyi_rth_multiprocessing',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
+   'PYSOURCE'),
+  ('pyi_rth_setuptools',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_setuptools.py',
+   'PYSOURCE'),
+  ('nexus_cli',
+   'C:\\Users\\Dhairya Gadhavi\\Documents\\Nexus\\nexus_cli.py',
+   'PYSOURCE'),
+  ('python312.dll',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\python312.dll',
+   'BINARY'),
+  ('unicodedata.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\unicodedata.pyd',
+   'EXTENSION'),
+  ('_lzma.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_lzma.pyd',
+   'EXTENSION'),
+  ('_bz2.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_bz2.pyd',
+   'EXTENSION'),
+  ('_decimal.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_decimal.pyd',
+   'EXTENSION'),
+  ('_hashlib.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_hashlib.pyd',
+   'EXTENSION'),
+  ('select.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\select.pyd',
+   'EXTENSION'),
+  ('_socket.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_socket.pyd',
+   'EXTENSION'),
+  ('_overlapped.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_overlapped.pyd',
+   'EXTENSION'),
+  ('_ssl.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_ssl.pyd',
+   'EXTENSION'),
+  ('_queue.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_queue.pyd',
+   'EXTENSION'),
+  ('_multiprocessing.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_multiprocessing.pyd',
+   'EXTENSION'),
+  ('pyexpat.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\pyexpat.pyd',
+   'EXTENSION'),
+  ('_asyncio.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_asyncio.pyd',
+   'EXTENSION'),
+  ('_ctypes.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_ctypes.pyd',
+   'EXTENSION'),
+  ('win32\\win32evtlog.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\win32\\win32evtlog.pyd',
+   'EXTENSION'),
+  ('win32\\win32api.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\win32\\win32api.pyd',
+   'EXTENSION'),
+  ('ada92cb5d92a588d1b93__mypyc.cp312-win_amd64.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\ada92cb5d92a588d1b93__mypyc.cp312-win_amd64.pyd',
+   'EXTENSION'),
+  ('charset_normalizer\\cd.cp312-win_amd64.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\charset_normalizer\\cd.cp312-win_amd64.pyd',
+   'EXTENSION'),
+  ('charset_normalizer\\md.cp312-win_amd64.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\charset_normalizer\\md.cp312-win_amd64.pyd',
+   'EXTENSION'),
+  ('_wmi.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\_wmi.pyd',
+   'EXTENSION'),
+  ('psutil\\_psutil_windows.pyd',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\psutil\\_psutil_windows.pyd',
+   'EXTENSION'),
+  ('api-ms-win-crt-filesystem-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-conio-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-conio-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-locale-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-locale-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-environment-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-environment-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-string-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-string-l1-1-0.dll',
+   'BINARY'),
+  ('VCRUNTIME140.dll',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('api-ms-win-crt-runtime-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-math-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-math-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-process-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-process-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-convert-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-convert-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-time-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-time-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-stdio-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-heap-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-heap-l1-1-0.dll',
+   'BINARY'),
+  ('libcrypto-3.dll',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\libcrypto-3.dll',
+   'BINARY'),
+  ('libssl-3.dll',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\libssl-3.dll',
+   'BINARY'),
+  ('api-ms-win-crt-utility-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-crt-utility-l1-1-0.dll',
+   'BINARY'),
+  ('libffi-8.dll',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\DLLs\\libffi-8.dll',
+   'BINARY'),
+  ('VCRUNTIME140_1.dll',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('pywin32_system32\\pywintypes312.dll',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pywin32_system32\\pywintypes312.dll',
+   'BINARY'),
+  ('python3.dll',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\python3.dll',
+   'BINARY'),
+  ('ucrtbase.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\ucrtbase.dll',
+   'BINARY'),
+  ('api-ms-win-core-heap-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-heap-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-interlocked-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-interlocked-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processenvironment-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-profile-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-profile-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-fibers-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-fibers-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-2-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-file-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-fibers-l1-1-1.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-fibers-l1-1-1.dll',
+   'BINARY'),
+  ('api-ms-win-core-debug-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-debug-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-datetime-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-datetime-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-localization-l1-2-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-localization-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-memory-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-memory-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l2-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-file-l2-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-2-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-synch-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-string-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-string-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-namedpipe-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-file-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-handle-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-handle-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processthreads-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-sysinfo-l1-2-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-sysinfo-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-sysinfo-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processthreads-l1-1-1.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-processthreads-l1-1-1.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-synch-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-libraryloader-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-util-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-util-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-kernel32-legacy-l1-1-1.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-kernel32-legacy-l1-1-1.dll',
+   'BINARY'),
+  ('api-ms-win-core-timezone-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-timezone-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-console-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-console-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-errorhandling-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.12.101-hotspot\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',
+   'BINARY'),
+  ('nexus_lang\\Nexus_Language_Specification_and_Automation_Manual.pdf',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\Nexus_Language_Specification_and_Automation_Manual.pdf',
+   'DATA'),
+  ('nexus_lang\\examples\\01_basics.nx',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\examples\\01_basics.nx',
+   'DATA'),
+  ('nexus_lang\\examples\\02_pc_automation.nx',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\examples\\02_pc_automation.nx',
+   'DATA'),
+  ('nexus_lang\\examples\\03_pipelines_and_data.nx',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\examples\\03_pipelines_and_data.nx',
+   'DATA'),
+  ('nexus_lang\\examples\\04_ai_and_parallel.nx',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\examples\\04_ai_and_parallel.nx',
+   'DATA'),
+  ('nexus_lang\\examples\\05_full_pc_autobot.nx',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\examples\\05_full_pc_autobot.nx',
+   'DATA'),
+  ('nexus_lang\\generate_all_nexus_docs.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\generate_all_nexus_docs.py',
+   'DATA'),
+  ('nexus_lang\\generate_pdf_manual.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\generate_pdf_manual.py',
+   'DATA'),
+  ('nexus_lang\\src\\__pycache__\\ast_nodes.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\__pycache__\\ast_nodes.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\__pycache__\\cli.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\__pycache__\\cli.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\__pycache__\\environment.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\__pycache__\\environment.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\__pycache__\\interpreter.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\__pycache__\\interpreter.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\__pycache__\\lexer.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\__pycache__\\lexer.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\__pycache__\\parser.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\__pycache__\\parser.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\__pycache__\\tokens.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\__pycache__\\tokens.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\ast_nodes.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\ast_nodes.py',
+   'DATA'),
+  ('nexus_lang\\src\\cli.py',
+   'C:\\Users\\Dhairya Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\cli.py',
+   'DATA'),
+  ('nexus_lang\\src\\environment.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\environment.py',
+   'DATA'),
+  ('nexus_lang\\src\\interpreter.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\interpreter.py',
+   'DATA'),
+  ('nexus_lang\\src\\lexer.py',
+   'C:\\Users\\Dhairya Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\lexer.py',
+   'DATA'),
+  ('nexus_lang\\src\\parser.py',
+   'C:\\Users\\Dhairya Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\parser.py',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__init__.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__init__.py',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__pycache__\\__init__.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__pycache__\\__init__.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__pycache__\\ai_mod.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__pycache__\\ai_mod.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__pycache__\\data_mod.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__pycache__\\data_mod.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__pycache__\\fs_mod.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__pycache__\\fs_mod.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__pycache__\\gui_mod.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__pycache__\\gui_mod.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__pycache__\\http_mod.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__pycache__\\http_mod.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__pycache__\\os_mod.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__pycache__\\os_mod.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\__pycache__\\scheduler_mod.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\__pycache__\\scheduler_mod.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\ai_mod.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\ai_mod.py',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\data_mod.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\data_mod.py',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\fs_mod.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\fs_mod.py',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\gui_mod.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\gui_mod.py',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\http_mod.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\http_mod.py',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\os_mod.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\os_mod.py',
+   'DATA'),
+  ('nexus_lang\\src\\stdlib\\scheduler_mod.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\stdlib\\scheduler_mod.py',
+   'DATA'),
+  ('nexus_lang\\src\\tokens.py',
+   'C:\\Users\\Dhairya Gadhavi\\Documents\\Nexus\\nexus_lang\\src\\tokens.py',
+   'DATA'),
+  ('nexus_lang\\tests\\__pycache__\\test_nexus.cpython-312.pyc',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\tests\\__pycache__\\test_nexus.cpython-312.pyc',
+   'DATA'),
+  ('nexus_lang\\tests\\test_nexus.py',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\nexus_lang\\tests\\test_nexus.py',
+   'DATA'),
+  ('certifi\\cacert.pem',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\certifi\\cacert.pem',
+   'DATA'),
+  ('certifi\\py.typed',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\certifi\\py.typed',
+   'DATA'),
+  ('setuptools\\_vendor\\jaraco\\text\\Lorem ipsum.txt',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\setuptools\\_vendor\\jaraco\\text\\Lorem '
+   'ipsum.txt',
+   'DATA'),
+  ('base_library.zip',
+   'C:\\Users\\Dhairya '
+   'Gadhavi\\Documents\\Nexus\\build\\nexus\\base_library.zip',
+   'DATA')],
+ 'python312.dll',
+ False,
+ False,
+ False,
+ [],
+ None,
+ None,
+ None)
