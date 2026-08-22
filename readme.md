@@ -1,8 +1,8 @@
 # 🌌 Nexus Programming Language
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Platform: Windows | Linux | macOS](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6.svg)](README.md)
-[![Release: v1.0.0](https://img.shields.io/badge/Release-v1.0.0-green.svg)](https://github.com/nexus-lang/nexus/releases)
+![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+![Platform: Windows | Linux | macOS](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-0078D6.svg)
+![Release: v1.0.0](https://img.shields.io/badge/Release-v1.0.0-green.svg)
 
 **Nexus** is a cross-platform, autonomous-first programming language engineered for **PC Automation**, **Native AI Intelligence**, and **Colorless Parallel Concurrency**. Supports **Windows**, **Linux (Kali, Ubuntu, Debian, Arch)**, and **macOS**.
 
@@ -22,7 +22,7 @@
 ## 🚀 Installation Guide
 
 ### 🪟 Windows Setup
-Download **[`Nexus_Setup_Wizard.exe`](https://github.com/nexus-lang/nexus/releases)** from the Latest Release and double-click to install.
+Download **[Nexus_Setup_Wizard.exe](https://github.com/impala19067-hub/Nexus-autonomous-language/releases)** from the Latest Release and double-click to install.
 
 ### 🐧 Linux (Kali, Ubuntu, Debian, Arch) & 🍎 macOS Setup
 Open terminal in the project folder and run the automated bash installer:
