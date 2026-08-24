@@ -73,6 +73,48 @@ fn run_poly_benchmarks() {
 
 run_poly_benchmarks();"""
 
+SAMPLE_DISTRIBUTED_AI_CODE = """// 💎 Sapphire 5D Distributed LLM Training — 512x H100 (40 TB VRAM)
+// Auto-Parallelism: TP x PP x DP x EP x SP + FSDP ZeRO-3 + FP8 FlashAttention-3
+
+fn run_frontier_training() {
+    print("=== SAPPHIRE FRONTIER DISTRIBUTED LLM TRAINING ===");
+
+    let model_config = {
+        "layers": 80,
+        "hidden": 8192,
+        "heads": 64,
+        "kv_heads": 8,
+        "vocab": 128000,
+        "seq_len": 8192
+    };
+    let model = ml.distributed.Transformer(model_config);
+
+    let cluster_config = {
+        "gpus": 512,
+        "nodes": 64,
+        "gpus_per_node": 8,
+        "gpu_type": "H100-80GB"
+    };
+    let cluster = ml.distributed.Cluster(cluster_config);
+
+    let train_config = {
+        "model": model,
+        "cluster": cluster,
+        "strategy": "auto",
+        "precision": "fp8",
+        "global_batch_size": 2048,
+        "flash_attention": true,
+        "export_codegen": true
+    };
+    let job = ml.distributed.train(train_config);
+
+    print("Strategy: " + job.plan.strategy_name);
+    print("MFU: " + job.throughput_metrics["mfu_percent"] + "%");
+    print("Throughput: " + job.throughput_metrics["tokens_per_sec"] + " tokens/sec");
+}
+
+run_frontier_training();"""
+
 class SapphireHighTechCompiler(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -188,7 +230,38 @@ class SapphireHighTechCompiler(tk.Tk):
         self.txt_poly = scrolledtext.ScrolledText(tab_poly, font=("Consolas", 10), bg="#040711", fg="#A78BFA", insertbackground="#A78BFA", bd=0)
         self.txt_poly.pack(fill="both", expand=True)
 
+
+        # Tab 6: 5D Distributed AI Auto-Parallelism
+        tab_dist = ttk.Frame(self.notebook)
+        self.notebook.add(tab_dist, text="🌐 5D Distributed AI")
+
+        dist_toolbar = tk.Frame(tab_dist, bg="#040711")
+        dist_toolbar.pack(fill="x", pady=(4, 0))
+        btn_dist_run = tk.Button(
+            dist_toolbar,
+            text="▶ Run 512-GPU 5D Solver",
+            font=("Consolas", 9, "bold"),
+            fg="#030712", bg="#00F0FF",
+            activebackground="#38BDF8",
+            bd=0, padx=10, pady=3,
+            command=self.run_distributed_solver
+        )
+        btn_dist_run.pack(side="left", padx=4)
+        btn_dist_tpl = tk.Button(
+            dist_toolbar,
+            text="💎 Load Frontier Template",
+            font=("Consolas", 9, "bold"),
+            fg="#00F0FF", bg="#0F172A",
+            bd=0, padx=10, pady=3,
+            command=lambda: self.load_sample(SAMPLE_DISTRIBUTED_AI_CODE)
+        )
+        btn_dist_tpl.pack(side="left", padx=4)
+
+        self.txt_dist = scrolledtext.ScrolledText(tab_dist, font=("Consolas", 10), bg="#040711", fg="#34D399", insertbackground="#34D399", bd=0)
+        self.txt_dist.pack(fill="both", expand=True)
+
         # 3. Status Bar
+
         self.statusbar = tk.Label(
             self,
             text="🟢 COMPILER READY — JIT OPTIMIZER: ON | POLYMORPHIC DISPATCH: ACTIVE | CUDA: DETECTED",
@@ -377,9 +450,129 @@ class SapphireHighTechCompiler(tk.Tk):
 
         threading.Thread(target=_execute, daemon=True).start()
 
+    def run_distributed_solver(self):
+        """Runs the 5D Auto-Parallelism solver and displays results in the Distributed AI tab."""
+        self.notebook.select(5)  # Switch to 5D Distributed AI tab
+        self.txt_dist.delete("1.0", tk.END)
+        self.txt_dist.insert(tk.END, "🌐 [SAPPHIRE 5D AUTO-PARALLELISM SOLVER] Initializing...\n")
+        self.txt_dist.insert(tk.END, "─" * 70 + "\n")
+
+        def _solve():
+            import io
+            old_stdout, old_stderr = sys.stdout, sys.stderr
+            sys.stdout = sys.stderr = io.StringIO()
+            try:
+                import sys as _sys
+                _sys.path.insert(0, SAPPHIRE_DIR)
+                from src.stdlib.distributed.transformer_spec import Transformer
+                from src.stdlib.distributed.cluster_spec import Cluster
+                from src.stdlib.distributed.auto_parallelism import AutoParallelismSolver
+                from src.stdlib.distributed.kernel_optimizer import KernelOptimizer
+                from src.stdlib.distributed.collectives import CollectiveCommunicationEngine
+
+                # 70B Frontier LLM
+                model = Transformer(**{"layers": 80, "hidden": 8192, "heads": 64, "kv_heads": 8, "vocab": 128000, "seq_len": 8192})
+                cluster = Cluster(**{"gpus": 512, "nodes": 64, "gpus_per_node": 8, "gpu_type": "H100-80GB"})
+                plan = AutoParallelismSolver.solve(model=model, cluster=cluster, precision="fp8", global_batch_size=2048)
+
+                # Cluster Summary
+                cs = cluster.summary()
+                ms = model.summary()
+                ps = plan.summary()
+
+                # NCCL collective time for one AllReduce over gradient tensor
+                grad_bytes = model.total_params * 1  # FP8 = 1 byte/param
+                ar = CollectiveCommunicationEngine.calculate_ring_allreduce(grad_bytes, cluster.gpus, cluster.intra_node_bw_gb_s)
+
+                # FP8 kernel table
+                kernels = KernelOptimizer.get_kernel_dispatch_table(True, "fp8")
+                fp8 = KernelOptimizer.fp8_recipe()
+
+                tokens_per_batch = 2048 * model.seq_len
+                peak_fp8 = cluster.fp8_tflops_per_gpu * cluster.gpus
+                delivered = peak_fp8 * plan.estimated_mfu
+                step_ms = (tokens_per_batch * model.flops_per_token / 1e12) / max(1, delivered) * 1000
+                tok_per_sec = tokens_per_batch / max(0.001, step_ms / 1000)
+                days_10t = (10e12 / tok_per_sec) / (3600 * 24)
+
+                out = []
+                out.append("╔══════════════════════════════════════════════════════════════════╗")
+                out.append("║     💎 SAPPHIRE FRONTIER 5D AUTO-PARALLELISM ANALYSIS REPORT     ║")
+                out.append("╚══════════════════════════════════════════════════════════════════╝\n")
+                out.append(f"MODEL ARCHITECTURE")
+                out.append(f"  Total Parameters   : {ms['total_params_billion']:.2f}B")
+                out.append(f"  Active Parameters  : {ms['active_params_billion']:.2f}B")
+                out.append(f"  Layers             : {ms['layers']} | Hidden: {ms['hidden']} | Heads: {ms['heads']}")
+                out.append(f"  Vocab              : {ms['vocab']:,} | Seq Len: {ms['seq_len']:,}")
+                out.append(f"  FLOPs per Token    : {ms['flops_per_token_tflops']:.4f} TFLOPs\n")
+
+                out.append(f"CLUSTER TOPOLOGY")
+                out.append(f"  GPU Type           : {cs['gpu_type']}  x{cs['gpus']} GPUs ({cs['nodes']} nodes)")
+                out.append(f"  Aggregate VRAM     : {cs['aggregate_memory_tb']} TB")
+                out.append(f"  Peak BF16 Compute  : {cs['aggregate_bf16_pflops']} PFLOPs")
+                out.append(f"  Peak FP8 Compute   : {cs['aggregate_fp8_pflops']} PFLOPs  (≈ {cs['aggregate_fp8_pflops']/1000:.3f} ExaFLOPs)")
+                out.append(f"  NVLink Intra-Node  : {cs['intra_node_bw_gb_s']} GB/s")
+                out.append(f"  InfiniBand Inter   : {cs['inter_node_bw_gbps']} Gbps\n")
+
+                g = ps["5D_Grid"]
+                m = ps["Memory_Per_GPU_GB"]
+                p = ps["Performance_Metrics"]
+                out.append(f"OPTIMAL 5D PARALLELISM PLAN")
+                out.append(f"  Tensor Parallelism : TP={g['Tensor_Parallelism (TP)']}")
+                out.append(f"  Pipeline Parallel  : PP={g['Pipeline_Parallelism (PP)']}")
+                out.append(f"  Data Parallelism   : DP={g['Data_Parallelism (DP)']}")
+                out.append(f"  Expert Parallelism : EP={g['Expert_Parallelism (EP)']}")
+                out.append(f"  Sequence Parallel  : SP={g['Sequence_Parallelism (SP)']}")
+                out.append(f"  FSDP / ZeRO Stage  : ZeRO-{g['ZeRO_FSDP_Stage']}")
+                out.append(f"  Strategy           : {p['Strategy']}\n")
+
+                out.append(f"MEMORY ALLOCATION PER GPU  ({m['Total_Used_GB']} GB / 80 GB used)")
+                out.append(f"  Weights            : {m['Weights_GB']} GB")
+                out.append(f"  Gradients          : {m['Gradients_GB']} GB")
+                out.append(f"  Optimizer States   : {m['Optimizer_States_GB']} GB")
+                out.append(f"  Activations        : {m['Activations_GB']} GB")
+                out.append(f"  VRAM Headroom      : {m['VRAM_Headroom_Percent']}%\n")
+
+                out.append(f"PERFORMANCE & THROUGHPUT")
+                out.append(f"  Model FLOPs MFU    : {p['Estimated_MFU_Percent']}%")
+                out.append(f"  Cluster Compute    : {delivered/1000:.2f} PFLOPs  (peak: {peak_fp8/1000:.2f} PFLOPs)")
+                out.append(f"  Tokens / Second    : {tok_per_sec:,.0f}")
+                out.append(f"  Step Time          : {step_ms:.2f} ms")
+                out.append(f"  10T Token Training : {days_10t:.1f} days\n")
+
+                out.append(f"NCCL COMMUNICATION (AllReduce over {grad_bytes/1e9:.1f}B FP8 Gradients)")
+                out.append(f"  Algorithm          : {ar['algorithm']}")
+                out.append(f"  Volume per GPU     : {ar['volume_mb']:.1f} MB")
+                out.append(f"  Estimated Time     : {ar['time_ms']:.3f} ms\n")
+
+                out.append(f"FP8 TRANSFORMER ENGINE CONFIGURATION")
+                out.append(f"  Format             : {fp8['fp8_format']}")
+                out.append(f"  Scaling Strategy   : {fp8['scaling_strategy']}")
+                out.append(f"  Weight Precision   : {fp8['weight_precision']}")
+                out.append(f"  VRAM vs FP16       : {fp8['vram_savings_vs_fp16']} savings\n")
+
+                out.append(f"KERNEL DISPATCH TABLE")
+                for k, v in kernels.items():
+                    out.append(f"  {k:<25}: {v['name']}  [{v['speedup_vs_standard']} speedup]")
+
+                out.append("\n✨ 5D Auto-Parallelism Solver Complete. Codegen artifacts in ./distributed_build/")
+                result = "\n".join(out)
+            except Exception as e:
+                import traceback
+                result = f"❌ Distributed Solver Error:\n{traceback.format_exc()}"
+            finally:
+                sys.stdout = old_stdout
+                sys.stderr = old_stderr
+
+            self.after(0, lambda: self.txt_dist.insert(tk.END, result + "\n"))
+            self.after(0, lambda: self.statusbar.config(text="✨ 5D AUTO-PARALLELISM PLAN SYNTHESIZED SUCCESSFULLY", fg="#10B981"))
+
+        threading.Thread(target=_solve, daemon=True).start()
+
     def bundle_to_exe(self):
         """Compiles the current .sp code into a standalone native .EXE executable using PyInstaller."""
         self.save_file()
+
         if not self.current_filepath:
             messagebox.showinfo("Bundle to EXE", "Please save your .sp script file first.")
             return

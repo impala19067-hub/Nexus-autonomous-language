@@ -1,0 +1,129 @@
+{
+  "sapphire_version": "1.0.0",
+  "model": {
+    "layers": 80,
+    "hidden": 8192,
+    "heads": 64,
+    "kv_heads": 64,
+    "vocab": 128000,
+    "seq_len": 8192,
+    "intermediate_dim": 21845,
+    "is_moe": false,
+    "moe_experts": 1,
+    "moe_top_k": 1,
+    "total_params": 66522324992,
+    "total_params_billion": 66.52,
+    "active_params_billion": 66.52,
+    "flops_per_token": 463558459392,
+    "flops_per_token_tflops": 0.4636
+  },
+  "cluster": {
+    "gpus": 512,
+    "nodes": 64,
+    "gpus_per_node": 8,
+    "gpu_type": "H100-80GB",
+    "memory_per_gpu_gb": 80.0,
+    "aggregate_memory_tb": 40.0,
+    "aggregate_bf16_pflops": 506.37,
+    "aggregate_fp8_pflops": 1013.25,
+    "interconnect": "NVLink-InfiniBand",
+    "intra_node_bw_gb_s": 900.0,
+    "inter_node_bw_gbps": 400.0
+  },
+  "parallelism_plan": {
+    "5D_Grid": {
+      "Tensor_Parallelism (TP)": 1,
+      "Pipeline_Parallelism (PP)": 1,
+      "Data_Parallelism (DP)": 512,
+      "Expert_Parallelism (EP)": 1,
+      "Sequence_Parallelism (SP)": 1,
+      "ZeRO_FSDP_Stage": 3,
+      "Total_GPUs": 512
+    },
+    "Batching": {
+      "global_batch_size": 2048,
+      "micro_batch_size": 2,
+      "grad_accumulation_steps": 2
+    },
+    "Memory_Per_GPU_GB": {
+      "Weights_GB": 0.12,
+      "Gradients_GB": 0.12,
+      "Optimizer_States_GB": 1.45,
+      "Activations_GB": 35.0,
+      "Total_Used_GB": 36.69,
+      "VRAM_Headroom_Percent": 54.1
+    },
+    "Performance_Metrics": {
+      "Estimated_MFU_Percent": 61.0,
+      "Comm_To_Compute_Ratio": 0.04,
+      "Strategy": "Sapphire-5D-Auto (TP1_PP1_DP512_EP1_SP1_ZeRO3_FP8)"
+    }
+  },
+  "throughput": {
+    "tokens_per_batch": 16777216,
+    "tokens_per_sec": 1333340.5,
+    "step_time_ms": 12582.84,
+    "cluster_delivered_pflops": 618.08,
+    "cluster_peak_pflops": 1013.25,
+    "mfu_percent": 61.0,
+    "days_to_train_10T_tokens": 86.81
+  },
+  "kernels": {
+    "attention_kernel": {
+      "name": "FlashAttention-3 (Tiled SRAM Kernel)",
+      "features": [
+        "O(N) memory complexity",
+        "Causal Masking",
+        "Triton Forward/Backward Tiling",
+        "FP8 KV-Cache Support"
+      ],
+      "speedup_vs_standard": "3.8x"
+    },
+    "linear_layer_kernel": {
+      "name": "cuBLASLt FP8 GEMM",
+      "features": [
+        "E4M3 Forward Activation",
+        "E5M2 Backward Gradient",
+        "Tensor-Level Amax Scaling"
+      ],
+      "speedup_vs_standard": "2.2x"
+    },
+    "norm_kernel": {
+      "name": "Triton Fused RMSNorm + Residual Add",
+      "features": [
+        "Single Pass Global Memory",
+        "Welford Variance Reduction"
+      ],
+      "speedup_vs_standard": "2.5x"
+    },
+    "activation_kernel": {
+      "name": "Triton Fused SwiGLU (Gate * Up Projection)",
+      "features": [
+        "Element-wise In-Register Fusion",
+        "Zero Intermediate HBM Writes"
+      ],
+      "speedup_vs_standard": "2.1x"
+    },
+    "loss_kernel": {
+      "name": "Fused Chunked Cross-Entropy Loss",
+      "features": [
+        "Avoids Vocab Logit Materialization",
+        "Saves 12GB VRAM at 150k Vocab"
+      ],
+      "speedup_vs_standard": "4.0x"
+    }
+  },
+  "fp8_recipe": {
+    "fp8_format": "HYBRID (E4M3 Forward, E5M2 Backward)",
+    "scaling_strategy": "Delayed Amax Scaling (Window Size = 1024)",
+    "margin": 0,
+    "interval": 1,
+    "amax_history_len": 1024,
+    "amax_compute_algo": "max",
+    "weight_precision": "FP8_E4M3",
+    "activation_precision": "FP8_E4M3",
+    "gradient_precision": "FP8_E5M2",
+    "optimizer_master_precision": "FP32",
+    "vram_savings_vs_fp16": "50.0%"
+  }
+}

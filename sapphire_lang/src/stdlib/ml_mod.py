@@ -11,6 +11,14 @@ import time
 import threading
 from typing import List, Optional, Union, Callable
 
+try:
+    from src.stdlib.distributed import DistributedModule
+except ImportError:
+    try:
+        from sapphire_lang.src.stdlib.distributed import DistributedModule
+    except ImportError:
+        DistributedModule = None
+
 
 # ---------------------------------------------------------------------------
 # TENSOR ENGINE
@@ -1398,14 +1406,15 @@ class MLModule:
     """
 
     # Sub-namespaces
-    autograd = AutogradModule
-    dataset  = DatasetModule
-    model    = ModelModule
-    loss     = LossModule
-    optim    = OptimizerModule
-    train    = TrainModule
-    kernel   = KernelModule
-    gpu      = GPUModule
+    autograd    = AutogradModule
+    dataset     = DatasetModule
+    model       = ModelModule
+    loss        = LossModule
+    optim       = OptimizerModule
+    train       = TrainModule
+    kernel      = KernelModule
+    gpu         = GPUModule
+    distributed = DistributedModule
 
     # ---- Tensor constructors ----
     @staticmethod
