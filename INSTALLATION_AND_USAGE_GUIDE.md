@@ -91,10 +91,10 @@ nexus> print("Sum: {x + y}");
 
 ---
 
-### 3. Launch the Voice-Guided Interactive Tutor
-Type `nexus tutor` to launch the interactive voice tutor with audio speech narration and step-by-step guidance:
+### 3. Launch Emerald Developer Studio GUI
+Type `sapphire studio` to launch Emerald Developer Studio — the graphical IDE, tool builder, and GPU dashboard:
 ```cmd
-nexus tutor
+sapphire studio
 ```
 
 ---
@@ -102,7 +102,7 @@ nexus tutor
 ### 4. Evaluate Inline Code Strings
 Quickly evaluate an inline expression:
 ```cmd
-nexus eval "let info = os.system_info(); print(info.platform);"
+sapphire eval "let info = os.system_info(); print(info.platform);"
 ```
 
 ---
@@ -111,11 +111,11 @@ nexus eval "let info = os.system_info(); print(info.platform);"
 
 | Command | Description |
 | :--- | :--- |
-| `nexus run <script.nx>` | Executes a `.nx` script file. |
-| `nexus repl` | Launches the interactive REPL shell. |
-| `nexus eval "<code>"` | Evaluates an inline code string. |
-| `nexus tutor` | Launches the Voice-Guided Interactive Tutor (`nexus_voice_tutor.exe`). |
-| `nexus info` | Displays version and capability summary. |
+| `sapphire run <script.sp>` | Executes a `.sp` Sapphire script file. |
+| `sapphire studio` | Launches Emerald Developer Studio GUI (`emerald_studio.py`). |
+| `sapphire repl` | Launches the interactive REPL shell. |
+| `sapphire eval "<code>"` | Evaluates an inline code string. |
+| `sapphire info` | Displays version, AI LLM backends, ML engine, and capability summary. |
 
 ---
 

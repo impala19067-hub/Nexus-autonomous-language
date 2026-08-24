@@ -1,6 +1,6 @@
-# 🌌 Nexus Programming Language — macOS Distribution Folder
+# 💎 Sapphire Programming Language — macOS Distribution Folder
 
-This folder contains everything needed to install Nexus on **macOS** (Apple Silicon M1/M2/M3 & Intel Mac).
+This folder contains everything needed to install Sapphire and Emerald Developer Studio on **macOS** (Apple Silicon M1/M2/M3 & Intel Mac).
 
 ---
 

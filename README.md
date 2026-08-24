@@ -61,10 +61,29 @@ sudo apt install ./nexus_1.0.0_all.deb
 
 ```bash
 sapphire info                  # Language overview & version
-sapphire run my_agent.nx       # Run a Sapphire script
+sapphire run my_agent.sp       # Run a Sapphire script (.sp)
 sapphire repl                  # Interactive REPL shell
 sapphire eval "<code>"         # Evaluate inline code
+sapphire studio                # Launch Emerald Developer Studio GUI
 ```
+
+---
+
+## 💚 Emerald Developer Studio (GUI IDE & Tool Builder)
+
+**Emerald Developer Studio** (`emerald_studio.py`) is the official graphical IDE & coding terminal built specifically for Sapphire developers to author, debug, and package `.sp` tools with ease.
+
+Launch directly from any terminal:
+```bash
+sapphire studio
+```
+
+### Key Capabilities:
+- 🛠️ **1-Click Tool Creator Wizard**: Generates pre-configured Sapphire `.sp` tool templates with selected ML, AI, and OS capabilities.
+- 💻 **Sapphire `.sp` Code Editor**: Built-in script editor with syntax highlighting, auto-formatting, and load/save support.
+- 🖥️ **Integrated Execution Terminal**: Live output console for running Sapphire scripts and viewing logs.
+- ⚡ **Hardware Telemetry Dashboard**: Real-time monitor for GPU VRAM, CUDA device memory, CPU, and System RAM.
+- 🧠 **Agent & Memory Inspector**: Visual inspector for active LLM backends (Ollama/Groq API), registered agent tools, and security policies.
 
 ---
 

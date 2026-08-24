@@ -1,6 +1,6 @@
-# 🌌 Nexus Programming Language — Debian & Kali Linux Distribution Folder
+# 💎 Sapphire Programming Language — Debian & Kali Linux Distribution Folder
 
-This folder contains everything needed to install Nexus on **Debian**, **Kali Linux**, **Ubuntu**, **Linux Mint**, and **Debian-derived Linux distros**.
+This folder contains everything needed to install Sapphire and Emerald Developer Studio on **Debian**, **Kali Linux**, **Ubuntu**, **Linux Mint**, and **Debian-derived Linux distros**.
 
 ---
 

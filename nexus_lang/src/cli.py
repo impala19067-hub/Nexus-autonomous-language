@@ -84,16 +84,17 @@ def start_repl():
             print(f"Error: {e}")
 
 def launch_studio():
-    studio_py = os.path.join(_WORKSPACE_ROOT, "sapphire_studio.py")
+    studio_py = os.path.join(_WORKSPACE_ROOT, "emerald_studio.py")
     if not os.path.exists(studio_py):
-        # Fallback check
-        studio_py = os.path.join(os.getcwd(), "sapphire_studio.py")
+        studio_py = os.path.join(_WORKSPACE_ROOT, "sapphire_studio.py")
+    if not os.path.exists(studio_py):
+        studio_py = os.path.join(os.getcwd(), "emerald_studio.py")
 
     if os.path.exists(studio_py):
-        print("🚀 Launching Sapphire Developer Studio GUI...")
+        print("💚 Launching Emerald Developer Studio GUI...")
         subprocess.Popen([sys.executable, studio_py])
     else:
-        print("❌ sapphire_studio.py script not found.", file=sys.stderr)
+        print("❌ emerald_studio.py script not found.", file=sys.stderr)
 
 def main():
     parser = argparse.ArgumentParser(description="Sapphire Language CLI Engine")
