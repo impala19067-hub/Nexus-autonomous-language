@@ -1,7 +1,8 @@
 """
 💎 SAPPHIRE PROGRAMMING LANGUAGE — GRAPHICAL WINDOWS SETUP WIZARD
 Interactive GUI Setup Wizard for Installing Sapphire Language, Emerald Developer Studio,
-PATH Configuration, GPU/ML Stack, PDF Documentation, and Desktop Shortcuts.
+Polymorphic Compiler Studio, PATH Configuration, GPU/ML Stack, PDF Documentation,
+Uninstaller, and Desktop Shortcuts.
 """
 
 import sys
@@ -18,10 +19,33 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
     sys.stderr.reconfigure(encoding='utf-8')
 
-if getattr(sys, 'frozen', False):
-    BASE_DIR = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-else:
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+def find_source_item(name: str):
+    """Finds an asset file/directory across PyInstaller temp bundles, exe directory, and workspace."""
+    candidates = []
+    # 1. PyInstaller _MEIPASS temp extraction folder
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        candidates.append(os.path.join(sys._MEIPASS, name))
+        candidates.append(os.path.join(sys._MEIPASS, "docs", name))
+    
+    # 2. Directory where the setup wizard .exe is running from
+    if getattr(sys, 'frozen', False) and sys.executable:
+        exe_dir = os.path.dirname(sys.executable)
+        candidates.append(os.path.join(exe_dir, name))
+        candidates.append(os.path.join(exe_dir, "docs", name))
+
+    # 3. Source script directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates.append(os.path.join(script_dir, name))
+    candidates.append(os.path.join(script_dir, "docs", name))
+
+    # 4. Current working directory
+    candidates.append(os.path.join(os.getcwd(), name))
+    candidates.append(os.path.join(os.getcwd(), "docs", name))
+
+    for p in candidates:
+        if os.path.exists(p):
+            return p
+    return None
 
 class SapphireSetupWizard(tk.Tk):
     def __init__(self):
@@ -84,7 +108,7 @@ class WelcomePage(tk.Frame):
         lbl_title = tk.Label(self, text="💎 Sapphire Programming Language v1.0.0", font=("Helvetica", 15, "bold"), fg="#38BDF8", bg="#0F172A")
         lbl_title.pack(anchor="w", padx=30, pady=(25, 5))
 
-        lbl_sub = tk.Label(self, text="Autonomous AI/ML Programming Language & Emerald Developer Studio", font=("Helvetica", 10), fg="#10B981", bg="#0F172A")
+        lbl_sub = tk.Label(self, text="Autonomous AI/ML Programming Language, Emerald Studio & Polymorphic Compiler", font=("Helvetica", 10), fg="#10B981", bg="#0F172A")
         lbl_sub.pack(anchor="w", padx=30, pady=(0, 15))
 
         # Description
@@ -97,30 +121,31 @@ class WelcomePage(tk.Frame):
             "  • Sapphire Deep Learning & Tensor Stack (ml, autograd, GPU/TPU)\n"
             "  • Sapphire Agent Architecture (memory, planning, tools, autonomy)\n"
             "  • Interactive Voice-Guided Tutor with Q&A Mode\n"
-            "  • System PATH Environment Registration & PDF Documentation"
+            "  • Sapphire Uninstaller (uninstall.exe)\n"
+            "  • System PATH Environment Registration & PDF Documentation Suite"
         )
-        lbl_desc = tk.Label(self, text=desc_text, font=("Helvetica", 9), fg="#CBD5E1", bg="#1E293B", justify="left", anchor="nw", padx=15, pady=12, relief="solid", bd=1)
+        lbl_desc = tk.Label(self, text=desc_text, font=("Helvetica", 9), fg="#CBD5E1", bg="#1E293B", justify="left", anchor="nw", padx=15, pady=10, relief="solid", bd=1)
         lbl_desc.pack(fill="x", padx=30, pady=5)
 
         # Options Checkboxes
         opts_frame = tk.Frame(self, bg="#0F172A")
-        opts_frame.pack(fill="x", padx=30, pady=10)
+        opts_frame.pack(fill="x", padx=30, pady=8)
 
         chk_path = tk.Checkbutton(opts_frame, text="Register Sapphire in System PATH", variable=controller.opt_add_path, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
-        chk_path.pack(anchor="w", pady=2)
+        chk_path.pack(anchor="w", pady=1)
 
-        chk_studio = tk.Checkbutton(opts_frame, text="Install Emerald Developer Studio GUI (emerald_studio.py)", variable=controller.opt_studio, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
-        chk_studio.pack(anchor="w", pady=2)
+        chk_studio = tk.Checkbutton(opts_frame, text="Install Emerald Developer Studio & Compiler Binaries", variable=controller.opt_studio, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
+        chk_studio.pack(anchor="w", pady=1)
 
-        chk_docs = tk.Checkbutton(opts_frame, text="Include PDF Developer & AI Manuals", variable=controller.opt_docs, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
-        chk_docs.pack(anchor="w", pady=2)
+        chk_docs = tk.Checkbutton(opts_frame, text="Include Full 5-Manual PDF Documentation Suite", variable=controller.opt_docs, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
+        chk_docs.pack(anchor="w", pady=1)
 
         chk_short = tk.Checkbutton(opts_frame, text="Create Desktop & Start Menu Shortcuts", variable=controller.opt_shortcuts, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
-        chk_short.pack(anchor="w", pady=2)
+        chk_short.pack(anchor="w", pady=1)
 
         # Bottom Bar
         btm = tk.Frame(self, bg="#0F172A")
-        btm.pack(fill="x", side="bottom", padx=30, pady=20)
+        btm.pack(fill="x", side="bottom", padx=30, pady=15)
 
         btn_next = tk.Button(btm, text="Next >", font=("Helvetica", 10, "bold"), fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF", bd=0, padx=20, pady=6, command=lambda: controller.show_frame(DirectoryPage))
         btn_next.pack(side="right")
@@ -203,88 +228,119 @@ class ProgressPage(tk.Frame):
         target = self.controller.install_dir.get()
         os.makedirs(target, exist_ok=True)
 
-        # 1. Copy Files
-        self.update_status("Copying Sapphire Core & Studio Files...", 15, "Target: " + target)
-        for fname in [
+        # 1. Copy All Executables, Scripts, and Tools
+        self.update_status("Unpacking Sapphire Binaries & Tools...", 15, f"Destination: {target}")
+        
+        all_binaries = [
+            # Core & IDE Binaries
             "sapphire.exe",
-            "emerald.exe", "Emerald_Studio.exe", "emerald_studio.py", "sapphire_studio.py",
-            "Sapphire_Compiler.exe", "compiler.exe", "sapphire_compiler.py",
+            "emerald.exe",
+            "Emerald_Studio.exe",
+            "Sapphire_Compiler.exe",
+            "compiler.exe",
+            "sapphire_voice_tutor.exe",
+            "sapphire_tutor.exe",
+            "uninstall_sapphire.exe",
+            "uninstall.exe",
+            # Python Scripts
+            "emerald_studio.py",
+            "sapphire_studio.py",
+            "sapphire_compiler.py",
             "sapphire_cli.py",
-            "sapphire_voice_tutor.exe", "sapphire_tutor.exe",
-            "sapphire_voice_tutor.py", "sapphire_tutor.py",
-        ]:
-            src_path = os.path.join(BASE_DIR, fname)
-            if os.path.exists(src_path):
-                shutil.copy2(src_path, os.path.join(target, fname))
-                self.log_box.insert(tk.END, f"  Copied: {fname}\n")
+            "sapphire_voice_tutor.py",
+            "sapphire_tutor.py",
+            "uninstall_sapphire.py",
+            "install_sapphire.bat",
+        ]
 
-        # Copy Docs
-        self.update_status("Copying PDF Developer Manuals...", 45, "Copying PDF documentation")
-        for pdf_file in ["Sapphire_Coding_and_Usage_Guide.pdf", "Building_Advanced_Autonomous_AI.pdf", "Sapphire_Autonomy_and_Performance_Benchmarks.pdf", "Beginners_Guide_Your_First_Autonomous_AI.pdf", "Sapphire_Language_Specification_and_Automation_Manual.pdf", "INSTALLATION_AND_USAGE_GUIDE.md"]:
-            src_path = os.path.join(BASE_DIR, pdf_file)
-            if not os.path.exists(src_path):
-                src_path = os.path.join(BASE_DIR, "docs", pdf_file)
-            if os.path.exists(src_path):
-                shutil.copy2(src_path, os.path.join(target, pdf_file))
+        for fname in all_binaries:
+            src = find_source_item(fname)
+            if src and os.path.exists(src):
+                shutil.copy2(src, os.path.join(target, fname))
+                self.log_box.insert(tk.END, f"  ✅ Unpacked: {fname}\n")
+                self.log_box.see(tk.END)
+            else:
+                self.log_box.insert(tk.END, f"  ⚠️ Skipped: {fname} (not present)\n")
 
-        # Copy stdlib folder
-        src_sapphire_lang = os.path.join(BASE_DIR, "sapphire_lang")
-        if os.path.exists(src_sapphire_lang):
-            dst_sapphire_lang = os.path.join(target, "sapphire_lang")
-            if os.path.exists(dst_sapphire_lang):
-                shutil.rmtree(dst_sapphire_lang, ignore_errors=True)
-            shutil.copytree(src_sapphire_lang, dst_sapphire_lang)
-            self.log_box.insert(tk.END, "Copied Sapphire ML, Agent, and Stdlib engine.\n")
+        # 2. Copy All 5 PDF Manuals & Markdown Guides
+        self.update_status("Unpacking PDF Developer Documentation...", 45, "Copying PDF documentation suite")
+        all_docs = [
+            "Sapphire_Coding_and_Usage_Guide.pdf",
+            "Building_Advanced_Autonomous_AI.pdf",
+            "Sapphire_Autonomy_and_Performance_Benchmarks.pdf",
+            "Beginners_Guide_Your_First_Autonomous_AI.pdf",
+            "Sapphire_Language_Specification_and_Automation_Manual.pdf",
+            "INSTALLATION_AND_USAGE_GUIDE.md",
+            "README.md",
+        ]
+        for doc_name in all_docs:
+            src = find_source_item(doc_name)
+            if src and os.path.exists(src):
+                shutil.copy2(src, os.path.join(target, doc_name))
+                self.log_box.insert(tk.END, f"  📄 Document: {doc_name}\n")
+                self.log_box.see(tk.END)
 
-        # 2. Configure PATH
+        # 3. Copy sapphire_lang Core Engine
+        src_lang = find_source_item("sapphire_lang")
+        if src_lang and os.path.exists(src_lang):
+            dst_lang = os.path.join(target, "sapphire_lang")
+            if os.path.exists(dst_lang):
+                shutil.rmtree(dst_lang, ignore_errors=True)
+            shutil.copytree(src_lang, dst_lang)
+            self.log_box.insert(tk.END, "  📦 Unpacked: sapphire_lang ML, Agent & Stdlib Engine\n")
+
+        # 4. Configure PATH
         if self.controller.opt_add_path.get():
-            self.update_status("Registering Sapphire in System PATH...", 70, "Executing PowerShell PATH script")
+            self.update_status("Registering Sapphire in System PATH...", 70, "Executing PowerShell PATH registration")
             try:
                 ps_cmd = f"$oldPath = [Environment]::GetEnvironmentVariable('Path', 'User'); if ($oldPath -notlike '*{target}*') {{ [Environment]::SetEnvironmentVariable('Path', $oldPath + ';{target}', 'User') }}"
-                subprocess.run(["powershell", "-Command", ps_cmd], capture_output=True)
-                self.log_box.insert(tk.END, "PATH variable updated.\n")
+                subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True)
+                self.log_box.insert(tk.END, "  ⚡ PATH updated: Added Sapphire to User PATH\n")
             except Exception as e:
-                self.log_box.insert(tk.END, f"PATH error: {e}\n")
+                self.log_box.insert(tk.END, f"  PATH error: {e}\n")
 
-        # 3. Create Shortcuts
+        # 5. Create Desktop & Start Menu Shortcuts
         if self.controller.opt_shortcuts.get():
-            self.update_status("Creating Desktop Shortcuts...", 90, "Generating Shortcuts")
+            self.update_status("Creating Desktop Shortcuts...", 90, "Generating Desktop shortcuts")
             try:
                 desktop = os.path.join(os.environ.get("USERPROFILE", "C:\\Users\\Public"), "Desktop")
-                studio_exe = os.path.join(target, "Emerald_Studio.exe")
-                studio_script = os.path.join(target, "emerald_studio.py")
-                target_exe = studio_exe if os.path.exists(studio_exe) else "python.exe"
-                args = "" if os.path.exists(studio_exe) else f'"{studio_script}"'
+                
+                # Shortcut helper function
+                def create_vbs_shortcut(shortcut_name, target_exe_name, fallback_script):
+                    target_exe = os.path.join(target, target_exe_name)
+                    script_file = os.path.join(target, fallback_script)
+                    
+                    if os.path.exists(target_exe):
+                        t_path = target_exe
+                        args = ""
+                    elif os.path.exists(script_file):
+                        t_path = "python.exe"
+                        args = f'"{script_file}"'
+                    else:
+                        return
 
-                # Shortcut: Emerald Developer Studio
-                vbs_cmd = f'''
-                $ws = New-Object -ComObject WScript.Shell
-                $s = $ws.CreateShortcut("{desktop}\\Emerald Developer Studio.lnk")
-                $s.TargetPath = "{target_exe}"
-                $s.Arguments = '{args}'
-                $s.WorkingDirectory = "{target}"
-                $s.Save()
-                '''
-                subprocess.run(["powershell", "-Command", vbs_cmd], capture_output=True)
-
-                # Shortcut: Sapphire Compiler Studio
-                compiler_exe = os.path.join(target, "Sapphire_Compiler.exe")
-                if os.path.exists(compiler_exe):
-                    vbs_compiler = f'''
+                    vbs_cmd = f'''
                     $ws = New-Object -ComObject WScript.Shell
-                    $s = $ws.CreateShortcut("{desktop}\\Sapphire Compiler Studio.lnk")
-                    $s.TargetPath = "{compiler_exe}"
+                    $s = $ws.CreateShortcut("{desktop}\\{shortcut_name}.lnk")
+                    $s.TargetPath = "{t_path}"
+                    $s.Arguments = '{args}'
                     $s.WorkingDirectory = "{target}"
                     $s.Save()
                     '''
-                    subprocess.run(["powershell", "-Command", vbs_compiler], capture_output=True)
+                    subprocess.run(["powershell", "-NoProfile", "-Command", vbs_cmd], capture_output=True)
+                    self.log_box.insert(tk.END, f"  🔗 Shortcut: {shortcut_name}\n")
 
-                self.log_box.insert(tk.END, "Desktop shortcuts generated.\n")
+                # Shortcuts to create
+                create_vbs_shortcut("Emerald Developer Studio", "Emerald_Studio.exe", "emerald_studio.py")
+                create_vbs_shortcut("Sapphire Compiler Studio", "Sapphire_Compiler.exe", "sapphire_compiler.py")
+                create_vbs_shortcut("Sapphire Language Tutor", "sapphire_voice_tutor.exe", "sapphire_voice_tutor.py")
+                create_vbs_shortcut("Uninstall Sapphire", "uninstall.exe", "uninstall_sapphire.py")
+
             except Exception as e:
-                self.log_box.insert(tk.END, f"Shortcut notice: {e}\n")
+                self.log_box.insert(tk.END, f"  Shortcut notice: {e}\n")
 
-        self.update_status("Installation Complete!", 100, "Installation finished successfully.")
-        time.sleep(0.5)
+        self.update_status("Installation Complete!", 100, "✨ All Sapphire components unpacked and installed successfully.")
+        time.sleep(0.8)
         self.controller.show_frame(FinishPage)
 
 
@@ -296,7 +352,7 @@ class FinishPage(tk.Frame):
         lbl_title = tk.Label(self, text="🎉 Sapphire Installation Complete!", font=("Helvetica", 16, "bold"), fg="#10B981", bg="#0F172A")
         lbl_title.pack(anchor="w", padx=30, pady=(35, 5))
 
-        lbl_sub = tk.Label(self, text="Sapphire Language & Emerald Developer Studio are ready to use.", font=("Helvetica", 10), fg="#CBD5E1", bg="#0F172A")
+        lbl_sub = tk.Label(self, text="Sapphire Language, Emerald Studio, and Compiler are ready to use.", font=("Helvetica", 10), fg="#CBD5E1", bg="#0F172A")
         lbl_sub.pack(anchor="w", padx=30, pady=(0, 20))
 
         box_frame = tk.Frame(self, bg="#1E293B", padx=15, pady=15)
@@ -309,7 +365,7 @@ class FinishPage(tk.Frame):
         chk_guide.pack(anchor="w", pady=4)
 
         # Command Reference summary
-        lbl_cmd = tk.Label(box_frame, text="\nTerminal Commands: 'sapphire run script.sp' | 'sapphire studio' | 'sapphire info'", font=("Consolas", 9), fg="#94A3B8", bg="#1E293B")
+        lbl_cmd = tk.Label(box_frame, text="\nTerminal Commands: 'sapphire run file.sp' | 'sapphire compiler' | 'sapphire studio' | 'sapphire tutor'", font=("Consolas", 9), fg="#94A3B8", bg="#1E293B")
         lbl_cmd.pack(anchor="w")
 
         # Bottom Bar
