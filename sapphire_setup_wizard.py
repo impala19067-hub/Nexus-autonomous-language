@@ -93,8 +93,10 @@ class WelcomePage(tk.Frame):
             "This installer will configure:\n"
             "  • Sapphire Core Language Engine (.sp scripts & REPL)\n"
             "  • Emerald Developer Studio GUI (IDE, Tool Builder & Hardware Dashboard)\n"
+            "  • Sapphire Polymorphic Compiler & JIT Studio (AST, IR, Bytecode, EXE bundler)\n"
             "  • Sapphire Deep Learning & Tensor Stack (ml, autograd, GPU/TPU)\n"
             "  • Sapphire Agent Architecture (memory, planning, tools, autonomy)\n"
+            "  • Interactive Voice-Guided Tutor with Q&A Mode\n"
             "  • System PATH Environment Registration & PDF Documentation"
         )
         lbl_desc = tk.Label(self, text=desc_text, font=("Helvetica", 9), fg="#CBD5E1", bg="#1E293B", justify="left", anchor="nw", padx=15, pady=12, relief="solid", bd=1)
@@ -203,10 +205,18 @@ class ProgressPage(tk.Frame):
 
         # 1. Copy Files
         self.update_status("Copying Sapphire Core & Studio Files...", 15, "Target: " + target)
-        for fname in ["sapphire.exe", "emerald.exe", "Emerald_Studio.exe", "emerald_studio.py", "sapphire_studio.py", "sapphire_cli.py", "sapphire_voice_tutor.exe", "sapphire_tutor.exe", "sapphire_voice_tutor.py", "sapphire_tutor.py"]:
+        for fname in [
+            "sapphire.exe",
+            "emerald.exe", "Emerald_Studio.exe", "emerald_studio.py", "sapphire_studio.py",
+            "Sapphire_Compiler.exe", "compiler.exe", "sapphire_compiler.py",
+            "sapphire_cli.py",
+            "sapphire_voice_tutor.exe", "sapphire_tutor.exe",
+            "sapphire_voice_tutor.py", "sapphire_tutor.py",
+        ]:
             src_path = os.path.join(BASE_DIR, fname)
             if os.path.exists(src_path):
                 shutil.copy2(src_path, os.path.join(target, fname))
+                self.log_box.insert(tk.END, f"  Copied: {fname}\n")
 
         # Copy Docs
         self.update_status("Copying PDF Developer Manuals...", 45, "Copying PDF documentation")
@@ -245,8 +255,8 @@ class ProgressPage(tk.Frame):
                 studio_script = os.path.join(target, "emerald_studio.py")
                 target_exe = studio_exe if os.path.exists(studio_exe) else "python.exe"
                 args = "" if os.path.exists(studio_exe) else f'"{studio_script}"'
-                
-                # PowerShell VBS shortcut helper
+
+                # Shortcut: Emerald Developer Studio
                 vbs_cmd = f'''
                 $ws = New-Object -ComObject WScript.Shell
                 $s = $ws.CreateShortcut("{desktop}\\Emerald Developer Studio.lnk")
@@ -256,6 +266,19 @@ class ProgressPage(tk.Frame):
                 $s.Save()
                 '''
                 subprocess.run(["powershell", "-Command", vbs_cmd], capture_output=True)
+
+                # Shortcut: Sapphire Compiler Studio
+                compiler_exe = os.path.join(target, "Sapphire_Compiler.exe")
+                if os.path.exists(compiler_exe):
+                    vbs_compiler = f'''
+                    $ws = New-Object -ComObject WScript.Shell
+                    $s = $ws.CreateShortcut("{desktop}\\Sapphire Compiler Studio.lnk")
+                    $s.TargetPath = "{compiler_exe}"
+                    $s.WorkingDirectory = "{target}"
+                    $s.Save()
+                    '''
+                    subprocess.run(["powershell", "-Command", vbs_compiler], capture_output=True)
+
                 self.log_box.insert(tk.END, "Desktop shortcuts generated.\n")
             except Exception as e:
                 self.log_box.insert(tk.END, f"Shortcut notice: {e}\n")
