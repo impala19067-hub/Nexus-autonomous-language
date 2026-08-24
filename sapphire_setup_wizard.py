@@ -203,14 +203,14 @@ class ProgressPage(tk.Frame):
 
         # 1. Copy Files
         self.update_status("Copying Sapphire Core & Studio Files...", 15, "Target: " + target)
-        for fname in ["sapphire.exe", "nexus.exe", "emerald_studio.py", "sapphire_studio.py", "nexus_cli.py", "nexus_voice_tutor.exe", "nexus_tutor.exe", "nexus_voice_tutor.py", "nexus_tutor.py"]:
+        for fname in ["sapphire.exe", "sapphire.exe", "emerald_studio.py", "sapphire_studio.py", "sapphire_cli.py", "sapphire_voice_tutor.exe", "sapphire_tutor.exe", "sapphire_voice_tutor.py", "sapphire_tutor.py"]:
             src_path = os.path.join(BASE_DIR, fname)
             if os.path.exists(src_path):
                 shutil.copy2(src_path, os.path.join(target, fname))
 
         # Copy Docs
         self.update_status("Copying PDF Developer Manuals...", 45, "Copying PDF documentation")
-        for pdf_file in ["Nexus_Coding_and_Usage_Guide.pdf", "Building_Advanced_Autonomous_AI.pdf", "Nexus_Autonomy_and_Performance_Benchmarks.pdf", "Beginners_Guide_Your_First_Autonomous_AI.pdf", "INSTALLATION_AND_USAGE_GUIDE.md"]:
+        for pdf_file in ["Sapphire_Coding_and_Usage_Guide.pdf", "Building_Advanced_Autonomous_AI.pdf", "Sapphire_Autonomy_and_Performance_Benchmarks.pdf", "Beginners_Guide_Your_First_Autonomous_AI.pdf", "INSTALLATION_AND_USAGE_GUIDE.md"]:
             src_path = os.path.join(BASE_DIR, pdf_file)
             if not os.path.exists(src_path):
                 src_path = os.path.join(BASE_DIR, "docs", pdf_file)
@@ -218,12 +218,12 @@ class ProgressPage(tk.Frame):
                 shutil.copy2(src_path, os.path.join(target, pdf_file))
 
         # Copy stdlib folder
-        src_nexus_lang = os.path.join(BASE_DIR, "nexus_lang")
-        if os.path.exists(src_nexus_lang):
-            dst_nexus_lang = os.path.join(target, "nexus_lang")
-            if os.path.exists(dst_nexus_lang):
-                shutil.rmtree(dst_nexus_lang, ignore_errors=True)
-            shutil.copytree(src_nexus_lang, dst_nexus_lang)
+        src_sapphire_lang = os.path.join(BASE_DIR, "sapphire_lang")
+        if os.path.exists(src_sapphire_lang):
+            dst_sapphire_lang = os.path.join(target, "sapphire_lang")
+            if os.path.exists(dst_sapphire_lang):
+                shutil.rmtree(dst_sapphire_lang, ignore_errors=True)
+            shutil.copytree(src_sapphire_lang, dst_sapphire_lang)
             self.log_box.insert(tk.END, "Copied Sapphire ML, Agent, and Stdlib engine.\n")
 
         # 2. Configure PATH

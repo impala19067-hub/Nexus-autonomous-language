@@ -18,7 +18,7 @@ chmod +x install_wizard.sh
 ### Method 2: Native `.deb` Package (`sudo apt install`)
 Install via APT / dpkg package manager:
 ```bash
-sudo apt install ./nexus_1.0.0_all.deb
+sudo apt install ./sapphire_1.0.0_all.deb
 ```
 
 ---
@@ -26,5 +26,5 @@ sudo apt install ./nexus_1.0.0_all.deb
 ### Method 3: 1-Line Universal Terminal Command
 Install from anywhere via curl:
 ```bash
-curl -sSL https://raw.githubusercontent.com/impala19067-hub/Nexus-autonomous-language/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/impala19067-hub/Sapphire-autonomous-language/main/install.sh | bash
 ```

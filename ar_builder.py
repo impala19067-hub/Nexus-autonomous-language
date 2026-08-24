@@ -51,7 +51,7 @@ def build_deb(deb_root_dir, output_deb_path):
                 full_p = os.path.join(root, file_name)
                 rel_p = os.path.relpath(full_p, deb_root_dir).replace("\\", "/")
                 tarinfo = tar.gettarinfo(full_p, arcname="./" + rel_p)
-                if file_name == "nexus":
+                if file_name == "sapphire":
                     tarinfo.mode = 0o755
                 else:
                     tarinfo.mode = 0o644

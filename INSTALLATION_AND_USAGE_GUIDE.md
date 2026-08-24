@@ -25,22 +25,22 @@ No Python or third-party dependencies required!
 ### Method 2: Portable Binary Execution (Zero Installation)
 If someone prefers not to run installers:
 
-1. Download **`nexus.exe`** (standalone single-file executable binary).
-2. Copy `nexus.exe` into any project directory or place it in `C:\Windows\System32`.
+1. Download **`sapphire.exe`** (standalone single-file executable binary).
+2. Copy `sapphire.exe` into any project directory or place it in `C:\Windows\System32`.
 3. Open terminal in that directory and run:
    ```cmd
-   nexus run my_script.nx
+   sapphire run my_script.nx
    ```
 
 ---
 
 ### Method 3: Source Code / Developer Installation (Cross-Platform)
-If a developer wants to run Nexus directly from Python source code:
+If a developer wants to run Sapphire directly from Python source code:
 
-1. Clone or copy the `nexus_lang` repository:
+1. Clone or copy the `sapphire_lang` repository:
    ```bash
-   git clone https://github.com/nexus-lang/nexus.git
-   cd nexus
+   git clone https://github.com/sapphire-lang/sapphire.git
+   cd sapphire
    ```
 2. Install standard library dependencies (optional, for HTTP & system metrics):
    ```bash
@@ -48,45 +48,45 @@ If a developer wants to run Nexus directly from Python source code:
    ```
 3. Run the CLI engine directly:
    ```bash
-   python nexus_lang/src/cli.py run examples/01_basics.nx
+   python sapphire_lang/src/cli.py run examples/01_basics.nx
    ```
 
 ---
 
-## 🚀 How to Use Nexus Language
+## 🚀 How to Use Sapphire Language
 
-Once installed, the `nexus` command is globally available across your operating system.
+Once installed, the `sapphire` command is globally available across your operating system.
 
-### 1. Execute a Nexus Script (`.nx`)
+### 1. Execute a Sapphire Script (`.nx`)
 Create a file named `hello.nx`:
-```nexus
+```sapphire
 // hello.nx
 let name = "Developer";
 let info = os.system_info();
 
-print("🚀 Hello {name}! Welcome to Nexus.");
+print("🚀 Hello {name}! Welcome to Sapphire.");
 print("📊 Live System RAM: {info.ram_percent}%");
 
-os.notify("Nexus Alert", "Script executed successfully!");
+os.notify("Sapphire Alert", "Script executed successfully!");
 ```
 
 Run it from any terminal:
 ```cmd
-nexus run hello.nx
+sapphire run hello.nx
 ```
 
 ---
 
 ### 2. Launch the Interactive REPL Shell
-Type `nexus repl` to launch an interactive terminal sandbox:
+Type `sapphire repl` to launch an interactive terminal sandbox:
 ```cmd
-nexus repl
+sapphire repl
 ```
 ```text
-🌌 Nexus Language REPL 1.0.0
-nexus> let x = 50;
-nexus> let y = 100;
-nexus> print("Sum: {x + y}");
+🌌 Sapphire Language REPL 1.0.0
+sapphire> let x = 50;
+sapphire> let y = 100;
+sapphire> print("Sum: {x + y}");
 => Sum: 150
 ```
 
@@ -122,9 +122,9 @@ sapphire eval "let info = os.system_info(); print(info.platform);"
 
 ## 📁 What Files to Share/Distribute to Others
 
-To share Nexus with another user, zip and send them these files:
-- **`install_nexus.bat`** (Automated installer)
-- **`nexus.exe`** (Global CLI Compiler & Runtime)
-- **`nexus_voice_tutor.exe`** (Voice-Guided Interactive Tutor)
-- **`Nexus_Coding_and_Usage_Guide.pdf`** (Complete Reference Manual)
+To share Sapphire with another user, zip and send them these files:
+- **`install_sapphire.bat`** (Automated installer)
+- **`sapphire.exe`** (Global CLI Compiler & Runtime)
+- **`sapphire_voice_tutor.exe`** (Voice-Guided Interactive Tutor)
+- **`Sapphire_Coding_and_Usage_Guide.pdf`** (Complete Reference Manual)
 - **`Beginners_Guide_Your_First_Autonomous_AI.pdf`** (Beginner Tutorial)

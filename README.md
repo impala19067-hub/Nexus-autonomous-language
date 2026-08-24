@@ -41,18 +41,18 @@ Natively runs on Windows, Kali Linux, Ubuntu, Debian, Arch, and macOS.
 ## 🚀 Installation Guide
 
 ### 🪟 Windows Setup
-Download **[Sapphire_Setup_Wizard.exe](https://github.com/impala19067-hub/Nexus-autonomous-language/releases)** from the Latest Release and double-click to install.
+Download **[Sapphire_Setup_Wizard.exe](https://github.com/impala19067-hub/Sapphire-autonomous-language/releases)** from the Latest Release and double-click to install.
 
 ### 🐧 Linux (Kali, Ubuntu, Debian, Arch) & 🍎 macOS Setup
 
 #### Method A: 1-Line Instant Installer (Recommended)
 ```bash
-curl -sSL https://raw.githubusercontent.com/impala19067-hub/Nexus-autonomous-language/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/impala19067-hub/Sapphire-autonomous-language/main/install.sh | bash
 ```
 
 #### Method B: Native Kali / Debian Package (`.deb`)
 ```bash
-sudo apt install ./nexus_1.0.0_all.deb
+sudo apt install ./sapphire_1.0.0_all.deb
 ```
 
 ---
@@ -249,9 +249,9 @@ main();
 
 ## 📚 Documentation & Manuals
 
-- [📘 Sapphire Coding & Usage Guide (PDF)](docs/Nexus_Coding_and_Usage_Guide.pdf)
+- [📘 Sapphire Coding & Usage Guide (PDF)](docs/Sapphire_Coding_and_Usage_Guide.pdf)
 - [🤖 Building Advanced Autonomous AI (PDF)](docs/Building_Advanced_Autonomous_AI.pdf)
-- [📊 Autonomy & Performance Benchmarks (PDF)](docs/Nexus_Autonomy_and_Performance_Benchmarks.pdf)
+- [📊 Autonomy & Performance Benchmarks (PDF)](docs/Sapphire_Autonomy_and_Performance_Benchmarks.pdf)
 - [🎓 Beginner's Guide: Your First Autonomous AI (PDF)](docs/Beginners_Guide_Your_First_Autonomous_AI.pdf)
 
 ---

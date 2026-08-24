@@ -24,5 +24,5 @@ chmod +x install_wizard.command
 ### Method 3: 1-Line Universal Terminal Command
 Run from any macOS terminal:
 ```bash
-curl -sSL https://raw.githubusercontent.com/impala19067-hub/Nexus-autonomous-language/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/impala19067-hub/Sapphire-autonomous-language/main/install.sh | bash
 ```

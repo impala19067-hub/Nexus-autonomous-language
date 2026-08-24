@@ -11,12 +11,12 @@ import json
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 
-# Ensure sys.path includes nexus_lang
+# Ensure sys.path includes sapphire_lang
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-NEXUS_LANG_DIR = os.path.join(BASE_DIR, "nexus_lang")
-if NEXUS_LANG_DIR not in sys.path:
-    sys.path.insert(0, NEXUS_LANG_DIR)
-    sys.path.insert(0, os.path.join(NEXUS_LANG_DIR, "src"))
+SAPPHIRE_LANG_DIR = os.path.join(BASE_DIR, "sapphire_lang")
+if SAPPHIRE_LANG_DIR not in sys.path:
+    sys.path.insert(0, SAPPHIRE_LANG_DIR)
+    sys.path.insert(0, os.path.join(SAPPHIRE_LANG_DIR, "src"))
 
 # Reconfigure terminal encoding for UTF-8 compatibility
 if hasattr(sys.stdout, 'reconfigure'):
@@ -246,7 +246,7 @@ class SapphireStudio(tk.Tk):
         self.term_output.insert("1.0", f"🚀 Executing Sapphire Script: {self.lbl_file.cget('text')}...\n" + "─"*50 + "\n")
 
         def _execute():
-            cli_py = os.path.join(NEXUS_LANG_DIR, "src", "cli.py")
+            cli_py = os.path.join(SAPPHIRE_LANG_DIR, "src", "cli.py")
             cmd = [sys.executable, cli_py, "run", temp_file]
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             stdout, stderr = proc.communicate()

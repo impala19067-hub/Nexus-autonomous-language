@@ -4,7 +4,7 @@ a = Analysis(
     ['sapphire_setup_wizard.py'],
     pathex=[],
     binaries=[],
-    datas=[('nexus_lang', 'nexus_lang'), ('emerald_studio.py', '.'), ('sapphire_studio.py', '.'), ('docs/Nexus_Coding_and_Usage_Guide.pdf', '.'), ('docs/Building_Advanced_Autonomous_AI.pdf', '.'), ('docs/Nexus_Autonomy_and_Performance_Benchmarks.pdf', '.'), ('docs/Beginners_Guide_Your_First_Autonomous_AI.pdf', '.'), ('INSTALLATION_AND_USAGE_GUIDE.md', '.')],
+    datas=[('sapphire_lang', 'sapphire_lang'), ('emerald_studio.py', '.'), ('sapphire_studio.py', '.'), ('docs/Sapphire_Coding_and_Usage_Guide.pdf', '.'), ('docs/Building_Advanced_Autonomous_AI.pdf', '.'), ('docs/Sapphire_Autonomy_and_Performance_Benchmarks.pdf', '.'), ('docs/Beginners_Guide_Your_First_Autonomous_AI.pdf', '.'), ('INSTALLATION_AND_USAGE_GUIDE.md', '.')],
     hiddenimports=['pyttsx3.drivers.sapi5', 'win32com', 'comtypes'],
     hookspath=[],
     hooksconfig={},
