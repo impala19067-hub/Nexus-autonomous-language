@@ -1,22 +1,23 @@
-# 🌌 Nexus Programming Language — Complete Installation & Usage Guide
+# 💎 Sapphire Programming Language — Complete Installation & Usage Guide
 
-This guide explains how **anyone** can install, configure, and use the **Nexus Programming Language** on their computer from scratch.
+This guide explains how **anyone** can install, configure, and use the **Sapphire Programming Language** and **Emerald Developer Studio** on their computer from scratch.
 
 ---
 
-## 📦 How Someone Installs Nexus (3 Easy Methods)
+## 📦 How Someone Installs Sapphire (3 Easy Methods)
 
-### Method 1: Standalone One-Click Windows Installer (Recommended for Beginners)
+### Method 1: Standalone Graphical Windows Installer (`Sapphire_Setup_Wizard.exe`)
 No Python or third-party dependencies required!
 
-1. Download or receive the Nexus distribution folder (containing `install_nexus.bat`, `nexus.exe`, and `nexus_voice_tutor.exe`).
-2. Double-click **`install_nexus.bat`**.
+1. Download **`Sapphire_Setup_Wizard.exe`**.
+2. Double-click **`Sapphire_Setup_Wizard.exe`**.
 3. The installer will automatically:
-   - Copy `nexus.exe` and `nexus_voice_tutor.exe` to `%LOCALAPPDATA%\NexusLang`.
-   - Register `%LOCALAPPDATA%\NexusLang` in the system environment variable (`PATH`).
+   - Copy Sapphire language engine and Emerald Developer Studio GUI (`emerald_studio.py`).
+   - Register `%LOCALAPPDATA%\SapphireLang` in the system environment variable (`PATH`).
+   - Create Desktop shortcuts for Emerald Developer Studio GUI.
 4. Open a **new** Command Prompt or PowerShell window and test:
    ```cmd
-   nexus info
+   sapphire info
    ```
 
 ---
