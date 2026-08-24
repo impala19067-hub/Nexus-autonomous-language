@@ -51,8 +51,9 @@ class SapphireSetupWizard(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("💎 Sapphire Programming Language & Emerald Studio Setup Wizard")
-        self.geometry("660x500")
-        self.resizable(False, False)
+        self.geometry("700x580")
+        self.minsize(680, 540)
+        self.resizable(True, True)
         self.configure(bg="#0F172A") # Dark Navy
 
         # Default Install Path
@@ -104,12 +105,40 @@ class WelcomePage(tk.Frame):
         super().__init__(parent, bg="#0F172A")
         self.controller = controller
 
-        # Title
-        lbl_title = tk.Label(self, text="💎 Sapphire Programming Language v1.0.0", font=("Helvetica", 15, "bold"), fg="#38BDF8", bg="#0F172A")
-        lbl_title.pack(anchor="w", padx=30, pady=(25, 5))
+        # 1. BOTTOM BAR (Packed first so it is ALWAYS anchored and visible)
+        btm = tk.Frame(self, bg="#0A0F1D", height=60)
+        btm.pack(fill="x", side="bottom")
 
-        lbl_sub = tk.Label(self, text="Autonomous AI/ML Programming Language, Emerald Studio & Polymorphic Compiler", font=("Helvetica", 10), fg="#10B981", bg="#0F172A")
-        lbl_sub.pack(anchor="w", padx=30, pady=(0, 15))
+        sep = tk.Frame(btm, bg="#334155", height=1)
+        sep.pack(fill="x", side="top")
+
+        btn_inner = tk.Frame(btm, bg="#0A0F1D")
+        btn_inner.pack(fill="x", padx=30, pady=12)
+
+        btn_next = tk.Button(
+            btn_inner, text="Next >", font=("Helvetica", 10, "bold"),
+            fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF",
+            bd=0, padx=24, pady=7, cursor="hand2", command=lambda: controller.show_frame(DirectoryPage)
+        )
+        btn_next.pack(side="right")
+
+        btn_cancel = tk.Button(
+            btn_inner, text="Cancel", font=("Helvetica", 10),
+            fg="#94A3B8", bg="#1E293B", activebackground="#334155", activeforeground="#FFFFFF",
+            bd=0, padx=16, pady=7, cursor="hand2", command=controller.quit
+        )
+        btn_cancel.pack(side="right", padx=10)
+
+        # 2. MAIN CONTENT (Scrollable/Padded)
+        content = tk.Frame(self, bg="#0F172A")
+        content.pack(fill="both", expand=True, padx=30, pady=(20, 10))
+
+        # Title
+        lbl_title = tk.Label(content, text="💎 Sapphire Programming Language v1.0.0", font=("Helvetica", 15, "bold"), fg="#38BDF8", bg="#0F172A")
+        lbl_title.pack(anchor="w", pady=(0, 2))
+
+        lbl_sub = tk.Label(content, text="Autonomous AI/ML Programming Language, Emerald Studio & Polymorphic Compiler", font=("Helvetica", 10), fg="#10B981", bg="#0F172A")
+        lbl_sub.pack(anchor="w", pady=(0, 10))
 
         # Description
         desc_text = (
@@ -124,12 +153,12 @@ class WelcomePage(tk.Frame):
             "  • Sapphire Uninstaller (uninstall.exe)\n"
             "  • System PATH Environment Registration & PDF Documentation Suite"
         )
-        lbl_desc = tk.Label(self, text=desc_text, font=("Helvetica", 9), fg="#CBD5E1", bg="#1E293B", justify="left", anchor="nw", padx=15, pady=10, relief="solid", bd=1)
-        lbl_desc.pack(fill="x", padx=30, pady=5)
+        lbl_desc = tk.Label(content, text=desc_text, font=("Helvetica", 9), fg="#CBD5E1", bg="#1E293B", justify="left", anchor="nw", padx=14, pady=8, relief="solid", bd=1)
+        lbl_desc.pack(fill="x", pady=(0, 10))
 
         # Options Checkboxes
-        opts_frame = tk.Frame(self, bg="#0F172A")
-        opts_frame.pack(fill="x", padx=30, pady=8)
+        opts_frame = tk.Frame(content, bg="#0F172A")
+        opts_frame.pack(fill="x")
 
         chk_path = tk.Checkbutton(opts_frame, text="Register Sapphire in System PATH", variable=controller.opt_add_path, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
         chk_path.pack(anchor="w", pady=1)
@@ -143,28 +172,48 @@ class WelcomePage(tk.Frame):
         chk_short = tk.Checkbutton(opts_frame, text="Create Desktop & Start Menu Shortcuts", variable=controller.opt_shortcuts, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
         chk_short.pack(anchor="w", pady=1)
 
-        # Bottom Bar
-        btm = tk.Frame(self, bg="#0F172A")
-        btm.pack(fill="x", side="bottom", padx=30, pady=15)
-
-        btn_next = tk.Button(btm, text="Next >", font=("Helvetica", 10, "bold"), fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF", bd=0, padx=20, pady=6, command=lambda: controller.show_frame(DirectoryPage))
-        btn_next.pack(side="right")
-
 
 class DirectoryPage(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent, bg="#0F172A")
         self.controller = controller
 
-        lbl_title = tk.Label(self, text="Select Destination Folder", font=("Helvetica", 14, "bold"), fg="#38BDF8", bg="#0F172A")
-        lbl_title.pack(anchor="w", padx=30, pady=(25, 5))
+        # 1. BOTTOM BAR
+        btm = tk.Frame(self, bg="#0A0F1D", height=60)
+        btm.pack(fill="x", side="bottom")
 
-        lbl_sub = tk.Label(self, text="Choose where Sapphire Language and Emerald Studio will be installed.", font=("Helvetica", 9), fg="#94A3B8", bg="#0F172A")
-        lbl_sub.pack(anchor="w", padx=30, pady=(0, 20))
+        sep = tk.Frame(btm, bg="#334155", height=1)
+        sep.pack(fill="x", side="top")
 
-        # Folder Selection
-        box_frame = tk.Frame(self, bg="#1E293B", padx=15, pady=15)
-        box_frame.pack(fill="x", padx=30, pady=10)
+        btn_inner = tk.Frame(btm, bg="#0A0F1D")
+        btn_inner.pack(fill="x", padx=30, pady=12)
+
+        btn_next = tk.Button(
+            btn_inner, text="Install Now", font=("Helvetica", 10, "bold"),
+            fg="#FFFFFF", bg="#16A34A", activebackground="#15803D", activeforeground="#FFFFFF",
+            bd=0, padx=22, pady=7, cursor="hand2", command=lambda: controller.show_frame(ProgressPage)
+        )
+        btn_next.pack(side="right")
+
+        btn_back = tk.Button(
+            btn_inner, text="< Back", font=("Helvetica", 10),
+            fg="#E2E8F0", bg="#334155", activebackground="#475569", activeforeground="#FFFFFF",
+            bd=0, padx=16, pady=7, cursor="hand2", command=lambda: controller.show_frame(WelcomePage)
+        )
+        btn_back.pack(side="right", padx=10)
+
+        # 2. MAIN CONTENT
+        content = tk.Frame(self, bg="#0F172A")
+        content.pack(fill="both", expand=True, padx=30, pady=(20, 10))
+
+        lbl_title = tk.Label(content, text="Select Destination Folder", font=("Helvetica", 14, "bold"), fg="#38BDF8", bg="#0F172A")
+        lbl_title.pack(anchor="w", pady=(0, 5))
+
+        lbl_sub = tk.Label(content, text="Choose where Sapphire Language, Tools, and Studio will be installed.", font=("Helvetica", 9), fg="#94A3B8", bg="#0F172A")
+        lbl_sub.pack(anchor="w", pady=(0, 20))
+
+        box_frame = tk.Frame(content, bg="#1E293B", padx=15, pady=15, relief="solid", bd=1)
+        box_frame.pack(fill="x", pady=10)
 
         lbl_dir = tk.Label(box_frame, text="Install Location:", font=("Helvetica", 10, "bold"), fg="#E2E8F0", bg="#1E293B")
         lbl_dir.pack(anchor="w", pady=(0, 5))
@@ -175,18 +224,8 @@ class DirectoryPage(tk.Frame):
         ent_path = tk.Entry(entry_frame, textvariable=controller.install_dir, font=("Consolas", 10), bg="#0F172A", fg="#F8FAFC", bd=1)
         ent_path.pack(side="left", fill="x", expand=True, padx=(0, 10))
 
-        btn_browse = tk.Button(entry_frame, text="Browse...", font=("Helvetica", 9), fg="#FFFFFF", bg="#334155", activebackground="#475569", activeforeground="#FFFFFF", bd=0, padx=12, pady=4, command=self.browse)
+        btn_browse = tk.Button(entry_frame, text="Browse...", font=("Helvetica", 9), fg="#FFFFFF", bg="#334155", activebackground="#475569", activeforeground="#FFFFFF", bd=0, padx=12, pady=4, cursor="hand2", command=self.browse)
         btn_browse.pack(side="right")
-
-        # Bottom Bar
-        btm = tk.Frame(self, bg="#0F172A")
-        btm.pack(fill="x", side="bottom", padx=30, pady=20)
-
-        btn_next = tk.Button(btm, text="Install Now", font=("Helvetica", 10, "bold"), fg="#FFFFFF", bg="#16A34A", activebackground="#15803D", activeforeground="#FFFFFF", bd=0, padx=20, pady=6, command=lambda: controller.show_frame(ProgressPage))
-        btn_next.pack(side="right")
-
-        btn_back = tk.Button(btm, text="< Back", font=("Helvetica", 10), fg="#E2E8F0", bg="#334155", activebackground="#475569", activeforeground="#FFFFFF", bd=0, padx=15, pady=6, command=lambda: controller.show_frame(WelcomePage))
-        btn_back.pack(side="right", padx=10)
 
     def browse(self):
         target = filedialog.askdirectory(initialdir=self.controller.install_dir.get())
@@ -199,19 +238,20 @@ class ProgressPage(tk.Frame):
         super().__init__(parent, bg="#0F172A")
         self.controller = controller
 
-        lbl_title = tk.Label(self, text="Installing Sapphire...", font=("Helvetica", 14, "bold"), fg="#38BDF8", bg="#0F172A")
-        lbl_title.pack(anchor="w", padx=30, pady=(30, 5))
+        content = tk.Frame(self, bg="#0F172A")
+        content.pack(fill="both", expand=True, padx=30, pady=(25, 15))
 
-        self.lbl_status = tk.Label(self, text="Preparing installation...", font=("Helvetica", 10), fg="#94A3B8", bg="#0F172A")
-        self.lbl_status.pack(anchor="w", padx=30, pady=(0, 15))
+        lbl_title = tk.Label(content, text="Installing Sapphire...", font=("Helvetica", 14, "bold"), fg="#38BDF8", bg="#0F172A")
+        lbl_title.pack(anchor="w", pady=(0, 5))
 
-        # Progress bar
-        self.progress = ttk.Progressbar(self, orient="horizontal", mode="determinate", length=580)
-        self.progress.pack(padx=30, pady=10)
+        self.lbl_status = tk.Label(content, text="Preparing installation...", font=("Helvetica", 10), fg="#94A3B8", bg="#0F172A")
+        self.lbl_status.pack(anchor="w", pady=(0, 15))
 
-        # Log output
-        self.log_box = tk.Text(self, font=("Consolas", 9), bg="#1E293B", fg="#38BDF8", bd=1, height=12)
-        self.log_box.pack(fill="x", padx=30, pady=15)
+        self.progress = ttk.Progressbar(content, orient="horizontal", mode="determinate", length=620)
+        self.progress.pack(fill="x", pady=5)
+
+        self.log_box = tk.Text(content, font=("Consolas", 9), bg="#1E293B", fg="#38BDF8", bd=1, height=14)
+        self.log_box.pack(fill="both", expand=True, pady=(10, 0))
 
     def on_show(self):
         threading.Thread(target=self.do_install, daemon=True).start()
@@ -232,7 +272,6 @@ class ProgressPage(tk.Frame):
         self.update_status("Unpacking Sapphire Binaries & Tools...", 15, f"Destination: {target}")
         
         all_binaries = [
-            # Core & IDE Binaries
             "sapphire.exe",
             "emerald.exe",
             "Emerald_Studio.exe",
@@ -242,7 +281,6 @@ class ProgressPage(tk.Frame):
             "sapphire_tutor.exe",
             "uninstall_sapphire.exe",
             "uninstall.exe",
-            # Python Scripts
             "emerald_studio.py",
             "sapphire_studio.py",
             "sapphire_compiler.py",
@@ -260,7 +298,7 @@ class ProgressPage(tk.Frame):
                 self.log_box.insert(tk.END, f"  ✅ Unpacked: {fname}\n")
                 self.log_box.see(tk.END)
             else:
-                self.log_box.insert(tk.END, f"  ⚠️ Skipped: {fname} (not present)\n")
+                self.log_box.insert(tk.END, f"  ⚠️ Skipped: {fname} (not found in bundle)\n")
 
         # 2. Copy All 5 PDF Manuals & Markdown Guides
         self.update_status("Unpacking PDF Developer Documentation...", 45, "Copying PDF documentation suite")
@@ -305,7 +343,6 @@ class ProgressPage(tk.Frame):
             try:
                 desktop = os.path.join(os.environ.get("USERPROFILE", "C:\\Users\\Public"), "Desktop")
                 
-                # Shortcut helper function
                 def create_vbs_shortcut(shortcut_name, target_exe_name, fallback_script):
                     target_exe = os.path.join(target, target_exe_name)
                     script_file = os.path.join(target, fallback_script)
@@ -330,7 +367,6 @@ class ProgressPage(tk.Frame):
                     subprocess.run(["powershell", "-NoProfile", "-Command", vbs_cmd], capture_output=True)
                     self.log_box.insert(tk.END, f"  🔗 Shortcut: {shortcut_name}\n")
 
-                # Shortcuts to create
                 create_vbs_shortcut("Emerald Developer Studio", "Emerald_Studio.exe", "emerald_studio.py")
                 create_vbs_shortcut("Sapphire Compiler Studio", "Sapphire_Compiler.exe", "sapphire_compiler.py")
                 create_vbs_shortcut("Sapphire Language Tutor", "sapphire_voice_tutor.exe", "sapphire_voice_tutor.py")
@@ -349,14 +385,35 @@ class FinishPage(tk.Frame):
         super().__init__(parent, bg="#0F172A")
         self.controller = controller
 
-        lbl_title = tk.Label(self, text="🎉 Sapphire Installation Complete!", font=("Helvetica", 16, "bold"), fg="#10B981", bg="#0F172A")
-        lbl_title.pack(anchor="w", padx=30, pady=(35, 5))
+        # 1. BOTTOM BAR
+        btm = tk.Frame(self, bg="#0A0F1D", height=60)
+        btm.pack(fill="x", side="bottom")
 
-        lbl_sub = tk.Label(self, text="Sapphire Language, Emerald Studio, and Compiler are ready to use.", font=("Helvetica", 10), fg="#CBD5E1", bg="#0F172A")
-        lbl_sub.pack(anchor="w", padx=30, pady=(0, 20))
+        sep = tk.Frame(btm, bg="#334155", height=1)
+        sep.pack(fill="x", side="top")
 
-        box_frame = tk.Frame(self, bg="#1E293B", padx=15, pady=15)
-        box_frame.pack(fill="x", padx=30, pady=10)
+        btn_inner = tk.Frame(btm, bg="#0A0F1D")
+        btn_inner.pack(fill="x", padx=30, pady=12)
+
+        btn_finish = tk.Button(
+            btn_inner, text="Finish", font=("Helvetica", 10, "bold"),
+            fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF",
+            bd=0, padx=28, pady=7, cursor="hand2", command=self.finish
+        )
+        btn_finish.pack(side="right")
+
+        # 2. MAIN CONTENT
+        content = tk.Frame(self, bg="#0F172A")
+        content.pack(fill="both", expand=True, padx=30, pady=(25, 10))
+
+        lbl_title = tk.Label(content, text="🎉 Sapphire Installation Complete!", font=("Helvetica", 16, "bold"), fg="#10B981", bg="#0F172A")
+        lbl_title.pack(anchor="w", pady=(0, 5))
+
+        lbl_sub = tk.Label(content, text="Sapphire Language, Emerald Studio, and Compiler are ready to use.", font=("Helvetica", 10), fg="#CBD5E1", bg="#0F172A")
+        lbl_sub.pack(anchor="w", pady=(0, 20))
+
+        box_frame = tk.Frame(content, bg="#1E293B", padx=15, pady=15, relief="solid", bd=1)
+        box_frame.pack(fill="x", pady=10)
 
         chk_launch = tk.Checkbutton(box_frame, text="Launch Emerald Developer Studio GUI Now", variable=controller.opt_launch_studio, font=("Helvetica", 10, "bold"), fg="#38BDF8", bg="#1E293B", selectcolor="#0F172A", activebackground="#1E293B")
         chk_launch.pack(anchor="w", pady=4)
@@ -364,16 +421,8 @@ class FinishPage(tk.Frame):
         chk_guide = tk.Checkbutton(box_frame, text="Open Sapphire Documentation & AI Manual", variable=controller.opt_open_guide, font=("Helvetica", 10), fg="#F8FAFC", bg="#1E293B", selectcolor="#0F172A", activebackground="#1E293B")
         chk_guide.pack(anchor="w", pady=4)
 
-        # Command Reference summary
         lbl_cmd = tk.Label(box_frame, text="\nTerminal Commands: 'sapphire run file.sp' | 'sapphire compiler' | 'sapphire studio' | 'sapphire tutor'", font=("Consolas", 9), fg="#94A3B8", bg="#1E293B")
         lbl_cmd.pack(anchor="w")
-
-        # Bottom Bar
-        btm = tk.Frame(self, bg="#0F172A")
-        btm.pack(fill="x", side="bottom", padx=30, pady=20)
-
-        btn_finish = tk.Button(btm, text="Finish", font=("Helvetica", 10, "bold"), fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF", bd=0, padx=25, pady=6, command=self.finish)
-        btn_finish.pack(side="right")
 
     def finish(self):
         target = self.controller.install_dir.get()
