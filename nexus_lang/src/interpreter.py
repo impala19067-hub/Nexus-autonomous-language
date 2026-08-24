@@ -40,6 +40,10 @@ class SapphireFunction:
             return ret.value
         return None
 
+    def __call__(self, *args):
+        interpreter = Interpreter()
+        return self.call(interpreter, list(args))
+
 class NativeFunction:
     def __init__(self, py_func):
         self.py_func = py_func

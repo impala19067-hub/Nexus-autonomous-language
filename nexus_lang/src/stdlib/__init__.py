@@ -9,6 +9,7 @@ from src.stdlib.ai_mod import AIModule
 from src.stdlib.data_mod import DataModule
 from src.stdlib.scheduler_mod import SchedulerModule
 from src.stdlib.ml_mod import MLModule
+from src.stdlib.agent_mod import AgentModule
 
 STDLIB = {
     "os": OSModule,
@@ -19,4 +20,5 @@ STDLIB = {
     "data": DataModule,
     "scheduler": SchedulerModule,
     "ml": MLModule,
+    "agent": AgentModule,
 }
