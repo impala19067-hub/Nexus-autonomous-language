@@ -1,5 +1,5 @@
 """
-Nexus Language Command Line Interface (CLI)
+Sapphire Language Command Line Interface (CLI)
 """
 import sys
 import os
@@ -53,7 +53,7 @@ def run_file(filepath: str, verbose: bool = False):
     run_code(source, filename=filepath, verbose=verbose)
 
 def start_repl():
-    print(f"🌌 Nexus Language REPL {VERSION}")
+    print(f"💎 Sapphire Language REPL {VERSION}")
     print("Type 'exit' or 'quit' to exit.\n")
 
     interpreter = Interpreter()
@@ -61,7 +61,7 @@ def start_repl():
 
     while True:
         try:
-            line = input("nexus> ")
+            line = input("sapphire> ")
             if line.strip() in ("exit", "quit"):
                 break
             if not line.strip():
@@ -81,7 +81,7 @@ def start_repl():
             print(f"Error: {e}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Nexus Language CLI Engine")
+    parser = argparse.ArgumentParser(description="Sapphire Language CLI Engine")
     parser.add_argument("command", nargs="?", default="repl", choices=["run", "eval", "repl", "info"], help="Command to execute")
     parser.add_argument("file_or_code", nargs="?", help="Script file path or inline code string")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose debug token/AST output")
@@ -90,17 +90,19 @@ def main():
 
     if args.command == "run":
         if not args.file_or_code:
-            print("Usage: python -m src.cli run <script.nx>")
+            print("Usage: sapphire run <script.nx>")
             sys.exit(1)
         run_file(args.file_or_code, verbose=args.verbose)
     elif args.command == "eval":
         if not args.file_or_code:
-            print("Usage: python -m src.cli eval \"<code>\"")
+            print('Usage: sapphire eval "<code>"')
             sys.exit(1)
         run_code(args.file_or_code, filename="<eval>", verbose=args.verbose)
     elif args.command == "info":
-        print(f"🌌 Nexus Language v{VERSION}")
-        print("Capabilities: Full PC System Automation, Concurrency, Shell Piping, AI Agent Primitives")
+        print(f"💎 Sapphire Language v{VERSION}")
+        print("Capabilities: Full PC Automation, Concurrency, Shell Piping, AI Agent Primitives,")
+        print("              Tensor Engine, Automatic Differentiation, Massive Datasets,")
+        print("              Model Architectures, Distributed Training, Numerical Kernels, GPU/TPU")
     elif args.command == "repl":
         start_repl()
 

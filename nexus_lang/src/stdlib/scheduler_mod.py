@@ -1,5 +1,5 @@
 """
-Nexus Scheduler & Delay Standard Library
+Sapphire Scheduler & Delay Standard Library
 """
 import time
 import threading

@@ -1,5 +1,5 @@
 """
-Nexus AI & Autonomous Agent Standard Library
+Sapphire AI & Autonomous Agent Standard Library
 """
 import json
 import re
@@ -16,7 +16,7 @@ class AIModule:
             return json.dumps({
                 "status": "success",
                 "extracted_fields": ["auto_analyzed"],
-                "summary": "Nexus Built-in AI Parsing Complete"
+                "summary": "Sapphire Built-in AI Parsing Complete"
             })
         else:
             return f"[AI Response ({model})]: Successfully processed prompt: {prompt_text[:100]}..."

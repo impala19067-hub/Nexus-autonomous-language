@@ -1,5 +1,5 @@
 """
-Nexus File System Automation Standard Library
+Sapphire File System Automation Standard Library
 """
 import os
 import shutil

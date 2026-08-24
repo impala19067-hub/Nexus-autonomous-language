@@ -1,5 +1,5 @@
 """
-Nexus GUI Automation (Mouse, Keyboard, Dialogs) Standard Library
+Sapphire GUI Automation (Mouse, Keyboard, Dialogs) Standard Library
 """
 import ctypes
 import time

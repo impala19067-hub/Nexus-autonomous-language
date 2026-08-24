@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Nexus Programming Language - Automated Linux & macOS Installer
+# Sapphire Programming Language - Automated Linux & macOS Installer
 # Supports Kali Linux, Ubuntu, Debian, Arch, Fedora, and macOS.
 
 echo "====================================================================="
-echo "  NEXUS PROGRAMMING LANGUAGE - AUTOMATED LINUX/macOS INSTALLER"
+echo "  SAPPHIRE PROGRAMMING LANGUAGE - AUTOMATED LINUX/macOS INSTALLER"
 echo "====================================================================="
 echo ""
 

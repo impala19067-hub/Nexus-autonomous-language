@@ -1,5 +1,5 @@
 """
-Nexus Standard Library Exports
+Sapphire Standard Library Exports
 """
 from src.stdlib.os_mod import OSModule
 from src.stdlib.fs_mod import FSModule
@@ -8,6 +8,7 @@ from src.stdlib.gui_mod import GUIModule
 from src.stdlib.ai_mod import AIModule
 from src.stdlib.data_mod import DataModule
 from src.stdlib.scheduler_mod import SchedulerModule
+from src.stdlib.ml_mod import MLModule
 
 STDLIB = {
     "os": OSModule,
@@ -17,4 +18,5 @@ STDLIB = {
     "ai": AIModule,
     "data": DataModule,
     "scheduler": SchedulerModule,
+    "ml": MLModule,
 }

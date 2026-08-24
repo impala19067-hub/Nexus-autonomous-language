@@ -1,5 +1,5 @@
 """
-Nexus Language Interpreter / Runtime Evaluator
+Sapphire Language Interpreter / Runtime Evaluator
 """
 import concurrent.futures
 from src.ast_nodes import (
@@ -22,7 +22,7 @@ class RuntimeError(Exception):
     def __init__(self, message: str):
         super().__init__(f"RuntimeError: {message}")
 
-class NexusFunction:
+class SapphireFunction:
     def __init__(self, decl: FunctionDefNode, closure: Environment):
         self.decl = decl
         self.closure = closure
@@ -46,6 +46,9 @@ class NativeFunction:
 
     def call(self, interpreter: 'Interpreter', args: list) -> any:
         return self.py_func(*args)
+
+    def __call__(self, *args, **kwargs):
+        return self.py_func(*args, **kwargs)
 
 class ProcessResult(str):
     """Wrapper class for process command output that behaves as string with extra methods."""
@@ -97,7 +100,7 @@ class Interpreter:
             return val
 
         elif isinstance(stmt, FunctionDefNode):
-            fn = NexusFunction(stmt, env)
+            fn = SapphireFunction(stmt, env)
             env.define(stmt.name, fn)
             return fn
 
@@ -296,6 +299,8 @@ class Interpreter:
             # Method access on objects/modules/strings/lists/maps
             if hasattr(obj, member):
                 attr = getattr(obj, member)
+                if isinstance(attr, type):
+                    return attr
                 if callable(attr):
                     return NativeFunction(attr)
                 return attr
@@ -367,7 +372,7 @@ class Interpreter:
         raise RuntimeError(f"Unknown AST node type: {type(expr).__name__}")
 
     def _invoke_callable(self, callee: any, args: list, env: Environment) -> any:
-        if isinstance(callee, NexusFunction):
+        if isinstance(callee, SapphireFunction):
             return callee.call(self, args)
         elif isinstance(callee, NativeFunction):
             return callee.call(self, args)

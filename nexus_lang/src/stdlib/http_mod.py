@@ -1,5 +1,5 @@
 """
-Nexus HTTP & Web Automation Standard Library
+Sapphire HTTP & Web Automation Standard Library
 """
 import json
 import urllib.request

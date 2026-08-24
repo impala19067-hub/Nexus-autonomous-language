@@ -1,5 +1,5 @@
 """
-Nexus OS & PC System Automation Standard Library
+Sapphire OS & PC System Automation Standard Library
 """
 import os
 import sys
