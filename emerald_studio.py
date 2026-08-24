@@ -151,7 +151,7 @@ class EmeraldStudio(tk.Tk):
 
         # Left Container: Editor & Tabs
         left_frame = tk.Frame(paned, bg="#0F172A")
-        paned.add(left_frame, weight=3)
+        paned.add(left_frame)
 
         # Toolbar
         tb = tk.Frame(left_frame, bg="#0F172A")
@@ -185,7 +185,7 @@ class EmeraldStudio(tk.Tk):
 
         # Right Container: Terminal & Inspector Tabs
         right_frame = tk.Frame(paned, bg="#0F172A")
-        paned.add(right_frame, weight=2)
+        paned.add(right_frame)
 
         notebook = ttk.Notebook(right_frame)
         notebook.pack(fill="both", expand=True)
