@@ -104,16 +104,16 @@ class WelcomePage(tk.Frame):
         opts_frame = tk.Frame(self, bg="#0F172A")
         opts_frame.pack(fill="x", padx=30, pady=10)
 
-        chk_path = tk.Checkbutton(opts_frame, text="Register Sapphire in System PATH", variable=controller.opt_add_path, font=("Helvetica", 9.5), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
+        chk_path = tk.Checkbutton(opts_frame, text="Register Sapphire in System PATH", variable=controller.opt_add_path, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
         chk_path.pack(anchor="w", pady=2)
 
-        chk_studio = tk.Checkbutton(opts_frame, text="Install Emerald Developer Studio GUI (emerald_studio.py)", variable=controller.opt_studio, font=("Helvetica", 9.5), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
+        chk_studio = tk.Checkbutton(opts_frame, text="Install Emerald Developer Studio GUI (emerald_studio.py)", variable=controller.opt_studio, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
         chk_studio.pack(anchor="w", pady=2)
 
-        chk_docs = tk.Checkbutton(opts_frame, text="Include PDF Developer & AI Manuals", variable=controller.opt_docs, font=("Helvetica", 9.5), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
+        chk_docs = tk.Checkbutton(opts_frame, text="Include PDF Developer & AI Manuals", variable=controller.opt_docs, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
         chk_docs.pack(anchor="w", pady=2)
 
-        chk_short = tk.Checkbutton(opts_frame, text="Create Desktop & Start Menu Shortcuts", variable=controller.opt_shortcuts, font=("Helvetica", 9.5), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
+        chk_short = tk.Checkbutton(opts_frame, text="Create Desktop & Start Menu Shortcuts", variable=controller.opt_shortcuts, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
         chk_short.pack(anchor="w", pady=2)
 
         # Bottom Bar
@@ -139,7 +139,7 @@ class DirectoryPage(tk.Frame):
         box_frame = tk.Frame(self, bg="#1E293B", padx=15, pady=15)
         box_frame.pack(fill="x", padx=30, pady=10)
 
-        lbl_dir = tk.Label(box_frame, text="Install Location:", font=("Helvetica", 9.5, "bold"), fg="#E2E8F0", bg="#1E293B")
+        lbl_dir = tk.Label(box_frame, text="Install Location:", font=("Helvetica", 10, "bold"), fg="#E2E8F0", bg="#1E293B")
         lbl_dir.pack(anchor="w", pady=(0, 5))
 
         entry_frame = tk.Frame(box_frame, bg="#1E293B")
@@ -175,7 +175,7 @@ class ProgressPage(tk.Frame):
         lbl_title = tk.Label(self, text="Installing Sapphire...", font=("Helvetica", 14, "bold"), fg="#38BDF8", bg="#0F172A")
         lbl_title.pack(anchor="w", padx=30, pady=(30, 5))
 
-        self.lbl_status = tk.Label(self, text="Preparing installation...", font=("Helvetica", 9.5), fg="#94A3B8", bg="#0F172A")
+        self.lbl_status = tk.Label(self, text="Preparing installation...", font=("Helvetica", 10), fg="#94A3B8", bg="#0F172A")
         self.lbl_status.pack(anchor="w", padx=30, pady=(0, 15))
 
         # Progress bar
@@ -183,7 +183,7 @@ class ProgressPage(tk.Frame):
         self.progress.pack(padx=30, pady=10)
 
         # Log output
-        self.log_box = tk.Text(self, font=("Consolas", 8.5), bg="#1E293B", fg="#38BDF8", bd=1, height=12)
+        self.log_box = tk.Text(self, font=("Consolas", 9), bg="#1E293B", fg="#38BDF8", bd=1, height=12)
         self.log_box.pack(fill="x", padx=30, pady=15)
 
     def on_show(self):
@@ -203,14 +203,14 @@ class ProgressPage(tk.Frame):
 
         # 1. Copy Files
         self.update_status("Copying Sapphire Core & Studio Files...", 15, "Target: " + target)
-        for fname in ["sapphire.exe", "sapphire.exe", "emerald_studio.py", "sapphire_studio.py", "sapphire_cli.py", "sapphire_voice_tutor.exe", "sapphire_tutor.exe", "sapphire_voice_tutor.py", "sapphire_tutor.py"]:
+        for fname in ["sapphire.exe", "emerald.exe", "Emerald_Studio.exe", "emerald_studio.py", "sapphire_studio.py", "sapphire_cli.py", "sapphire_voice_tutor.exe", "sapphire_tutor.exe", "sapphire_voice_tutor.py", "sapphire_tutor.py"]:
             src_path = os.path.join(BASE_DIR, fname)
             if os.path.exists(src_path):
                 shutil.copy2(src_path, os.path.join(target, fname))
 
         # Copy Docs
         self.update_status("Copying PDF Developer Manuals...", 45, "Copying PDF documentation")
-        for pdf_file in ["Sapphire_Coding_and_Usage_Guide.pdf", "Building_Advanced_Autonomous_AI.pdf", "Sapphire_Autonomy_and_Performance_Benchmarks.pdf", "Beginners_Guide_Your_First_Autonomous_AI.pdf", "INSTALLATION_AND_USAGE_GUIDE.md"]:
+        for pdf_file in ["Sapphire_Coding_and_Usage_Guide.pdf", "Building_Advanced_Autonomous_AI.pdf", "Sapphire_Autonomy_and_Performance_Benchmarks.pdf", "Beginners_Guide_Your_First_Autonomous_AI.pdf", "Sapphire_Language_Specification_and_Automation_Manual.pdf", "INSTALLATION_AND_USAGE_GUIDE.md"]:
             src_path = os.path.join(BASE_DIR, pdf_file)
             if not os.path.exists(src_path):
                 src_path = os.path.join(BASE_DIR, "docs", pdf_file)
@@ -240,15 +240,18 @@ class ProgressPage(tk.Frame):
         if self.controller.opt_shortcuts.get():
             self.update_status("Creating Desktop Shortcuts...", 90, "Generating Shortcuts")
             try:
-                desktop = os.path.join(os.environ["USERPROFILE"], "Desktop")
+                desktop = os.path.join(os.environ.get("USERPROFILE", "C:\\Users\\Public"), "Desktop")
+                studio_exe = os.path.join(target, "Emerald_Studio.exe")
                 studio_script = os.path.join(target, "emerald_studio.py")
+                target_exe = studio_exe if os.path.exists(studio_exe) else "python.exe"
+                args = "" if os.path.exists(studio_exe) else f'"{studio_script}"'
                 
                 # PowerShell VBS shortcut helper
                 vbs_cmd = f'''
                 $ws = New-Object -ComObject WScript.Shell
                 $s = $ws.CreateShortcut("{desktop}\\Emerald Developer Studio.lnk")
-                $s.TargetPath = "python.exe"
-                $s.Arguments = '"{studio_script}"'
+                $s.TargetPath = "{target_exe}"
+                $s.Arguments = '{args}'
                 $s.WorkingDirectory = "{target}"
                 $s.Save()
                 '''
@@ -279,11 +282,11 @@ class FinishPage(tk.Frame):
         chk_launch = tk.Checkbutton(box_frame, text="Launch Emerald Developer Studio GUI Now", variable=controller.opt_launch_studio, font=("Helvetica", 10, "bold"), fg="#38BDF8", bg="#1E293B", selectcolor="#0F172A", activebackground="#1E293B")
         chk_launch.pack(anchor="w", pady=4)
 
-        chk_guide = tk.Checkbutton(box_frame, text="Open Sapphire Documentation & AI Manual", variable=controller.opt_open_guide, font=("Helvetica", 9.5), fg="#F8FAFC", bg="#1E293B", selectcolor="#0F172A", activebackground="#1E293B")
+        chk_guide = tk.Checkbutton(box_frame, text="Open Sapphire Documentation & AI Manual", variable=controller.opt_open_guide, font=("Helvetica", 10), fg="#F8FAFC", bg="#1E293B", selectcolor="#0F172A", activebackground="#1E293B")
         chk_guide.pack(anchor="w", pady=4)
 
         # Command Reference summary
-        lbl_cmd = tk.Label(box_frame, text="\nTerminal Commands: 'sapphire run script.sp' | 'sapphire studio' | 'sapphire info'", font=("Consolas", 8.5), fg="#94A3B8", bg="#1E293B")
+        lbl_cmd = tk.Label(box_frame, text="\nTerminal Commands: 'sapphire run script.sp' | 'sapphire studio' | 'sapphire info'", font=("Consolas", 9), fg="#94A3B8", bg="#1E293B")
         lbl_cmd.pack(anchor="w")
 
         # Bottom Bar
@@ -297,8 +300,11 @@ class FinishPage(tk.Frame):
         target = self.controller.install_dir.get()
         
         if self.controller.opt_launch_studio.get():
+            studio_exe = os.path.join(target, "Emerald_Studio.exe")
             studio_py = os.path.join(target, "emerald_studio.py")
-            if os.path.exists(studio_py):
+            if os.path.exists(studio_exe):
+                subprocess.Popen([studio_exe], cwd=target)
+            elif os.path.exists(studio_py):
                 subprocess.Popen([sys.executable, studio_py], cwd=target)
 
         if self.controller.opt_open_guide.get():
