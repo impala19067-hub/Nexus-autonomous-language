@@ -115,19 +115,19 @@ class WelcomePage(tk.Frame):
         btn_inner = tk.Frame(btm, bg="#0A0F1D")
         btn_inner.pack(fill="x", padx=30, pady=12)
 
+        btn_cancel = tk.Button(
+            btn_inner, text="Cancel", font=("Helvetica", 10),
+            fg="#94A3B8", bg="#1E293B", activebackground="#334155", activeforeground="#FFFFFF",
+            bd=0, padx=18, pady=7, cursor="hand2", command=controller.quit
+        )
+        btn_cancel.pack(side="left", padx=5)
+
         btn_next = tk.Button(
             btn_inner, text="Next >", font=("Helvetica", 10, "bold"),
             fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF",
             bd=0, padx=24, pady=7, cursor="hand2", command=lambda: controller.show_frame(DirectoryPage)
         )
-        btn_next.pack(side="right")
-
-        btn_cancel = tk.Button(
-            btn_inner, text="Cancel", font=("Helvetica", 10),
-            fg="#94A3B8", bg="#1E293B", activebackground="#334155", activeforeground="#FFFFFF",
-            bd=0, padx=16, pady=7, cursor="hand2", command=controller.quit
-        )
-        btn_cancel.pack(side="right", padx=10)
+        btn_next.pack(side="right", padx=5)
 
         # 2. MAIN CONTENT (Scrollable/Padded)
         content = tk.Frame(self, bg="#0F172A")
@@ -188,19 +188,19 @@ class DirectoryPage(tk.Frame):
         btn_inner = tk.Frame(btm, bg="#0A0F1D")
         btn_inner.pack(fill="x", padx=30, pady=12)
 
+        btn_back = tk.Button(
+            btn_inner, text="< Back", font=("Helvetica", 10),
+            fg="#E2E8F0", bg="#334155", activebackground="#475569", activeforeground="#FFFFFF",
+            bd=0, padx=18, pady=7, cursor="hand2", command=lambda: controller.show_frame(WelcomePage)
+        )
+        btn_back.pack(side="left", padx=5)
+
         btn_next = tk.Button(
             btn_inner, text="Install Now", font=("Helvetica", 10, "bold"),
             fg="#FFFFFF", bg="#16A34A", activebackground="#15803D", activeforeground="#FFFFFF",
             bd=0, padx=22, pady=7, cursor="hand2", command=lambda: controller.show_frame(ProgressPage)
         )
-        btn_next.pack(side="right")
-
-        btn_back = tk.Button(
-            btn_inner, text="< Back", font=("Helvetica", 10),
-            fg="#E2E8F0", bg="#334155", activebackground="#475569", activeforeground="#FFFFFF",
-            bd=0, padx=16, pady=7, cursor="hand2", command=lambda: controller.show_frame(WelcomePage)
-        )
-        btn_back.pack(side="right", padx=10)
+        btn_next.pack(side="right", padx=5)
 
         # 2. MAIN CONTENT
         content = tk.Frame(self, bg="#0F172A")
