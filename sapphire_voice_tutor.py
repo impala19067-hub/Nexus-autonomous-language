@@ -562,77 +562,136 @@ def run_chapter(chap_idx: int):
         else:
             print("Please enter a valid choice number.")
 
-def run_interactive_course():
-    print_banner("Sapphire Step-by-Step Voice-Guided Course")
-    voice.speak("Welcome to the step by step voice guided course for Sapphire Programming Language.", wait=True)
-    
-    for idx in range(len(CURRICULUM)):
-        run_chapter(idx)
-        if idx < len(CURRICULUM) - 1:
-            print_next_step(f"Press Enter to advance to Chapter {idx+2} (or type 'q' to return to menu):")
-            user_input = input().strip().lower()
-            if user_input == 'q':
-                break
-    
-    print_banner("Course Chapter Module Finished!")
-    voice.speak("Great job! You have completed the curriculum modules.", wait=True)
+SAPPHIRE_QA_KNOWLEDGE = {
+    # Core Language
+    "what is sapphire": "Sapphire is an autonomous-first programming language built for PC automation, deep learning, and AI agent systems. It uses colorless concurrency, native agent primitives, and a built-in ML stack.",
+    "what is .sp": "The .sp file extension is used for Sapphire script files. You run them using: sapphire run yourfile.sp",
+    "how to print": "To print in Sapphire, use: print(\"Hello World!\"); or with variables: print(\"Value: {myVar}\");",
+    "how to declare a variable": "Declare variables with the `let` keyword: let name = \"Sapphire\"; let count = 42;",
+    "what is parallel": "The `parallel { ... }` block runs multiple code branches concurrently using green fibers. No async/await needed — Sapphire handles it automatically.",
+    "how to define a function": "Use the `fn` keyword: fn greet(name) { print(\"Hello {name}!\"); } Then call it: greet(\"World\");",
+    "what is the pipe operator": "The pipe operator `|>` passes a value as input to the next function: [1,2,3] |> normalize |> evaluate",
+    "how to train ai": "Use ml.train.fit(): let model = ml.model.mlp([16, 64, 2], \"relu\"); ml.train.fit(model, dataset, ml.loss.cross_entropy, ml.optim.adam(0.001), epochs=5);",
+    "what is agent memory": "agent.memory lets agents remember and recall values: agent.memory.remember(\"key\", value); agent.memory.recall(\"key\");",
+    "how to run a loop": "Use for-in: for (item in list) { print(item); } or while: while (x < 10) { x = x + 1; }",
+    "what is if else": "Standard conditional: if (x > 5) { print(\"big\"); } else { print(\"small\"); }",
+    "what is agent.autonomy": "agent.autonomy.run_loop(goal, max_steps=5) runs a full autonomous ReAct reasoning loop to achieve a multi-step goal.",
+    "how to read a file": "Use: let content = fs.read(\"path/to/file.txt\");",
+    "how to write a file": "Use: fs.write(\"path/to/file.txt\", \"content here\");",
+    "how to get system info": "Use: let info = os.system_info(); print(\"RAM: {info.ram_percent}%\");",
+    "how to make an http request": "Use: let resp = http.get(\"https://api.example.com\"); print(resp.status_code);",
+    "what is emerald studio": "Emerald Developer Studio is Sapphire's official GUI IDE with a code editor, live terminal, hardware dashboard, and tool builder. Launch with: sapphire studio",
+    "how to launch the compiler": "Run sapphire compiler or double-click Sapphire_Compiler.exe for the high-tech polymorphic compiler studio.",
+    "what is the compiler": "The Sapphire Compiler Studio (Sapphire_Compiler.exe) features a live lexer token inspector, polymorphic AST graph, IR/bytecode disassembler, JIT sandbox, and 1-click EXE bundler.",
+    "how to use ai.prompt": "Call ai.prompt() to query an LLM: let answer = ai.prompt(\"What should I do if RAM exceeds 90%?\"); print(answer);",
+    "what is ml.tensor": "Creates a multi-dimensional array for deep learning: let t = ml.tensor([[1.0, 2.0], [3.0, 4.0]]);",
+    "what is autograd": "Automatic differentiation: let tape = ml.autograd.tape(); tape.watch(x); let grad = tape.gradient(y, x);",
+    "what is sapphire repl": "The interactive REPL shell lets you type Sapphire code line-by-line and see results instantly. Launch with: sapphire repl",
+    "how to create a gui alert": "Use: gui.alert(\"Your message\", \"Title\");",
+    "how to send a notification": "Use: os.notify(\"Title\", \"Message content\");",
+}
 
-def live_sandbox():
-    print_banner("Live Sapphire Interactive Sandbox")
-    if not SAPPHIRE_ENGINE_AVAILABLE:
-        print(f"❌ Interpreter engine unavailable: {SAPPHIRE_ENGINE_ERROR}")
-        voice.speak("Interpreter engine unavailable.", wait=False)
-        input("\nPress Enter to return to main menu...")
-        return
+def find_best_qa_answer(question: str) -> str:
+    """Finds the best matching answer from the knowledge base using keyword matching."""
+    q = question.lower().strip().rstrip("?")
+    # Direct lookup
+    if q in SAPPHIRE_QA_KNOWLEDGE:
+        return SAPPHIRE_QA_KNOWLEDGE[q]
+    # Keyword scoring
+    best_score = 0
+    best_answer = None
+    q_words = set(q.split())
+    for key, answer in SAPPHIRE_QA_KNOWLEDGE.items():
+        key_words = set(key.split())
+        score = len(q_words & key_words)
+        if score > best_score:
+            best_score = score
+            best_answer = answer
+    if best_score >= 1 and best_answer:
+        return best_answer
+    return None
 
-    voice.speak("Welcome to the live interactive sandbox. You can type any Sapphire code to execute it immediately.", wait=False)
-    print("Type your Sapphire code line or snippet below. Type 'exit' or 'quit' to return to main menu.\n")
-    
-    try:
-        interpreter = Interpreter()
-        env = interpreter.global_env
-    except Exception as e:
-        print(f"❌ Failed to initialize Interpreter environment: {e}")
-        input("\nPress Enter to return to main menu...")
-        return
+def interactive_qa_mode():
+    """Interactive Q&A session where users can ask any Sapphire question."""
+    print_banner("💬 ASK SAPPHIRE — INTERACTIVE Q&A MODE")
+    print("""
+  Ask any question about Sapphire programming language and get an
+  instant answer with voice narration!
+
+  Examples:
+    • "How do I train an AI model?"
+    • "What is the parallel block?"
+    • "How do I define a function?"
+    • "What is agent.memory?"
+    • "How to read a file?"
+
+  Type 'help' for all available topics.
+  Type 'exit' or 'quit' to return to the main menu.
+""")
+    voice.speak("Interactive Q and A mode activated. Ask me anything about Sapphire!", wait=False)
 
     while True:
         try:
-            line = input("sapphire> ")
-            if line.strip().lower() in ("exit", "quit"):
-                break
-            if not line.strip():
-                continue
-            
-            lexer = Lexer(line)
-            tokens = lexer.tokenize()
-            parser = Parser(tokens)
-            ast = parser.parse()
-            res = interpreter.interpret(ast, env)
-            if res is not None:
-                print(f"=> {interpreter._stringify(res)}")
-        except KeyboardInterrupt:
-            print("\nExiting sandbox mode...")
-            break
-        except Exception as e:
-            print(f"❌ Sandbox Execution Error: {e}")
-            voice.speak("Execution error.", wait=False)
+            print_next_step("Type your question about Sapphire:")
+            question = input("❓ Your Question: ").strip()
 
-def settings_menu():
-    print_banner("Voice & Audio Settings")
-    current_status = "ENABLED" if voice.enabled else "DISABLED"
-    print(f"Current Voice Status: {current_status}")
-    print("1. Toggle Voice Speech ON/OFF")
-    print("2. Return to Main Menu")
-    
-    print_next_step("Select option (1-2):")
-    choice = input("Choice: ").strip()
-    if choice == "1":
-        new_state = voice.toggle()
-        state_str = "ENABLED" if new_state else "DISABLED"
-        print(f"\n✅ Voice Speech is now {state_str}.")
-        if new_state:
-            voice.speak("Voice speech enabled.")
+            if not question:
+                continue
+
+            if question.lower() in ("exit", "quit", "q", "back"):
+                voice.speak("Returning to main menu.", wait=False)
+                break
+
+            if question.lower() == "help":
+                print("\n📚 Available Topics (type any related question):")
+                topics = [
+                    "Variables & let keyword",
+                    "Print & String Interpolation",
+                    "Functions (fn keyword)",
+                    "If/Else Conditions",
+                    "For & While Loops",
+                    "Parallel Blocks (Concurrency)",
+                    "Pipe Operator |>",
+                    "AI Training (ml.train.fit)",
+                    "Tensors & Autograd",
+                    "Agent Memory & Autonomy",
+                    "HTTP Requests (http.get/post)",
+                    "File System (fs.read/write)",
+                    "System Info (os.system_info)",
+                    "GUI Alerts & Notifications",
+                    "Emerald Studio IDE",
+                    "Polymorphic Compiler Studio",
+                    "Sapphire REPL",
+                ]
+                for t in topics:
+                    print(f"  • {t}")
+                print()
+                voice.speak("I can answer questions about variables, functions, AI training, concurrency, file systems, and more.", wait=False)
+                continue
+
+            # Try to find answer in knowledge base
+            answer = find_best_qa_answer(question)
+
+            if answer:
+                print(f"\n💡 ANSWER:\n  {answer}\n")
+                voice.speak(answer, wait=False)
+            else:
+                # Try running through Sapphire interpreter if it looks like code
+                if any(kw in question for kw in ["let ", "fn ", "print(", "ml.", "agent.", "os.", "fs."]):
+                    print("\n🧪 Detected code — running in sandbox:\n")
+                    execute_sapphire_code(question)
+                else:
+                    fallback = (
+                        "I don't have a specific answer for that yet, but here's a tip: "
+                        "Check the Sapphire documentation PDFs (Coding Guide, AI Manual, Spec Manual) "
+                        "in your Sapphire installation folder, or try the live sandbox mode to experiment with code!"
+                    )
+                    print(f"\n🤔 {fallback}\n")
+                    voice.speak(fallback, wait=False)
+
+        except KeyboardInterrupt:
+            print("\nReturning to main menu...")
+            break
 
 def main_menu():
     voice.speak("Welcome to the Advanced Voice Guided Sapphire Language Tutor.", wait=False)
@@ -641,10 +700,11 @@ def main_menu():
         print("1. 🎓 Start Guided Course (13 Step-by-Step Chapters & Quizzes)")
         print("2. 📚 Select Specific Chapter")
         print("3. 🧪 Open Live Interactive Code Sandbox")
-        print("4. 🔊 Voice & Speech Settings")
-        print("5. 🚪 Exit")
+        print("4. 💬 Ask a Question (Interactive Q&A Mode)")
+        print("5. 🔊 Voice & Speech Settings")
+        print("6. 🚪 Exit")
         
-        print_next_step("Select an option by entering a number from 1 to 5:")
+        print_next_step("Select an option by entering a number from 1 to 6:")
         choice = input("Choice: ").strip()
         
         if choice == "1":
@@ -660,8 +720,10 @@ def main_menu():
         elif choice == "3":
             live_sandbox()
         elif choice == "4":
-            settings_menu()
+            interactive_qa_mode()
         elif choice == "5":
+            settings_menu()
+        elif choice == "6":
             print("\nThank you for learning Sapphire Language! Goodbye! 🚀\n")
             voice.speak("Thank you for learning Sapphire Language. Goodbye!", wait=True)
             break
@@ -675,3 +737,4 @@ if __name__ == "__main__":
         print(f"\n❌ Unexpected Application Error: {err}")
         traceback.print_exc()
         input("\nPress Enter to exit...")
+

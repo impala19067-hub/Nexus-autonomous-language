@@ -133,7 +133,12 @@ class OSModule:
                 root.destroy()
                 return True
             else:
-                subprocess.run(f'powershell Set-Clipboard "{text}"', shell=True)
+                # Use -Value flag to avoid PositionalParameterNotFound when text contains colons/spaces
+                escaped = str(text).replace("'", "''")
+                subprocess.run(
+                    ["powershell", "-Command", f"Set-Clipboard -Value '{escaped}'"],
+                    capture_output=True
+                )
                 return True
         except Exception:
             return False
