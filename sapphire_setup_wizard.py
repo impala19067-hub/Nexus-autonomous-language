@@ -51,8 +51,8 @@ class SapphireSetupWizard(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("💎 Sapphire Programming Language & Emerald Studio Setup Wizard")
-        self.geometry("700x580")
-        self.minsize(680, 540)
+        self.geometry("720x560")
+        self.minsize(680, 520)
         self.resizable(True, True)
         self.configure(bg="#0F172A") # Dark Navy
 
@@ -70,12 +70,35 @@ class SapphireSetupWizard(tk.Tk):
         self.opt_launch_studio = tk.BooleanVar(value=True)
         self.opt_open_guide = tk.BooleanVar(value=True)
 
-        # Styles
-        self.setup_styles()
+        # 1. FIXED FOOTER BAR (Anchored at root level for 100% reliable layout)
+        self.footer = tk.Frame(self, bg="#0A0F1D", height=65)
+        self.footer.pack(fill="x", side="bottom")
 
-        # Frames container
+        self.sep = tk.Frame(self.footer, bg="#334155", height=1)
+        self.sep.pack(fill="x", side="top")
+
+        self.btn_box = tk.Frame(self.footer, bg="#0A0F1D")
+        self.btn_box.pack(fill="x", padx=30, pady=12)
+
+        self.btn_left = tk.Button(
+            self.btn_box, text="Cancel", font=("Helvetica", 10),
+            fg="#94A3B8", bg="#1E293B", activebackground="#334155", activeforeground="#FFFFFF",
+            bd=0, padx=20, pady=7, cursor="hand2", command=self.quit
+        )
+        self.btn_left.pack(side="left")
+
+        self.btn_right = tk.Button(
+            self.btn_box, text="Next >", font=("Helvetica", 10, "bold"),
+            fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF",
+            bd=0, padx=26, pady=7, cursor="hand2", command=self.on_next_click
+        )
+        self.btn_right.pack(side="right")
+
+        # 2. PAGE CONTAINER (Fills all space above the footer)
         self.container = tk.Frame(self, bg="#0F172A")
         self.container.pack(fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
         for PageClass in (WelcomePage, DirectoryPage, ProgressPage, FinishPage):
@@ -83,21 +106,60 @@ class SapphireSetupWizard(tk.Tk):
             self.frames[PageClass] = page
             page.grid(row=0, column=0, sticky="nsew")
 
+        self.current_page = None
         self.show_frame(WelcomePage)
 
-    def setup_styles(self):
-        self.style = ttk.Style()
-        self.style.theme_use("clam")
-        self.style.configure("TFrame", background="#0F172A")
-        self.style.configure("Header.TLabel", font=("Helvetica", 16, "bold"), foreground="#38BDF8", background="#0F172A")
-        self.style.configure("SubHeader.TLabel", font=("Helvetica", 10), foreground="#94A3B8", background="#0F172A")
-        self.style.configure("TCheckbutton", font=("Helvetica", 10), foreground="#E2E8F0", background="#0F172A")
-
     def show_frame(self, page_class):
+        self.current_page = page_class
         frame = self.frames[page_class]
         frame.tkraise()
+
+        # Update Navigation Buttons dynamically
+        if page_class == WelcomePage:
+            self.btn_left.pack(side="left")
+            self.btn_left.config(text="Cancel", bg="#1E293B", command=self.quit, state="normal")
+            self.btn_right.pack(side="right")
+            self.btn_right.config(text="Next >", bg="#2563EB", activebackground="#1D4ED8", command=lambda: self.show_frame(DirectoryPage), state="normal")
+        elif page_class == DirectoryPage:
+            self.btn_left.pack(side="left")
+            self.btn_left.config(text="< Back", bg="#334155", command=lambda: self.show_frame(WelcomePage), state="normal")
+            self.btn_right.pack(side="right")
+            self.btn_right.config(text="Install Now", bg="#16A34A", activebackground="#15803D", command=lambda: self.show_frame(ProgressPage), state="normal")
+        elif page_class == ProgressPage:
+            self.btn_left.config(state="disabled")
+            self.btn_right.config(state="disabled", text="Installing...", bg="#475569")
+        elif page_class == FinishPage:
+            self.btn_left.pack_forget()
+            self.btn_right.pack(side="right")
+            self.btn_right.config(text="Finish", bg="#2563EB", activebackground="#1D4ED8", command=self.finish_app, state="normal")
+
         if hasattr(frame, "on_show"):
             frame.on_show()
+
+    def on_next_click(self):
+        if self.current_page == WelcomePage:
+            self.show_frame(DirectoryPage)
+        elif self.current_page == DirectoryPage:
+            self.show_frame(ProgressPage)
+        elif self.current_page == FinishPage:
+            self.finish_app()
+
+    def finish_app(self):
+        target = self.install_dir.get()
+        if self.opt_launch_studio.get():
+            studio_exe = os.path.join(target, "Emerald_Studio.exe")
+            studio_py = os.path.join(target, "emerald_studio.py")
+            if os.path.exists(studio_exe):
+                subprocess.Popen([studio_exe], cwd=target)
+            elif os.path.exists(studio_py):
+                subprocess.Popen([sys.executable, studio_py], cwd=target)
+
+        if self.opt_open_guide.get():
+            pdf_path = os.path.join(target, "Beginners_Guide_Your_First_Autonomous_AI.pdf")
+            if os.path.exists(pdf_path):
+                os.startfile(pdf_path)
+
+        self.quit()
 
 
 class WelcomePage(tk.Frame):
@@ -105,31 +167,7 @@ class WelcomePage(tk.Frame):
         super().__init__(parent, bg="#0F172A")
         self.controller = controller
 
-        # 1. BOTTOM BAR (Packed first so it is ALWAYS anchored and visible)
-        btm = tk.Frame(self, bg="#0A0F1D", height=60)
-        btm.pack(fill="x", side="bottom")
-
-        sep = tk.Frame(btm, bg="#334155", height=1)
-        sep.pack(fill="x", side="top")
-
-        btn_inner = tk.Frame(btm, bg="#0A0F1D")
-        btn_inner.pack(fill="x", padx=30, pady=12)
-
-        btn_cancel = tk.Button(
-            btn_inner, text="Cancel", font=("Helvetica", 10),
-            fg="#94A3B8", bg="#1E293B", activebackground="#334155", activeforeground="#FFFFFF",
-            bd=0, padx=18, pady=7, cursor="hand2", command=controller.quit
-        )
-        btn_cancel.pack(side="left", padx=5)
-
-        btn_next = tk.Button(
-            btn_inner, text="Next >", font=("Helvetica", 10, "bold"),
-            fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF",
-            bd=0, padx=24, pady=7, cursor="hand2", command=lambda: controller.show_frame(DirectoryPage)
-        )
-        btn_next.pack(side="right", padx=5)
-
-        # 2. MAIN CONTENT (Scrollable/Padded)
+        # Main Padded Container
         content = tk.Frame(self, bg="#0F172A")
         content.pack(fill="both", expand=True, padx=30, pady=(20, 10))
 
@@ -178,31 +216,6 @@ class DirectoryPage(tk.Frame):
         super().__init__(parent, bg="#0F172A")
         self.controller = controller
 
-        # 1. BOTTOM BAR
-        btm = tk.Frame(self, bg="#0A0F1D", height=60)
-        btm.pack(fill="x", side="bottom")
-
-        sep = tk.Frame(btm, bg="#334155", height=1)
-        sep.pack(fill="x", side="top")
-
-        btn_inner = tk.Frame(btm, bg="#0A0F1D")
-        btn_inner.pack(fill="x", padx=30, pady=12)
-
-        btn_back = tk.Button(
-            btn_inner, text="< Back", font=("Helvetica", 10),
-            fg="#E2E8F0", bg="#334155", activebackground="#475569", activeforeground="#FFFFFF",
-            bd=0, padx=18, pady=7, cursor="hand2", command=lambda: controller.show_frame(WelcomePage)
-        )
-        btn_back.pack(side="left", padx=5)
-
-        btn_next = tk.Button(
-            btn_inner, text="Install Now", font=("Helvetica", 10, "bold"),
-            fg="#FFFFFF", bg="#16A34A", activebackground="#15803D", activeforeground="#FFFFFF",
-            bd=0, padx=22, pady=7, cursor="hand2", command=lambda: controller.show_frame(ProgressPage)
-        )
-        btn_next.pack(side="right", padx=5)
-
-        # 2. MAIN CONTENT
         content = tk.Frame(self, bg="#0F172A")
         content.pack(fill="both", expand=True, padx=30, pady=(20, 10))
 
@@ -385,24 +398,6 @@ class FinishPage(tk.Frame):
         super().__init__(parent, bg="#0F172A")
         self.controller = controller
 
-        # 1. BOTTOM BAR
-        btm = tk.Frame(self, bg="#0A0F1D", height=60)
-        btm.pack(fill="x", side="bottom")
-
-        sep = tk.Frame(btm, bg="#334155", height=1)
-        sep.pack(fill="x", side="top")
-
-        btn_inner = tk.Frame(btm, bg="#0A0F1D")
-        btn_inner.pack(fill="x", padx=30, pady=12)
-
-        btn_finish = tk.Button(
-            btn_inner, text="Finish", font=("Helvetica", 10, "bold"),
-            fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF",
-            bd=0, padx=28, pady=7, cursor="hand2", command=self.finish
-        )
-        btn_finish.pack(side="right")
-
-        # 2. MAIN CONTENT
         content = tk.Frame(self, bg="#0F172A")
         content.pack(fill="both", expand=True, padx=30, pady=(25, 10))
 
@@ -423,24 +418,6 @@ class FinishPage(tk.Frame):
 
         lbl_cmd = tk.Label(box_frame, text="\nTerminal Commands: 'sapphire run file.sp' | 'sapphire compiler' | 'sapphire studio' | 'sapphire tutor'", font=("Consolas", 9), fg="#94A3B8", bg="#1E293B")
         lbl_cmd.pack(anchor="w")
-
-    def finish(self):
-        target = self.controller.install_dir.get()
-        
-        if self.controller.opt_launch_studio.get():
-            studio_exe = os.path.join(target, "Emerald_Studio.exe")
-            studio_py = os.path.join(target, "emerald_studio.py")
-            if os.path.exists(studio_exe):
-                subprocess.Popen([studio_exe], cwd=target)
-            elif os.path.exists(studio_py):
-                subprocess.Popen([sys.executable, studio_py], cwd=target)
-
-        if self.controller.opt_open_guide.get():
-            pdf_path = os.path.join(target, "Beginners_Guide_Your_First_Autonomous_AI.pdf")
-            if os.path.exists(pdf_path):
-                os.startfile(pdf_path)
-
-        self.controller.quit()
 
 if __name__ == "__main__":
     app = SapphireSetupWizard()
