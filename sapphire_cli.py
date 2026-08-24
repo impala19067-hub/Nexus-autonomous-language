@@ -61,12 +61,16 @@ def main():
     elif cmd in ("studio", "ide"):
         launch_app("Emerald_Studio.exe", "emerald_studio.py")
 
+    elif cmd in ("compiler", "compile"):
+        launch_app("Sapphire_Compiler.exe", "sapphire_compiler.py")
+
     elif cmd == "info":
         print("🌌 Sapphire Language v1.0.0 (Automation Era)")
         print("Executables:")
         print("  sapphire run <file.sp>   — Execute a Sapphire script")
         print("  sapphire repl            — Interactive REPL shell")
-        print("  sapphire studio          — Launch Emerald Developer Studio (VSCode IDE)")
+        print("  sapphire compiler        — Launch High-Tech Polymorphic Compiler Studio")
+        print("  sapphire studio          — Launch Emerald Developer Studio (IDE)")
         print("  sapphire tutor           — Launch Voice-Guided Interactive Tutor")
         print("  sapphire eval \"<code>\"  — Evaluate inline code string")
 
