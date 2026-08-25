@@ -4,7 +4,7 @@ Learns Sapphire Programming Language from 0 to Advanced Autonomous AI Developmen
 Features:
 - Real-time Speech Voice Narration (Text-To-Speech SAPI5)
 - Interactive Step-by-Step UI ("What to do next" guidance)
-- 13 Chapter-wise Modules & Quizzes
+- 14 Chapter-wise Modules & Quizzes (incl. Ch14: Frontier Distributed LLM)
 - Embedded Live Sapphire Code Execution Sandbox
 """
 
@@ -506,6 +506,62 @@ main_pc_autobot();""",
             "correct": 1,
             "explanation": "Autonomous agents combine perception, parallel execution, AI reasoning, and automated action!"
         }
+    },
+    {
+        "id": 14,
+        "title": "Frontier Distributed LLM Training (ml.distributed)",
+        "intro": "Welcome to Chapter 14 — the most advanced chapter! You will learn how Sapphire's ml.distributed module enables frontier-scale LLM training across hundreds of GPUs using 5D Auto-Parallelism, FlashAttention-3, FP8 precision, and NCCL-optimized communication.",
+        "content": """
+ml.distributed — Frontier LLM Training Engine:
+
+1. Transformer Spec (ml.distributed.Transformer):
+   Define model: layers, hidden size, heads, vocab, seq_len, precision (bf16/fp8).
+   Supports Dense (70B-540B) and MoE (Mixture-of-Experts) architectures.
+
+2. Cluster Spec (ml.distributed.Cluster):
+   Hardware DB: H100-80GB, H200-141GB, B200-192GB, A100-80GB, RTX4090-24GB.
+   Configures NVLink (600 GB/s intra-node) and InfiniBand (400 Gb/s inter-node).
+
+3. 5D Auto-Parallelism Solver:
+   Automatically finds the best strategy across 5 axes:
+   - TP (Tensor Parallelism): splits attention heads/MLP columns across GPUs
+   - PP (Pipeline Parallelism): layer micro-batching across pipeline stages
+   - DP (Data Parallelism): gradient all-reduce across DP ranks
+   - EP (Expert Parallelism): MoE expert sharding across EP ranks
+   - SP (Sequence Parallelism): sequence split for long-context
+   - ZeRO-1/2/3 / FSDP: optimizer, gradient, and weight sharding
+
+4. Optimized Kernels:
+   - FlashAttention-3: IO-optimal fused attention kernel (H100/H200)
+   - FP8 TransformerEngine: 8-bit matmuls with BF16 accumulation
+   - Triton/CUDA fused kernels for SwiGLU, LayerNorm, RoPE
+
+5. Benchmarks (512x H100-80GB, 70B model):
+   Strategy: TP1 PP1 DP512 ZeRO-3 FP8
+   MFU: 61% | Tokens/sec: ~1.52M | ETA (10T tokens): ~76 days
+   Memory per GPU: 36.5 GB / 80 GB (54% headroom)
+""",
+        "example": """// Chapter 14: 512-GPU Frontier LLM Training
+let model_cfg = {"layers": 80, "hidden": 8192, "heads": 64, "ff_mult": 4, "vocab": 128000, "seq_len": 8192, "precision": "fp8"};
+let model = ml.distributed.Transformer(model_cfg);
+let cluster_cfg = {"gpu_type": "H100-80GB", "num_gpus": 512, "gpus_per_node": 8};
+let cluster = ml.distributed.Cluster(cluster_cfg);
+let job_cfg = {"tokens": 10000000000000, "batch_size": 2048, "checkpoint_every": 1000};
+let result = ml.distributed.train(model, cluster, job_cfg);
+print("Strategy: {result.strategy}");
+print("MFU: {result.mfu_percent}%");
+print("Tokens/sec: {result.tokens_per_sec}");
+print("ETA (10T tokens): {result.eta_days} days");""",
+        "quiz": {
+            "question": "What does '5D Auto-Parallelism' mean in Sapphire's ml.distributed?",
+            "options": [
+                "Training in 5 separate Python processes",
+                "Automatically finding the best combination of TP, PP, DP, EP, and SP axes plus ZeRO sharding",
+                "Using 5 different GPU models at the same time"
+            ],
+            "correct": 2,
+            "explanation": "5D Auto-Parallelism means the solver searches all combinations of Tensor, Pipeline, Data, Expert, and Sequence Parallelism plus ZeRO sharding to find the highest MFU strategy for your model and cluster!"
+        }
     }
 ]
 
@@ -589,6 +645,21 @@ SAPPHIRE_QA_KNOWLEDGE = {
     "what is sapphire repl": "The interactive REPL shell lets you type Sapphire code line-by-line and see results instantly. Launch with: sapphire repl",
     "how to create a gui alert": "Use: gui.alert(\"Your message\", \"Title\");",
     "how to send a notification": "Use: os.notify(\"Title\", \"Message content\");",
+    # Frontier Distributed LLM (ml.distributed)
+    "what is ml.distributed": "ml.distributed is Sapphire's built-in frontier LLM training engine. Use ml.distributed.Transformer() to define model architecture, ml.distributed.Cluster() to define your GPU cluster, and ml.distributed.train() to auto-solve the best 5D parallelism strategy and run training at scale.",
+    "how to train a large language model": "Use ml.distributed: define your model with ml.distributed.Transformer({layers, hidden, heads, vocab, seq_len, precision}), define your cluster with ml.distributed.Cluster({gpu_type, num_gpus}), then call ml.distributed.train(model, cluster, {tokens, batch_size, checkpoint_every}).",
+    "what is tensor parallelism": "Tensor Parallelism (TP) splits individual tensor operations (attention heads, MLP columns) across multiple GPUs within the same node. It uses NVLink for ultra-fast intra-node communication. Sapphire's 5D solver chooses the optimal TP degree automatically.",
+    "what is pipeline parallelism": "Pipeline Parallelism (PP) assigns different transformer layers to different GPUs and uses micro-batching with the 1F1B schedule to keep all pipeline stages busy. It reduces per-GPU memory but introduces pipeline bubble overhead.",
+    "what is data parallelism": "Data Parallelism (DP) replicates the model across multiple GPUs and splits the training batch. Gradients are synchronized via AllReduce after each backward pass. ZeRO stages 1/2/3 extend DP by sharding optimizer states, gradients, and model weights.",
+    "what is zero fsdp": "ZeRO (Zero Redundancy Optimizer) / FSDP shards optimizer states (ZeRO-1), gradients (ZeRO-2), and model weights (ZeRO-3) across DP ranks. ZeRO-3 with 512 GPUs means each GPU only holds 1/512th of the model weights, enabling training of models far larger than single-GPU memory.",
+    "what is fp8": "FP8 (8-bit floating point) is supported by H100/H200/B200 GPUs via NVIDIA TransformerEngine. Sapphire uses FP8 for matmuls with BF16 accumulation, roughly doubling compute throughput vs BF16 while maintaining training stability.",
+    "what is flashattention": "FlashAttention-3 is an IO-optimal fused attention kernel for H100/H200 GPUs. It computes attention entirely in fast SRAM (L2 cache), avoiding slow HBM reads/writes. Sapphire's kernel_optimizer automatically dispatches FlashAttention-3 when H100/H200 is detected.",
+    "what is nccl": "NCCL (NVIDIA Collective Communications Library) is the GPU communication library used by Sapphire's ml.distributed for AllReduce, ReduceScatter, AllGather, and AllToAll collectives across GPUs. Sapphire models NCCL latency and overlaps communication with backward computation.",
+    "how to define a frontier model": "Use ml.distributed.Transformer with a config dict: let model = ml.distributed.Transformer({\"layers\": 80, \"hidden\": 8192, \"heads\": 64, \"ff_mult\": 4, \"vocab\": 128000, \"seq_len\": 8192, \"precision\": \"fp8\"});",
+    "what cluster types are supported": "Sapphire ml.distributed supports H100-80GB, H200-141GB, B200-192GB, A100-80GB, and RTX4090-24GB. Example: ml.distributed.Cluster({\"gpu_type\": \"H100-80GB\", \"num_gpus\": 512, \"gpus_per_node\": 8});",
+    "what is mfu": "MFU (Model FLOPs Utilization) measures what percentage of the GPU's theoretical peak FLOP/s is actually used. Sapphire achieves 61% MFU on 512x H100 for a 70B model with TP1 PP1 DP512 ZeRO-3 FP8. Higher MFU = more efficient training.",
+    "what is swiglu": "SwiGLU is a gated activation function used in modern LLMs (LLaMA, Gemma, Mistral). It replaces standard ReLU/GELU in the FFN. Sapphire's kernel optimizer dispatches fused Triton SwiGLU kernels automatically on supported GPUs.",
+    "how to check frontier training results": "The result object from ml.distributed.train() contains: result.strategy (e.g. TP1_PP1_DP512_ZeRO3_FP8), result.mfu_percent (e.g. 61.0), result.tokens_per_sec (e.g. 1520000), result.eta_days (e.g. 76), result.memory_per_gpu_gb.",
 }
 
 def find_best_qa_answer(question: str) -> str:
@@ -662,12 +733,23 @@ def interactive_qa_mode():
                     "Emerald Studio IDE",
                     "Polymorphic Compiler Studio",
                     "Sapphire REPL",
+                    # Frontier Distributed LLM topics
+                    "Frontier Distributed LLM (ml.distributed)",
+                    "5D Auto-Parallelism (TP/PP/DP/EP/SP)",
+                    "ZeRO / FSDP Sharding",
+                    "FP8 Precision & TransformerEngine",
+                    "FlashAttention-3 Kernels",
+                    "NCCL Collectives",
+                    "Cluster Setup (H100/H200/B200)",
+                    "MFU (Model FLOPs Utilization)",
+                    "Training 70B Models on 512 GPUs",
                 ]
                 for t in topics:
                     print(f"  • {t}")
                 print()
-                voice.speak("I can answer questions about variables, functions, AI training, concurrency, file systems, and more.", wait=False)
+                voice.speak("I can answer questions about variables, functions, AI training, concurrency, file systems, frontier distributed LLM training, 5D parallelism, and much more.", wait=False)
                 continue
+
 
             # Try to find answer in knowledge base
             answer = find_best_qa_answer(question)
@@ -697,7 +779,7 @@ def main_menu():
     voice.speak("Welcome to the Advanced Voice Guided Sapphire Language Tutor.", wait=False)
     while True:
         print_banner("Sapphire Advanced Voice-Guided Interactive Tutor")
-        print("1. 🎓 Start Guided Course (13 Step-by-Step Chapters & Quizzes)")
+        print("1. 🎓 Start Guided Course (14 Step-by-Step Chapters & Quizzes)")
         print("2. 📚 Select Specific Chapter")
         print("3. 🧪 Open Live Interactive Code Sandbox")
         print("4. 💬 Ask a Question (Interactive Q&A Mode)")
@@ -713,7 +795,8 @@ def main_menu():
             print_banner("Chapter Selection")
             for c in CURRICULUM:
                 print(f"  Chapter {c['id']}: {c['title']}")
-            print_next_step("Enter Chapter number (1-13):")
+            print_next_step("Enter Chapter number (1-14):")
+
             ch_num = input("Chapter: ").strip()
             if ch_num.isdigit() and 1 <= int(ch_num) <= len(CURRICULUM):
                 run_chapter(int(ch_num) - 1)
