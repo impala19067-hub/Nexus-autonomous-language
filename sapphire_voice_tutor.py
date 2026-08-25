@@ -662,44 +662,173 @@ SAPPHIRE_QA_KNOWLEDGE = {
     "how to check frontier training results": "The result object from ml.distributed.train() contains: result.strategy (e.g. TP1_PP1_DP512_ZeRO3_FP8), result.mfu_percent (e.g. 61.0), result.tokens_per_sec (e.g. 1520000), result.eta_days (e.g. 76), result.memory_per_gpu_gb.",
 }
 
-def find_best_qa_answer(question: str) -> str:
-    """Finds the best matching answer from the knowledge base using keyword matching."""
-    q = question.lower().strip().rstrip("?")
-    # Direct lookup
-    if q in SAPPHIRE_QA_KNOWLEDGE:
-        return SAPPHIRE_QA_KNOWLEDGE[q]
-    # Keyword scoring
-    best_score = 0
-    best_answer = None
-    q_words = set(q.split())
-    for key, answer in SAPPHIRE_QA_KNOWLEDGE.items():
-        key_words = set(key.split())
-        score = len(q_words & key_words)
-        if score > best_score:
-            best_score = score
-            best_answer = answer
-    if best_score >= 1 and best_answer:
-        return best_answer
+# =========================================================================
+# AI ASSISTANT CONFIGURATION & BACKENDS (GEMINI + OLLAMA BACKUP)
+# =========================================================================
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyB18pVLV_GYKzmGCOglQ3xiWVmYRz_Auns")
+DEFAULT_OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
+GEMINI_MODELS = [
+    "gemini-3.1-flash-lite",
+    "gemini-flash-lite-latest",
+    "gemini-3.6-flash",
+    "gemini-3.7-flash",
+    "gemini-3.1-pro-preview"
+]
+OLLAMA_MODELS = ["llama3", "mistral", "gemma", "llama2", "qwen"]
+
+SAPPHIRE_SYSTEM_CONTEXT = """You are the intelligent Voice-Guided Tutor and AI Assistant for the Sapphire Programming Language.
+Sapphire is an autonomous-first programming language engineered for PC Automation, Native AI, Colorless Parallel Concurrency, and a full ML & Distributed Deep Learning stack (ml.distributed).
+Key language features:
+- Variables: `let x = 10;`
+- Functions: `fn my_func(arg) { print("Hello {arg}"); }`
+- String interpolation: `"Value: {var}"`
+- Colorless parallel concurrency: `parallel { { task1(); } { task2(); } }` (no async/await)
+- Pipe operator: `[1,2,3] |> normalize |> evaluate`
+- Native AI: `ai.prompt("...")`, `ai.classify()`, `ai.extract_json()`
+- PC Automation: `os.system_info()`, `os.notify()`, `os.clip_write()`, `fs.read()`, `http.get()`
+- Distributed LLM: `ml.distributed.Transformer(config)`, `ml.distributed.Cluster(config)`, `ml.distributed.train(model, cluster, job_cfg)` with 5D Auto-Parallelism (TP, PP, DP, EP, SP, ZeRO-1/2/3), FlashAttention-3, and FP8.
+
+Answer the user's question clearly, concisely, and accurately in 2-4 sentences or provide a short Sapphire code snippet if relevant. Format your answer nicely for both on-screen reading and voice text-to-speech."""
+
+def clean_for_speech(text: str) -> str:
+    """Cleans markdown, code fences, and symbols for natural Text-To-Speech output."""
+    import re
+    cleaned = re.sub(r'```[\w]*\n?', '', text)
+    cleaned = re.sub(r'`([^`]+)`', r'\1', cleaned)
+    cleaned = re.sub(r'^[#*\-•]+\s*', '', cleaned, flags=re.MULTILINE)
+    cleaned = cleaned.replace("[", "").replace("]", "").replace("{", "").replace("}", "")
+    cleaned = cleaned.replace("  ", " ").strip()
+    return cleaned
+
+def query_gemini_qa(question: str) -> str:
+    """Queries Google Gemini API with automatic fallback across model variants."""
+    if not GEMINI_API_KEY:
+        return None
+    for model in GEMINI_MODELS:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
+        payload = json.dumps({
+            "systemInstruction": {"parts": [{"text": SAPPHIRE_SYSTEM_CONTEXT}]},
+            "contents": [{"parts": [{"text": question}]}],
+            "generationConfig": {"temperature": 0.7, "maxOutputTokens": 400}
+        }).encode('utf-8')
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=12) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+                candidates = data.get("candidates", [])
+                if candidates:
+                    parts = candidates[0].get("content", {}).get("parts", [])
+                    if parts:
+                        res = parts[0].get("text", "").strip()
+                        if res:
+                            return res
+        except Exception:
+            continue
     return None
 
+def query_ollama_qa(question: str) -> str:
+    """Queries local Ollama instance as backup."""
+    url = f"{DEFAULT_OLLAMA_URL}/api/generate"
+    for model in OLLAMA_MODELS:
+        payload = json.dumps({
+            "model": model,
+            "system": SAPPHIRE_SYSTEM_CONTEXT,
+            "prompt": question,
+            "stream": False,
+            "options": {"temperature": 0.7}
+        }).encode('utf-8')
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=4) as resp:
+                data = json.loads(resp.read().decode('utf-8'))
+                res = data.get("response", "").strip()
+                if res:
+                    return res
+        except Exception:
+            continue
+    return None
+
+def smart_qa_answer(question: str) -> tuple:
+    """
+    Intelligently answers any user question.
+    Order:
+      1. Gemini Cloud AI (Instant & comprehensive)
+      2. Ollama Local AI (Offline LLM backup)
+      3. Curated Sapphire Knowledge Base (High confidence match)
+      4. Safe fallback
+    Returns: (answer_text, source_name)
+    """
+    # 1. Gemini Cloud AI
+    try:
+        gemini_res = query_gemini_qa(question)
+        if gemini_res:
+            return gemini_res, "Gemini AI"
+    except Exception:
+        pass
+
+    # 2. Ollama Backup
+    try:
+        ollama_res = query_ollama_qa(question)
+        if ollama_res:
+            return ollama_res, "Ollama LLM (Local)"
+    except Exception:
+        pass
+
+    # 3. Curated Knowledge Base (exact or strict match)
+    q_norm = question.lower().strip().rstrip("?")
+    if q_norm in SAPPHIRE_QA_KNOWLEDGE:
+        return SAPPHIRE_QA_KNOWLEDGE[q_norm], "Sapphire Knowledge Base"
+
+    stop_words = {"what", "is", "how", "to", "a", "an", "the", "in", "for", "of", "and", "or", "do", "i", "can", "tell", "me", "about"}
+    q_words = set(q_norm.split()) - stop_words
+    if len(q_words) >= 1:
+        best_score = 0
+        best_answer = None
+        for key, answer in SAPPHIRE_QA_KNOWLEDGE.items():
+            key_words = set(key.split()) - stop_words
+            score = len(q_words & key_words)
+            if score > best_score:
+                best_score = score
+                best_answer = answer
+        if best_score >= 2 and best_answer:
+            return best_answer, "Sapphire Knowledge Base"
+
+    return (
+        "Sapphire is an autonomous-first language with built-in ML, 5D distributed training, "
+        "colorless parallel blocks, and PC automation. You can ask any coding question or run code in the sandbox!",
+        "Sapphire Tutor"
+    )
+
 def interactive_qa_mode():
-    """Interactive Q&A session where users can ask any Sapphire question."""
-    print_banner("💬 ASK SAPPHIRE — INTERACTIVE Q&A MODE")
+    """Interactive Q&A session where users can ask any Sapphire question powered by Gemini & Ollama."""
+    print_banner("💬 ASK SAPPHIRE — AI SMART TUTOR Q&A (GEMINI + OLLAMA)")
     print("""
-  Ask any question about Sapphire programming language and get an
-  instant answer with voice narration!
+  Ask ANY question about Sapphire programming language, AI training,
+  concurrency, system automation, or coding concepts.
+  Powered by Google Gemini AI with automatic local Ollama backup!
 
   Examples:
-    • "How do I train an AI model?"
-    • "What is the parallel block?"
-    • "How do I define a function?"
-    • "What is agent.memory?"
-    • "How to read a file?"
+    • "How do I train a 70B LLM across 512 GPUs?"
+    • "How do parallel blocks work without async/await?"
+    • "How can an agent monitor system memory and send an alert?"
+    • "What is SwiGLU and how is it used in Sapphire?"
+    • "Write an autonomous script that downloads data every 10 seconds."
 
   Type 'help' for all available topics.
   Type 'exit' or 'quit' to return to the main menu.
 """)
-    voice.speak("Interactive Q and A mode activated. Ask me anything about Sapphire!", wait=False)
+    voice.speak("Interactive Q and A mode activated. Powered by Gemini AI. Ask me anything about Sapphire!", wait=False)
 
     while True:
         try:
@@ -750,30 +879,27 @@ def interactive_qa_mode():
                 voice.speak("I can answer questions about variables, functions, AI training, concurrency, file systems, frontier distributed LLM training, 5D parallelism, and much more.", wait=False)
                 continue
 
+            # Query AI
+            print("\n⏳ Thinking with Sapphire AI (Gemini / Ollama)...")
+            answer, source = smart_qa_answer(question)
 
-            # Try to find answer in knowledge base
-            answer = find_best_qa_answer(question)
+            print(f"\n💡 ANSWER [{source}]:\n  {answer}\n")
+            voice.speak(clean_for_speech(answer), wait=False)
 
-            if answer:
-                print(f"\n💡 ANSWER:\n  {answer}\n")
-                voice.speak(answer, wait=False)
-            else:
-                # Try running through Sapphire interpreter if it looks like code
-                if any(kw in question for kw in ["let ", "fn ", "print(", "ml.", "agent.", "os.", "fs."]):
-                    print("\n🧪 Detected code — running in sandbox:\n")
+            # If user entered executable Sapphire code, optionally offer to run in sandbox
+            if any(question.strip().startswith(kw) for kw in ["let ", "fn ", "print(", "ml.", "parallel"]):
+                print("\n🧪 Detected executable Sapphire code in input. Running in live sandbox:\n")
+                try:
                     execute_sapphire_code(question)
-                else:
-                    fallback = (
-                        "I don't have a specific answer for that yet, but here's a tip: "
-                        "Check the Sapphire documentation PDFs (Coding Guide, AI Manual, Spec Manual) "
-                        "in your Sapphire installation folder, or try the live sandbox mode to experiment with code!"
-                    )
-                    print(f"\n🤔 {fallback}\n")
-                    voice.speak(fallback, wait=False)
+                except Exception as code_err:
+                    print(f"Sandbox note: {code_err}")
 
         except KeyboardInterrupt:
             print("\nReturning to main menu...")
             break
+        except Exception as err:
+            print(f"\n⚠️ Note: {err}\n")
+            continue
 
 def main_menu():
     voice.speak("Welcome to the Advanced Voice Guided Sapphire Language Tutor.", wait=False)

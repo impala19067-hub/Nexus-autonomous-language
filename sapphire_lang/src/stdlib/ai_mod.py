@@ -1,21 +1,29 @@
 """
 Sapphire AI & Native LLM Standard Library
-Integrates Ollama (Local) with automatic fallback to Groq API & Cloud LLMs.
+Integrates Google Gemini Cloud AI with automatic fallback to Ollama (Local), Groq API, & smart offline heuristics.
 """
 import json
 import re
 import urllib.request
 import os
 
+DEFAULT_GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyB18pVLV_GYKzmGCOglQ3xiWVmYRz_Auns")
 DEFAULT_GROQ_KEY = os.environ.get("GROQ_API_KEY", "")
-DEFAULT_OLLAMA_URL = "http://localhost:11434"
+DEFAULT_OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
+DEFAULT_GEMINI_MODELS = ["gemini-3.1-flash-lite", "gemini-flash-lite-latest", "gemini-3.6-flash", "gemini-3.7-flash"]
 DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
 DEFAULT_OLLAMA_MODEL = "llama3"
 
 class AIModule:
+    _gemini_key = DEFAULT_GEMINI_KEY
     _groq_key = DEFAULT_GROQ_KEY
     _ollama_url = DEFAULT_OLLAMA_URL
-    _preferred_backend = "auto"  # "auto", "ollama", "groq", "offline"
+    _preferred_backend = "auto"  # "auto", "gemini", "ollama", "groq", "offline"
+
+    @classmethod
+    def set_gemini_key(cls, key: str):
+        cls._gemini_key = key
+        return True
 
     @classmethod
     def set_groq_key(cls, key: str):
@@ -36,17 +44,24 @@ class AIModule:
     def prompt(cls, prompt_text: str, model: str = "default", temperature: float = 0.7) -> str:
         """
         Executes LLM prompt.
-        Attempts local Ollama endpoint first.
-        If Ollama is unavailable, automatically falls back to Groq API.
-        If both are unreachable, uses Sapphire's smart offline inference engine.
+        1. Attempts Gemini Cloud API first (ultra-fast, comprehensive intelligence).
+        2. Falls back to local Ollama endpoint if offline or preferred.
+        3. Falls back to Groq API.
+        4. If all unreachable, uses Sapphire's smart offline inference engine.
         """
-        # Try Ollama first (if auto or ollama preferred)
+        # Gemini Cloud AI
+        if cls._preferred_backend in ("auto", "gemini"):
+            res = cls._query_gemini(prompt_text, model, temperature)
+            if res:
+                return res
+
+        # Ollama local endpoint
         if cls._preferred_backend in ("auto", "ollama"):
             res = cls._query_ollama(prompt_text, model, temperature)
             if res:
                 return res
 
-        # Try Groq API as primary cloud fallback
+        # Groq API fallback
         if cls._preferred_backend in ("auto", "groq"):
             res = cls._query_groq(prompt_text, model, temperature)
             if res:
@@ -54,6 +69,38 @@ class AIModule:
 
         # Offline fallback engine
         return cls._offline_fallback(prompt_text, model)
+
+    @classmethod
+    def _query_gemini(cls, prompt_text: str, model: str, temperature: float) -> str:
+        """Query Google Gemini API with model fallback list."""
+        if not cls._gemini_key:
+            return None
+        models_to_try = [model] if model != "default" else DEFAULT_GEMINI_MODELS
+        for m in models_to_try:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={cls._gemini_key}"
+            payload = json.dumps({
+                "contents": [{"parts": [{"text": prompt_text}]}],
+                "generationConfig": {"temperature": temperature, "maxOutputTokens": 1024}
+            }).encode('utf-8')
+            req = urllib.request.Request(
+                url,
+                data=payload,
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=10.0) as resp:
+                    data = json.loads(resp.read().decode('utf-8'))
+                    candidates = data.get("candidates", [])
+                    if candidates:
+                        parts = candidates[0].get("content", {}).get("parts", [])
+                        if parts:
+                            res = parts[0].get("text", "").strip()
+                            if res:
+                                return res
+            except Exception:
+                continue
+        return None
 
     @classmethod
     def _query_ollama(cls, prompt_text: str, model: str, temperature: float) -> str:
@@ -113,6 +160,7 @@ class AIModule:
             return None
         return None
 
+
     @classmethod
     def _offline_fallback(cls, prompt_text: str, model: str) -> str:
         """Smart offline heuristic generator."""
@@ -154,15 +202,19 @@ class AIModule:
     @classmethod
     def status(cls) -> dict:
         """Return status of AI backends."""
-        ollama_active = cls._query_ollama("test", "llama3", 0.1) is not None
-        groq_active = False
-        if not ollama_active:
-            groq_active = cls._query_groq("test", DEFAULT_GROQ_MODEL, 0.1) is not None
+        gemini_active = cls._query_gemini("test", "default", 0.1) is not None if cls._gemini_key else False
+        ollama_active = cls._query_ollama("test", "llama3", 0.1) is not None if not gemini_active else False
+        groq_active = cls._query_groq("test", DEFAULT_GROQ_MODEL, 0.1) is not None if (not gemini_active and not ollama_active and cls._groq_key) else False
+
+        active = "gemini" if gemini_active else ("ollama" if ollama_active else ("groq" if groq_active else "offline"))
 
         return {
+            "gemini_key_configured": bool(cls._gemini_key),
+            "gemini_online": gemini_active,
             "ollama_url": cls._ollama_url,
             "ollama_online": ollama_active,
             "groq_key_configured": bool(cls._groq_key),
             "groq_online": groq_active,
-            "active_backend": "ollama" if ollama_active else ("groq" if groq_active else "offline")
+            "active_backend": active
         }
+
