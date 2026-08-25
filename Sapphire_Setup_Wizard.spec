@@ -26,11 +26,11 @@ datas_list = [
     ('install_sapphire.bat', '.'),
 
     # All 5 PDF Manuals
-    ('docs/Sapphire_Coding_and_Usage_Guide.pdf', '.'),
-    ('docs/Building_Advanced_Autonomous_AI.pdf', '.'),
-    ('docs/Sapphire_Autonomy_and_Performance_Benchmarks.pdf', '.'),
-    ('docs/Beginners_Guide_Your_First_Autonomous_AI.pdf', '.'),
-    ('docs/Sapphire_Language_Specification_and_Automation_Manual.pdf', '.'),
+    ('Sapphire_Coding_and_Usage_Guide.pdf', '.'),
+    ('Building_Advanced_Autonomous_AI.pdf', '.'),
+    ('Sapphire_Autonomy_and_Performance_Benchmarks.pdf', '.'),
+    ('Beginners_Guide_Your_First_Autonomous_AI.pdf', '.'),
+    ('Sapphire_Language_Specification_and_Automation_Manual.pdf', '.'),
     ('INSTALLATION_AND_USAGE_GUIDE.md', '.'),
     ('README.md', '.'),
 ]
