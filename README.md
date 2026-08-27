@@ -7,7 +7,7 @@ Sapphire is a Python-based interpreted programming language and Windows distribu
 - Language and installer version: 1.0.7
 - Tested interpreter: Python 3.12.10
 - Primary distribution: Windows setup wizard, CLI tools, and bundled documentation
-- Bundle status: compact single-page PDF manuals regenerated and published
+- Bundle status: detailed multi-page PDF manuals with comprehensive content regenerated and published
 - Optional integrations: NumPy, PyTorch, psutil, requests, audio packages, and configured AI service backends
 
 ## What Sapphire includes
@@ -58,16 +58,16 @@ python -m unittest sapphire_lang.tests.test_sapphire sapphire_lang.tests.test_in
 
 ## Included documentation bundle
 
-The project root includes the following compact single-page manuals and guides:
+The project root includes the following detailed multi-page manuals and guides:
 
-- [Sapphire_Coding_and_Usage_Guide.pdf](Sapphire_Coding_and_Usage_Guide.pdf) — practical coding reference and usage guide
-- [Building_Advanced_Autonomous_AI.pdf](Building_Advanced_Autonomous_AI.pdf) — advanced automation and autonomous AI patterns
-- [Sapphire_Autonomy_and_Performance_Benchmarks.pdf](Sapphire_Autonomy_and_Performance_Benchmarks.pdf) — benchmark and autonomy analysis
-- [Beginners_Guide_Your_First_Autonomous_AI.pdf](Beginners_Guide_Your_First_Autonomous_AI.pdf) — beginner-facing onboarding guide
-- [Sapphire_Language_Specification_and_Automation_Manual.pdf](Sapphire_Language_Specification_and_Automation_Manual.pdf) — specification and automation reference
-- [Sapphire_Capabilities_and_Transparency_Manual.pdf](Sapphire_Capabilities_and_Transparency_Manual.pdf) — current scope, transparency notes, and known limitations
+- [Sapphire_Coding_and_Usage_Guide.pdf](Sapphire_Coding_and_Usage_Guide.pdf) — practical coding reference, language syntax, standard library overview, and usage patterns
+- [Building_Advanced_Autonomous_AI.pdf](Building_Advanced_Autonomous_AI.pdf) — advanced automation, agent loop architecture, memory systems, permissions, and design patterns
+- [Sapphire_Autonomy_and_Performance_Benchmarks.pdf](Sapphire_Autonomy_and_Performance_Benchmarks.pdf) — local runtime benchmarks, reproducible measurements, and performance methodology
+- [Beginners_Guide_Your_First_Autonomous_AI.pdf](Beginners_Guide_Your_First_Autonomous_AI.pdf) — beginner-facing onboarding, first local scripts, AI integration, and safety practices
+- [Sapphire_Language_Specification_and_Automation_Manual.pdf](Sapphire_Language_Specification_and_Automation_Manual.pdf) — language semantics, automation primitives, optional dependencies, and portability details
+- [Sapphire_Capabilities_and_Transparency_Manual.pdf](Sapphire_Capabilities_and_Transparency_Manual.pdf) — validation scope, optional runtime layers, distributed system boundaries, and roadmap
 
-The bundle has been regenerated to reduce large blank areas and fit the content into a tighter one-page format for easier browsing.
+The bundle has been regenerated with detailed content, multiple sections per manual, and full explanatory text so readers have complete context and practical detail.
 
 Additional project documentation:
 
