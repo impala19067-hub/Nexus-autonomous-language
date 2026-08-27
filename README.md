@@ -1,4 +1,4 @@
-\# Sapphire Programming Language
+# Sapphire Programming Language
 
 Sapphire is a Python-based interpreted programming language and Windows distribution for local scripting, automation, AI-assisted workflows, and prototype ML tooling. It is designed for learning, experimentation, and local PC automation rather than for claiming a full production-grade distributed AI platform.
 
