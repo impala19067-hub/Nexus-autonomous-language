@@ -4,15 +4,31 @@ __pycache__/
 *$py.class
 *.so
 
+# Legacy build & doc generation scripts
+generate_guide_*.py
+build_all_*.py
+doc_helpers.py
+ar_builder.py
+make_deb.py
+make_*.py
+
 # PyInstaller & Build artifacts
 build/
 dist/
 dist_debian/
 dist_macos/
+docs/
 nexus_1.0.0_all/
 nexus_1.0.0_all.deb
+sapphire_1.0.0_all/
+sapphire_1.0.0_all.deb
+sapphire_1.0.5_all/
+sapphire_1.0.5_all.deb
+distributed_build/
+frontier_512gpu_build/
 *.spec
 *.exe
+*.deb
 
 # System & IDE
 .DS_Store
