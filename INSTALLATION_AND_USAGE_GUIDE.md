@@ -29,7 +29,7 @@ If someone prefers not to run installers:
 2. Copy `sapphire.exe` into any project directory or place it in `C:\Windows\System32`.
 3. Open terminal in that directory and run:
    ```cmd
-   sapphire run my_script.nx
+   sapphire run my_script.sp
    ```
 
 ---
@@ -48,7 +48,7 @@ If a developer wants to run Sapphire directly from Python source code:
    ```
 3. Run the CLI engine directly:
    ```bash
-   python sapphire_lang/src/cli.py run examples/01_basics.nx
+   python sapphire_lang/src/cli.py run examples/01_basics.sp
    ```
 
 ---
@@ -57,10 +57,10 @@ If a developer wants to run Sapphire directly from Python source code:
 
 Once installed, the `sapphire` command is globally available across your operating system.
 
-### 1. Execute a Sapphire Script (`.nx`)
-Create a file named `hello.nx`:
+### 1. Execute a Sapphire Script (`.sp`)
+Create a file named `hello.sp`:
 ```sapphire
-// hello.nx
+// hello.sp
 let name = "Developer";
 let info = os.system_info();
 
@@ -72,7 +72,7 @@ os.notify("Sapphire Alert", "Script executed successfully!");
 
 Run it from any terminal:
 ```cmd
-sapphire run hello.nx
+sapphire run hello.sp
 ```
 
 ---

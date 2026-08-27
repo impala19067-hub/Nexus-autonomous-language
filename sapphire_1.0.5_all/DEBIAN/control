@@ -1,0 +1,10 @@
+Package: sapphire-lang
+Version: 1.0.5
+Section: devel
+Priority: optional
+Architecture: all
+Maintainer: Sapphire Language Team <sapphire@local>
+Depends: python3 (>= 3.8)
+Description: Sapphire Programming Language
+ Autonomous-first programming language for PC Automation,
+ Colorless Concurrency, and Native AI Intelligence.

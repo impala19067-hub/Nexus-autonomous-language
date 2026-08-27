@@ -9,6 +9,9 @@ datas_list = [
     ('emerald.exe', '.'),
     ('Emerald_Studio.exe', '.'),
     ('Sapphire_Compiler.exe', '.'),
+    ('Sapphire_Runtime.exe', '.'),
+    ('Sapphire_Icon.ico', '.'),
+    ('Emerald_Icon.ico', '.'),
     ('compiler.exe', '.'),
     ('sapphire_voice_tutor.exe', '.'),
     ('sapphire_tutor.exe', '.'),
@@ -24,6 +27,10 @@ datas_list = [
     ('sapphire_tutor.py', '.'),
     ('uninstall_sapphire.py', '.'),
     ('install_sapphire.bat', '.'),
+    ('security_audit.py', '.'),
+    ('build_reproducible.py', '.'),
+    ('benchmarks', 'benchmarks'),
+    ('apps', 'apps'),
 
     # All 5 PDF Manuals
     ('Sapphire_Coding_and_Usage_Guide.pdf', '.'),
@@ -31,8 +38,11 @@ datas_list = [
     ('Sapphire_Autonomy_and_Performance_Benchmarks.pdf', '.'),
     ('Beginners_Guide_Your_First_Autonomous_AI.pdf', '.'),
     ('Sapphire_Language_Specification_and_Automation_Manual.pdf', '.'),
+    ('Sapphire_Capabilities_and_Transparency_Manual.pdf', '.'),
     ('INSTALLATION_AND_USAGE_GUIDE.md', '.'),
     ('README.md', '.'),
+    ('INDUSTRIAL_READINESS.md', '.'),
+    ('release_manifest.json', '.'),
 ]
 
 a = Analysis(
@@ -64,6 +74,7 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=False,
+    icon='Sapphire_Icon.ico',
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

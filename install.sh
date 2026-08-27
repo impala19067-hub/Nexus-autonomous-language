@@ -3,7 +3,7 @@
 # Supports Kali Linux, Ubuntu, Debian, Arch, Fedora, and macOS.
 
 echo "====================================================================="
-echo "  SAPPHIRE PROGRAMMING LANGUAGE - AUTOMATED LINUX/macOS INSTALLER"
+echo "  SAPPHIRE PROGRAMMING LANGUAGE 1.0.5 - AUTOMATED LINUX/macOS INSTALLER"
 echo "====================================================================="
 echo ""
 

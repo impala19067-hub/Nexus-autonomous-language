@@ -1,28 +1,37 @@
-# 💎 Sapphire Programming Language — macOS Distribution Folder
+# Sapphire Programming Language 1.0.5 - macOS
 
-This folder contains everything needed to install Sapphire and Emerald Developer Studio on **macOS** (Apple Silicon M1/M2/M3 & Intel Mac).
+This distribution provides the Python source runtime and terminal installer for Intel and Apple Silicon Macs. It does not include a native macOS GUI setup wizard executable.
 
----
+## Install
 
-## 📦 How to Install on macOS
+From this folder, open Terminal and run:
 
-### Method 1: Graphical Setup Wizard (Finder Double-Click)
-1. Double-click **`install_wizard.command`** in Finder.
-2. Follow the 4-step graphical installer.
-
----
-
-### Method 2: Terminal Script Installer
-Open Terminal in this folder and run:
 ```bash
-chmod +x install_wizard.command
-./install_wizard.command
+chmod +x install.sh
+./install.sh
 ```
 
----
+The installer copies the runtime to `~/.sapphire_lang` and creates a `sapphire` launcher in `/usr/local/bin` when writable, or in `~/.local/bin` otherwise. Start a new shell after installation so the PATH change is available.
 
-### Method 3: 1-Line Universal Terminal Command
-Run from any macOS terminal:
+You can also use the remote installer:
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/impala19067-hub/Sapphire-autonomous-language/main/install.sh | bash
 ```
+
+## Verify
+
+```bash
+sapphire info
+sapphire run examples/01_basics.sp
+sapphire repl
+sapphire eval 'print("Sapphire is running");'
+```
+
+## Current ML Scope
+
+The source runtime provides tensors, datasets, basic model helpers, autodiff, losses, optimizers, and local training utilities. The optional `ml.torch_train` backend uses a separately installed PyTorch package for real CPU or CUDA training, validation, history, and checkpoints.
+
+PyTorch is not bundled. CUDA requires compatible NVIDIA hardware, drivers, and a CUDA-enabled PyTorch installation. AI service integrations also require their own local service or credentials.
+
+The distributed API produces planning and launcher artifacts. It does not run or verify multi-node training by itself. Emerald Developer Studio is currently packaged for Windows; macOS users should use the terminal and source tools in this distribution.

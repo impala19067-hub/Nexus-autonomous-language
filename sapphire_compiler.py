@@ -37,6 +37,7 @@ import importlib
 import types
 import traceback
 import io
+import contextlib
 import sys
 import os
 import time
@@ -272,8 +273,10 @@ class SapphireHighTechCompiler(tk.Tk):
             pass
 
         self.current_filepath = None
+        self.project_directory = BASE_DIR
         self.setup_styles()
         self.build_ui()
+        self.bind("<F5>", self._run_from_shortcut)
 
     def setup_styles(self):
         self.style = ttk.Style()
@@ -355,7 +358,7 @@ class SapphireHighTechCompiler(tk.Tk):
         btn_dist.pack(side="right", padx=4)
 
         btn_run = tk.Button(
-            btn_box, text="▶ JIT RUN (.sp)",
+            btn_box, text="▶ RUN",
             font=("Consolas", 9, "bold"), fg="#FFFFFF", bg="#059669",
             activebackground="#10B981", activeforeground="#FFFFFF",
             bd=0, padx=13, pady=5, cursor="hand2", command=self.run_jit_execution
@@ -373,8 +376,10 @@ class SapphireHighTechCompiler(tk.Tk):
         # ─────────────────────────────────────────────────────────────────
         # 2. MAIN PANED LAYOUT (GLASS PANELS)
         # ─────────────────────────────────────────────────────────────────
-        paned = tk.PanedWindow(self, orient=tk.HORIZONTAL, bg="#050811", bd=0, sashwidth=5)
-        paned.pack(fill="both", expand=True, padx=8, pady=(4, 6))
+        main_area = tk.PanedWindow(self, orient=tk.VERTICAL, bg="#050811", bd=0, sashwidth=5)
+        main_area.pack(fill="both", expand=True, padx=8, pady=(4, 6))
+        paned = tk.PanedWindow(main_area, orient=tk.HORIZONTAL, bg="#050811", bd=0, sashwidth=5)
+        main_area.add(paned, minsize=400)
 
         # --- LEFT: Source Code Editor Pane ---
         left_container = tk.Frame(paned, bg="#070B16")
@@ -402,6 +407,21 @@ class SapphireHighTechCompiler(tk.Tk):
             cursor="hand2", command=self.save_file
         )
         btn_save.pack(side="left", padx=2)
+
+        btn_save_as = tk.Button(
+            tb, text="💾 Save As", font=("Consolas", 8, "bold"), fg="#E2E8F0",
+            bg="#1E293B", activebackground="#334155", activeforeground="#FFFFFF",
+            bd=0, padx=8, pady=3, cursor="hand2", command=self.save_as_file
+        )
+        btn_save_as.pack(side="left", padx=2)
+
+        btn_browse = tk.Button(
+            tb, text="📁 Browse Directory", font=("Consolas", 8, "bold"),
+            fg="#E2E8F0", bg="#1E293B", activebackground="#334155",
+            activeforeground="#FFFFFF", bd=0, padx=8, pady=3, cursor="hand2",
+            command=self.browse_directory
+        )
+        btn_browse.pack(side="left", padx=2)
 
         # Quick Templates
         btn_tpl_bot = tk.Button(
@@ -510,6 +530,35 @@ class SapphireHighTechCompiler(tk.Tk):
         )
         self.txt_dist.pack(fill="both", expand=True)
 
+        terminal_frame = tk.Frame(main_area, bg="#040711")
+        main_area.add(terminal_frame, minsize=150)
+        bottom_notebook = ttk.Notebook(terminal_frame)
+        bottom_notebook.pack(fill="both", expand=True)
+        bottom_tabs = {}
+        for tab_name in ("Problems", "Output", "Debug Console", "Terminal", "Ports"):
+            tab = tk.Frame(bottom_notebook, bg="#040711")
+            bottom_notebook.add(tab, text=tab_name)
+            bottom_tabs[tab_name] = tab
+
+        self.txt_problems = scrolledtext.ScrolledText(bottom_tabs["Problems"], height=7, font=("Consolas", 10), bg="#020617", fg="#FBBF24", bd=0)
+        self.txt_problems.pack(fill="both", expand=True)
+        self.txt_problems.insert(tk.END, "No problems detected.\n")
+        self.txt_output = scrolledtext.ScrolledText(bottom_tabs["Output"], height=7, font=("Consolas", 10), bg="#020617", fg="#38BDF8", bd=0)
+        self.txt_output.pack(fill="both", expand=True)
+        self.txt_debug = scrolledtext.ScrolledText(bottom_tabs["Debug Console"], height=7, font=("Consolas", 10), bg="#020617", fg="#A78BFA", bd=0)
+        self.txt_debug.pack(fill="both", expand=True)
+        terminal_tab = bottom_tabs["Terminal"]
+        terminal_header = tk.Frame(terminal_tab, bg="#0A0F1F", height=28)
+        terminal_header.pack(fill="x")
+        tk.Label(terminal_header, text="TERMINAL", font=("Consolas", 9, "bold"), fg="#34D399", bg="#0A0F1F", anchor="w").pack(side="left", padx=10, pady=5)
+        tk.Button(terminal_header, text="Clear", font=("Consolas", 8), fg="#CBD5E1", bg="#1E293B", bd=0, padx=7, command=lambda: self.terminal_output.delete("1.0", tk.END)).pack(side="right", padx=8, pady=3)
+        self.terminal_output = scrolledtext.ScrolledText(terminal_tab, height=7, font=("Consolas", 10), bg="#020617", fg="#34D399", bd=0, padx=10, pady=6)
+        self.terminal_output.pack(fill="both", expand=True)
+        self.txt_ports = scrolledtext.ScrolledText(bottom_tabs["Ports"], height=7, font=("Consolas", 10), bg="#020617", fg="#CBD5E1", bd=0)
+        self.txt_ports.pack(fill="both", expand=True)
+        self.txt_ports.insert(tk.END, "No forwarded ports detected.\n")
+        bottom_notebook.select(bottom_tabs["Terminal"])
+
         # ─────────────────────────────────────────────────────────────────
         # 3. HIGH-TECH STATUS BAR & GLASS OPACITY CONTROLLER
         # ─────────────────────────────────────────────────────────────────
@@ -559,30 +608,65 @@ class SapphireHighTechCompiler(tk.Tk):
     # COMPILER PIPELINE & LOGIC
     # =====================================================================
 
+    def _run_from_shortcut(self, event=None):
+        self.run_jit_execution()
+        return "break"
+
     def load_sample(self, code: str):
         self.editor.delete("1.0", tk.END)
         self.editor.insert("1.0", code)
         self.run_compile_pipeline()
 
     def open_file(self):
-        f = filedialog.askopenfilename(filetypes=[("Sapphire Script", "*.sp"), ("All Files", "*.*")])
+        f = filedialog.askopenfilename(parent=self, initialdir=self.project_directory, filetypes=[("Sapphire Script", "*.sp"), ("All Files", "*.*")])
         if f:
             with open(f, "r", encoding="utf-8") as file_handle:
                 content = file_handle.read()
             self.editor.delete("1.0", tk.END)
             self.editor.insert("1.0", content)
             self.current_filepath = f
+            self.project_directory = os.path.dirname(f)
             self.run_compile_pipeline()
 
+    def browse_directory(self):
+        directory = filedialog.askdirectory(parent=self, initialdir=self.project_directory, title="Choose Sapphire Project Directory")
+        if directory:
+            self.project_directory = directory
+            self.current_filepath = None
+            self.statusbar.config(text=f"📁 Project directory: {directory}", fg="#38BDF8")
+
     def save_file(self):
-        if not self.current_filepath:
-            self.current_filepath = filedialog.asksaveasfilename(
-                defaultextension=".sp", filetypes=[("Sapphire Script", "*.sp")]
-            )
-        if self.current_filepath:
-            with open(self.current_filepath, "w", encoding="utf-8") as file_handle:
-                file_handle.write(self.editor.get("1.0", tk.END))
-            self.statusbar.config(text=f"💾 Saved: {self.current_filepath}", fg="#00F0FF")
+        target_path = filedialog.asksaveasfilename(
+            parent=self, initialdir=self.project_directory,
+            initialfile=os.path.basename(self.current_filepath) if self.current_filepath else "untitled.sp",
+            title="Browse Location and Save Sapphire Script", defaultextension=".sp",
+            filetypes=[("Sapphire Script", "*.sp"), ("All Files", "*.*")]
+        )
+        if not target_path:
+            return False
+        if target_path.lower().endswith(".sp.txt"):
+            target_path = target_path[:-4]
+        elif not target_path.lower().endswith(".sp"):
+            target_path += ".sp"
+        try:
+            with open(target_path, "w", encoding="utf-8", newline="") as file_handle:
+                file_handle.write(self.editor.get("1.0", tk.END).rstrip("\n") + "\n")
+            self.current_filepath = target_path
+            self.project_directory = os.path.dirname(target_path)
+            self.statusbar.config(text=f"💾 Saved: {target_path}", fg="#00F0FF")
+            return True
+        except OSError as error:
+            self.statusbar.config(text=f"Save failed: {error}", fg="#F87171")
+            messagebox.showerror("Save Failed", f"Could not save the Sapphire script:\n{error}", parent=self)
+            return False
+
+    def save_as_file(self):
+        previous_path = self.current_filepath
+        self.current_filepath = None
+        saved = self.save_file()
+        if not saved and previous_path:
+            self.current_filepath = previous_path
+        return saved
 
     def run_compile_pipeline(self):
         """Runs the multi-stage Lexer -> Parser -> Polymorphic AST -> IR Disassembly pipeline."""
@@ -666,7 +750,7 @@ class SapphireHighTechCompiler(tk.Tk):
         """Generates high-tech Sapphire Bytecode / IR disassembly representation."""
         instructions = [
             ".version 1.0.0",
-            ".target sapphire-jit-x86_64",
+            ".target sapphire-interpreter",
             ".features [POLYMORPHIC_DISPATCH, COLORLESS_CONCURRENCY, TENSOR_ACCELERATION, 5D_DISTRIBUTED]",
             ""
         ]
@@ -692,56 +776,51 @@ class SapphireHighTechCompiler(tk.Tk):
         return instructions
 
     def extract_poly_signatures(self, code):
-        """Extracts dynamic polymorphic dispatch tables."""
-        signatures = [
-            "🔷 Registered Polymorphic Dynamic Overloads:",
-            "  • fn polymorphic_compute(input_data: Tensor) -> Tensor [CUDA Accelerated Kernel]",
-            "  • fn polymorphic_compute(input_data: Array)  -> Array  [SIMD Vectorized Stream]",
-            "  • fn polymorphic_compute(input_data: Float)  -> Float  [Scalar Native ALU]",
+        """Report function declarations found in the parsed source surface."""
+        functions = re.findall(r"\bfn\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(([^)]*)\)", code)
+        signatures = ["🔷 Functions discovered in source:"]
+        signatures.extend(f"  • fn {name}({arguments}) [interpreted function]" for name, arguments in functions)
+        signatures.extend([
             "",
-            "⚙️ Dispatch Resolution Strategy: Dynamic Type Inference + Shape Specialization",
-            "⚡ JIT Optimization: Polymorphic Inline Cache (PIC) Level 2 Active",
-            "🌐 5D Auto-Parallelism: FSDP ZeRO-3 + FlashAttention-3 Dispatch Table Ready"
-        ]
+            "⚙️ Dispatch: runtime function lookup from parsed AST",
+            "ℹ️ Native machine-code optimization: unavailable in this interpreter build",
+        ])
         return signatures
 
     def run_jit_execution(self):
-        """Executes the Sapphire code in the live JIT sandbox with real-time terminal output."""
+        """Executes Sapphire directly and streams output to the bottom terminal."""
         code = self.editor.get("1.0", tk.END).strip()
         if not code:
             return
 
-        self.notebook.select(0)
-        self.txt_jit.delete("1.0", tk.END)
-        self.txt_jit.insert(tk.END, "🚀 [SAPPHIRE JIT ENGINE] Executing polymorphic bytecode...\n")
-        self.txt_jit.insert(tk.END, "────────────────────────────────────────────────────────────\n")
+        self.terminal_output.delete("1.0", tk.END)
+        self.terminal_output.insert(tk.END, "PS> sapphire run <current-buffer.sp>\n")
+        self.terminal_output.insert(tk.END, "────────────────────────────────────────────────────────────\n")
 
         def _execute():
             t0 = time.perf_counter()
-            old_stdout = sys.stdout
-            old_stderr = sys.stderr
-            captured_out = io.StringIO()
-            sys.stdout = captured_out
-            sys.stderr = captured_out
-
             try:
-                lexer = Lexer(code)
-                tokens = lexer.tokenize()
-                parser = Parser(tokens)
-                ast = parser.parse()
-                interpreter = Interpreter()
-                interpreter.interpret(ast)
-                output = captured_out.getvalue()
-                t_diff = (time.perf_counter() - t0) * 1000.0
-                output += f"\n────────────────────────────────────────────────────────────\n✨ [JIT EXECUTION FINISHED] Duration: {t_diff:.2f}ms | Exit Code: 0\n"
-            except Exception as e:
-                output = captured_out.getvalue() + f"\n❌ Runtime Exception: {e}\n"
-            finally:
-                sys.stdout = old_stdout
-                sys.stderr = old_stderr
+                class TerminalCapture(io.StringIO):
+                    def write(capture_self, text):
+                        result = super().write(text)
+                        if text:
+                            self.after(0, lambda text=text: self.terminal_output.insert(tk.END, text))
+                            self.after(0, lambda: self.terminal_output.see(tk.END))
+                        return result
 
-            self.after(0, lambda: self.txt_jit.insert(tk.END, output))
-            self.after(0, lambda: self.statusbar.config(text="✨ JIT EXECUTION FINISHED SUCCESSFULLY", fg="#10B981"))
+                captured_out = TerminalCapture()
+                with contextlib.redirect_stdout(captured_out), contextlib.redirect_stderr(captured_out):
+                    ast = Parser(Lexer(code).tokenize()).parse()
+                    Interpreter().interpret(ast)
+                t_diff = (time.perf_counter() - t0) * 1000.0
+                output = f"\n────────────────────────────────────────────────────────────\n✨ [JIT EXECUTION FINISHED] Duration: {t_diff:.2f}ms | Exit Code: 0\n"
+            except Exception as e:
+                output = f"\n❌ Runtime Exception: {e}\n"
+
+            self.after(0, lambda: self.terminal_output.insert(tk.END, output))
+            status = "✨ JIT EXECUTION FINISHED" if "Exit Code: 0" in output else "❌ JIT EXECUTION FAILED"
+            color = "#10B981" if status.startswith("✨") else "#F87171"
+            self.after(0, lambda: self.statusbar.config(text=status, fg=color))
 
         threading.Thread(target=_execute, daemon=True).start()
 
@@ -753,8 +832,6 @@ class SapphireHighTechCompiler(tk.Tk):
         self.txt_dist.insert(tk.END, "─" * 70 + "\n")
 
         def _solve():
-            old_stdout, old_stderr = sys.stdout, sys.stderr
-            sys.stdout = sys.stderr = io.StringIO()
             try:
                 from src.stdlib.distributed.transformer_spec import Transformer
                 from src.stdlib.distributed.cluster_spec import Cluster
@@ -848,9 +925,6 @@ class SapphireHighTechCompiler(tk.Tk):
                 result = "\n".join(out)
             except Exception as e:
                 result = f"❌ Distributed Solver Error:\n{traceback.format_exc()}"
-            finally:
-                sys.stdout = old_stdout
-                sys.stderr = old_stderr
 
             self.after(0, lambda: self.txt_dist.insert(tk.END, result + "\n"))
             self.after(0, lambda: self.statusbar.config(text="✨ 5D AUTO-PARALLELISM PLAN SYNTHESIZED SUCCESSFULLY", fg="#10B981"))

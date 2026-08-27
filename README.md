@@ -1,6 +1,7 @@
 # Sapphire Programming Language
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Sapphire is a Python-based interpreted programming language and Windows distribution for local scripting, automation, AI-assisted workflows, and prototype ML tooling. It is designed for learning, experimentation, and local PC automation rather than for claiming a full production-grade distributed AI platform.
 
 ## Current release
@@ -14,6 +15,11 @@ Sapphire is a Python-based interpreted programming language and Windows distribu
 
 **Sapphire** is a cross-platform, **autonomous-first programming language** engineered for **PC Automation**, **Native AI Intelligence**, **Colorless Parallel Concurrency**, and a **full ML/Deep Learning stack** — including a **frontier-scale distributed LLM training engine** (`ml.distributed`) capable of orchestrating 512-GPU H100 clusters with 5D Auto-Parallelism, FlashAttention-3, FP8, and NCCL-optimized collectives — all built into the language runtime with zero external dependencies.
 >>>>>>> bf07d50 (docs: add ch14 Distributed LLM to tutor, regenerate all 5 PDFs, update README with frontier stats)
+=======
+Sapphire is a Python-based interpreted programming language and Windows distribution for local scripting, automation, AI-assisted workflows, and prototype ML tooling. It is designed for learning, experimentation, and local PC automation rather than for claiming a full production-grade distributed AI platform.
+
+## Current release
+>>>>>>> 732e4d1 (Update README and documentation bundle)
 
 - Language and installer version: 1.0.5
 - Tested interpreter: Python 3.12.10
@@ -23,22 +29,24 @@ Sapphire is a Python-based interpreted programming language and Windows distribu
 ## What Sapphire includes
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Language features
 =======
 ## 🆕 What's New in v1.0.0 — Frontier Distributed LLM Engine
+=======
+### Language features
+>>>>>>> 732e4d1 (Update README and documentation bundle)
 
-| Feature | Description |
-|---|---|
-| **`ml.distributed` Namespace** | Full distributed LLM training API built into Sapphire |
-| **5D Auto-Parallelism Solver** | Automatically finds optimal TP × PP × DP × EP × SP + ZeRO grid |
-| **512-GPU H100/H200/B200 Support** | Hardware topology DB with NVLink/InfiniBand bandwidth specs |
-| **FlashAttention-3 + FP8 Kernels** | Fused kernel dispatch via TransformerEngine and Triton |
-| **NCCL Collective Simulation** | AllReduce, ReduceScatter, AllGather, AllToAll latency modeling |
-| **PyTorch FSDP Codegen** | Auto-generate production-ready torchrun + SLURM launcher scripts |
-| **5D Compiler Studio Tab** | Interactive 512-GPU solver GUI in Sapphire Compiler Studio |
+- `let` and `const` declarations with optional type annotations
+- Functions, conditionals, loops, arrays, maps, structs, lambdas, returns, and exceptions
+- Arithmetic, comparisons, boolean logic, indexing, member access, and pipelines
+- `parallel { ... }` execution blocks
+- Shell/process literals using backticks or `$`, returning a `ProcessResult`
+- `.sp` script execution, REPL mode, inline evaluation, and CLI inspection tools
 
----
+### Standard library
 
+<<<<<<< HEAD
 ## ✨ Key Features
 >>>>>>> bf07d50 (docs: add ch14 Distributed LLM to tutor, regenerate all 5 PDFs, update README with frontier stats)
 
@@ -72,9 +80,27 @@ Sapphire is a Python-based interpreted programming language and Windows distribu
 | **Optimizers** | `ml.optim.adam()`, `.sgd()`, `.rmsprop()` |
 | **Loss Functions** | `ml.loss.mse()`, `.cross_entropy()`, `.binary_cross_entropy()`, `.mae()`, `.huber()` |
 | **🌐 Frontier Distributed LLM** | `ml.distributed.Transformer()`, `.Cluster()`, `.train()` — full 5D frontier training |
+=======
+- `os`: system information, process control, notifications, clipboard access, and bounded command execution
+- `fs`: file read/write/append/remove operations
+- `http`: optional HTTP helpers when the dependency is installed
+- `ai`: prompt, classification, and JSON extraction flows via local/cloud backends or offline fallback behavior
+- `ml`: tensor primitives, dataset helpers, optimization and loss utilities, and optional CUDA/PyTorch execution paths
+- `scheduler`: SQLite-backed scheduled work
+- `agent`: memory, planning, permissions, bounded execution, and orchestration support
 
-### 🌐 Frontier Distributed LLM Training (`ml.distributed`)
+> Optional integrations depend on installed packages, hardware, drivers, credentials, and service availability. They are not automatically available just because the API exists.
 
+## Project tools
+
+- `Emerald_Studio.exe`: editor, runner, template builder, hardware display, and agent runtime panel
+- `Sapphire_Compiler.exe`: script execution and AST/IR inspection tool
+- `Sapphire_Setup_Wizard.exe`: installer for the runtime, docs, PATH configuration, `.sp` association, and shortcuts
+>>>>>>> 732e4d1 (Update README and documentation bundle)
+
+## Installation
+
+<<<<<<< HEAD
 | Capability | Detail |
 |---|---|
 | **Tensor Parallelism (TP)** | Split attention heads/MLP columns across GPUs within a node |
@@ -124,6 +150,10 @@ Sapphire is a Python-based interpreted programming language and Windows distribu
 
 On Windows, run `Sapphire_Setup_Wizard.exe` and keep PATH and shortcuts enabled if desired. After installation, open a new terminal and run:
 
+=======
+On Windows, run `Sapphire_Setup_Wizard.exe` and keep PATH and shortcuts enabled if desired. After installation, open a new terminal and run:
+
+>>>>>>> 732e4d1 (Update README and documentation bundle)
 ```text
 sapphire info
 sapphire run hello.sp
@@ -132,6 +162,7 @@ sapphire studio
 
 For source execution from the repository:
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 ```text
 python sapphire_lang/src/cli.py run path/to/script.sp
@@ -169,11 +200,19 @@ let activated = x.relu();
 let probs = ml.tensor([2.0, 1.0, 0.5]).softmax();
 print("Softmax probs: {probs}");
 >>>>>>> bf07d50 (docs: add ch14 Distributed LLM to tutor, regenerate all 5 PDFs, update README with frontier stats)
+=======
+```text
+python sapphire_lang/src/cli.py run path/to/script.sp
+python -m unittest sapphire_lang.tests.test_sapphire sapphire_lang.tests.test_industrial_readiness
+>>>>>>> 732e4d1 (Update README and documentation bundle)
 ```
 
 ## Included documentation bundle
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 732e4d1 (Update README and documentation bundle)
 The project root includes the following manuals and guides:
 
 - [Sapphire_Coding_and_Usage_Guide.pdf](Sapphire_Coding_and_Usage_Guide.pdf) — practical coding reference and usage guide
@@ -196,6 +235,7 @@ A benchmark can be run with:
 
 ```text
 python benchmarks/benchmark_runtime.py
+<<<<<<< HEAD
 ```
 
 One reference run on Python 3.12.10 completed 100 parse-and-interpret iterations of a 100-item loop with:
@@ -234,52 +274,39 @@ let x = ml.autograd.variable(ml.tensor([1.0, 2.0, 3.0]), "inputs");
 let loss_var = ml.autograd.variable(ml.tensor([3.14]), "loss");
 let grads = ml.autograd.gradient(loss_var, [w, x]);
 print("Weight gradients: {grads[0]}");
+=======
+>>>>>>> 732e4d1 (Update README and documentation bundle)
 ```
 
-### 3. 🌐 Frontier 512-GPU LLM Training (NEW)
+One reference run on Python 3.12.10 completed 100 parse-and-interpret iterations of a 100-item loop with:
 
-```sapphire
-// Define a 70B Frontier Transformer
-let model_cfg = {
-    "layers": 80,
-    "hidden": 8192,
-    "heads": 64,
-    "ff_mult": 4,
-    "vocab": 128000,
-    "seq_len": 8192,
-    "precision": "fp8"
-};
-let model = ml.distributed.Transformer(model_cfg);
+- result: 4950
+- median: 0.21095 ms
+- minimum: 0.2023 ms
+- maximum: 0.7817 ms
 
-// Define a 512-GPU H100 cluster
-let cluster_cfg = {
-    "gpu_type": "H100-80GB",
-    "num_gpus": 512,
-    "gpus_per_node": 8
-};
-let cluster = ml.distributed.Cluster(cluster_cfg);
+Those numbers are machine-specific and are not a language-wide guarantee. This project does not currently include cross-language, cluster-scale, or large GPU-training validation.
 
-// Auto-solve 5D parallelism + train 10 trillion tokens
-let job_cfg = {
-    "tokens": 10000000000000,
-    "batch_size": 2048,
-    "checkpoint_every": 1000
-};
-let result = ml.distributed.train(model, cluster, job_cfg);
-print("Strategy: {result.strategy}");
-print("MFU: {result.mfu_percent}%");
-print("Throughput: {result.tokens_per_sec} tok/s");
-print("ETA (10T tokens): {result.eta_days} days");
+## Roadmap and known limitations
+
+The following are not presented as completed production features: native compiler backend, strong isolation guarantees, persistent vector embeddings, event-driven agent declarations, DAG scheduling, verified multi-node training, automatic cluster recovery, and broad security certification.
+
+See [INDUSTRIAL_READINESS.md](INDUSTRIAL_READINESS.md) and [Sapphire_Capabilities_and_Transparency_Manual.pdf](Sapphire_Capabilities_and_Transparency_Manual.pdf) for the tested scope and known limitations.
+
+## Quick start
+
+```text
+python -m pip install -r requirements.txt
+python sapphire_lang/src/cli.py --help
 ```
 
-**Actual output on 512x H100-80GB:**
-```
-Strategy: TP1_PP1_DP512_EP1_SP1_ZeRO3_FP8
-MFU: 61.0%
-Throughput: ~1,520,000 tok/s
-ETA (10T tokens): ~76 days
+Then run a sample script or launch the included studio tool:
+
+```text
+python sapphire_lang/src/cli.py run examples/01_basics.sp
 ```
 
+<<<<<<< HEAD
 ### 4. Dataset Loading & Training
 
 ```sapphire
@@ -347,3 +374,6 @@ The `ml.distributed` module is Sapphire's **autonomous infrastructure layer** fo
 ## 📄 License
 Released under the MIT License.
 >>>>>>> bf07d50 (docs: add ch14 Distributed LLM to tutor, regenerate all 5 PDFs, update README with frontier stats)
+=======
+If the Windows installer is used, the bundled `.sp` association and runtime tools are installed automatically.
+>>>>>>> 732e4d1 (Update README and documentation bundle)

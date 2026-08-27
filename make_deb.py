@@ -1,14 +1,14 @@
 """
 🌌 Sapphire Programming Language — Debian/Kali (.deb) Package Builder
-Generates a native Debian/Kali Linux package: sapphire_1.0.0_all.deb
-Allows installation via: sudo apt install ./sapphire_1.0.0_all.deb
+Generates a native Debian/Kali Linux package: sapphire_1.0.5_all.deb
+Allows installation via: sudo apt install ./sapphire_1.0.5_all.deb
 """
 
 import os, sys, shutil, subprocess, tarfile, gzip, io
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SAPPHIRE_LANG_DIR = os.path.join(BASE_DIR, "sapphire_lang")
-DEB_ROOT = os.path.join(BASE_DIR, "sapphire_1.0.0_all")
+DEB_ROOT = os.path.join(BASE_DIR, "sapphire_1.0.5_all")
 
 def create_deb_structure():
     if os.path.exists(DEB_ROOT):
@@ -25,7 +25,7 @@ def create_deb_structure():
 
     # 1. DEBIAN/control
     control_content = """Package: sapphire-lang
-Version: 1.0.0
+Version: 1.0.5
 Section: devel
 Priority: optional
 Architecture: all
@@ -66,7 +66,7 @@ fi
     print("[OK] Package file layout created at:", DEB_ROOT)
 
 def pack_deb():
-    deb_filename = os.path.join(BASE_DIR, "sapphire_1.0.0_all.deb")
+    deb_filename = os.path.join(BASE_DIR, "sapphire_1.0.5_all.deb")
     import ar_builder
     ar_builder.build_deb(DEB_ROOT, deb_filename)
 

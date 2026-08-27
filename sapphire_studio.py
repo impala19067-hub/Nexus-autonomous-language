@@ -285,9 +285,32 @@ class SapphireStudio(tk.Tk):
             from src.stdlib.agent_mod import AgentModule
             status = AIModule.status()
             self.agent_inspector.insert(tk.END, "🧠 SAPPHIRE AGENT & LLM STATUS\n" + "═"*50 + "\n\n")
-            self.agent_inspector.insert(tk.END, f"• Active LLM Backend : {status['active_backend'].upper()}\n")
-            self.agent_inspector.insert(tk.END, f"  Ollama Local URL   : {status['ollama_url']} (Online: {status['ollama_online']})\n")
-            self.agent_inspector.insert(tk.END, f"  Groq Cloud Key     : Configured (Online: {status['groq_online']})\n\n")
+            
+            backend_name = status.get('active_backend', 'offline').upper()
+            if backend_name == "GEMINI":
+                active_badge = "🟢 ONLINE — Google Gemini Cloud AI (Primary)"
+            elif backend_name == "OLLAMA":
+                active_badge = "🟢 ONLINE — Ollama Local Engine"
+            elif backend_name == "GROQ":
+                active_badge = "🟢 ONLINE — Groq Cloud Engine"
+            else:
+                active_badge = "⚪ OFFLINE (Smart Local Fallback Active)"
+
+            self.agent_inspector.insert(tk.END, f"• Active Engine   : {active_badge}\n\n")
+            
+            # Gemini Status
+            gemini_online = "🟢 Online (Active)" if status.get('gemini_online') else "⚪ Standby"
+            self.agent_inspector.insert(tk.END, f"  ✦ Google Gemini Cloud : {gemini_online}\n")
+            self.agent_inspector.insert(tk.END, f"    Models              : gemini-3.1-flash-lite, gemini-3.6-flash\n\n")
+
+            # Ollama Status
+            ollama_online = "🟢 Online" if status.get('ollama_online') else "⚪ Standby (Offline)"
+            self.agent_inspector.insert(tk.END, f"  ✦ Ollama Local Core   : {ollama_online}\n")
+            self.agent_inspector.insert(tk.END, f"    Local URL           : {status.get('ollama_url', 'http://localhost:11434')}\n\n")
+
+            # Groq Status
+            groq_online = "🟢 Online" if status.get('groq_online') else "⚪ Standby"
+            self.agent_inspector.insert(tk.END, f"  ✦ Groq Cloud Fallback : {groq_online}\n\n")
             
             self.agent_inspector.insert(tk.END, "📌 Registered Agent Tools:\n")
             for tool in AgentModule.tools.list_tools():
@@ -296,6 +319,7 @@ class SapphireStudio(tk.Tk):
             self.agent_inspector.insert(tk.END, f"\n🔒 Security Policy: {AgentModule.permissions.policy.upper()}\n")
         except Exception as e:
             self.agent_inspector.insert(tk.END, f"Agent Inspector Error: {e}")
+
 
     def show_tool_wizard(self):
         wiz = tk.Toplevel(self)

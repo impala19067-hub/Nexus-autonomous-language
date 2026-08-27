@@ -1,424 +1,242 @@
-"""
-💎 SAPPHIRE PROGRAMMING LANGUAGE — GRAPHICAL WINDOWS SETUP WIZARD
-Interactive GUI Setup Wizard for Installing Sapphire Language, Emerald Developer Studio,
-Polymorphic Compiler Studio, PATH Configuration, GPU/ML Stack, PDF Documentation,
-Uninstaller, and Desktop Shortcuts.
-"""
+"""Sapphire v1.0.5 Windows installer."""
+from __future__ import annotations
 
-import sys
 import os
 import shutil
 import subprocess
+import sys
 import threading
-import time
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import filedialog, messagebox, ttk
 
-# Reconfigure terminal encoding for UTF-8 compatibility
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
-    sys.stderr.reconfigure(encoding='utf-8')
+VERSION = "1.0.5"
+ROOT = os.path.dirname(os.path.abspath(__file__))
+PALETTE = {
+    "canvas": "#F4FBF7", "surface": "#FFFFFF", "header": "#073B2A",
+    "ink": "#123B27", "muted": "#557A64", "line": "#C8E3D1",
+    "mint": "#42D98A", "mint_dark": "#087F4E", "soft": "#E6F5EC",
+}
+FILES = [
+    "sapphire.exe", "sapphire_cli.exe", "emerald.exe", "Emerald_Studio.exe",
+    "Sapphire_Compiler.exe", "Sapphire_Runtime.exe", "Sapphire_Icon.ico",
+    "Emerald_Icon.ico", "sapphire_voice_tutor.exe", "sapphire_tutor.exe",
+    "uninstall.exe", "uninstall_sapphire.exe", "emerald_studio.py",
+    "sapphire_cli.py", "sapphire_compiler.py", "sapphire_voice_tutor.py",
+    "sapphire_tutor.py", "uninstall_sapphire.py", "install_sapphire.bat",
+    "README.md", "INSTALLATION_AND_USAGE_GUIDE.md", "INDUSTRIAL_READINESS.md",
+    "release_manifest.json", "Sapphire_Coding_and_Usage_Guide.pdf",
+    "Building_Advanced_Autonomous_AI.pdf", "Sapphire_Autonomy_and_Performance_Benchmarks.pdf",
+    "Beginners_Guide_Your_First_Autonomous_AI.pdf",
+    "Sapphire_Language_Specification_and_Automation_Manual.pdf",
+    "Sapphire_Capabilities_and_Transparency_Manual.pdf",
+]
 
-def find_source_item(name: str):
-    """Finds an asset file/directory across PyInstaller temp bundles, exe directory, and workspace."""
+
+def source_path(name: str):
     candidates = []
-    # 1. PyInstaller _MEIPASS temp extraction folder
-    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        candidates.append(os.path.join(sys._MEIPASS, name))
-        candidates.append(os.path.join(sys._MEIPASS, "docs", name))
-    
-    # 2. Directory where the setup wizard .exe is running from
-    if getattr(sys, 'frozen', False) and sys.executable:
-        exe_dir = os.path.dirname(sys.executable)
-        candidates.append(os.path.join(exe_dir, name))
-        candidates.append(os.path.join(exe_dir, "docs", name))
+    if getattr(sys, "frozen", False):
+        candidates.extend([os.path.join(getattr(sys, "_MEIPASS", ""), name), os.path.join(os.path.dirname(sys.executable), name)])
+    candidates.extend([os.path.join(ROOT, name), os.path.join(os.getcwd(), name)])
+    return next((path for path in candidates if os.path.exists(path)), None)
 
-    # 3. Source script directory
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    candidates.append(os.path.join(script_dir, name))
-    candidates.append(os.path.join(script_dir, "docs", name))
 
-    # 4. Current working directory
-    candidates.append(os.path.join(os.getcwd(), name))
-    candidates.append(os.path.join(os.getcwd(), "docs", name))
+def shell_folder(name: str, fallback: str) -> str:
+    if os.name == "nt":
+        try:
+            result = subprocess.run(["powershell", "-NoProfile", "-Command", f"[Environment]::GetFolderPath('{name}')"], capture_output=True, text=True, check=True)
+            return result.stdout.strip() or fallback
+        except (OSError, subprocess.CalledProcessError):
+            pass
+    return fallback
 
-    for p in candidates:
-        if os.path.exists(p):
-            return p
-    return None
 
-class SapphireSetupWizard(tk.Tk):
+class Wizard(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("💎 Sapphire Programming Language & Emerald Studio Setup Wizard")
-        self.geometry("720x560")
-        self.minsize(680, 520)
-        self.resizable(True, True)
-        self.configure(bg="#0F172A") # Dark Navy
+        self.title(f"Sapphire Setup  /  v{VERSION}")
+        self.geometry("900x650")
+        self.minsize(780, 570)
+        self.configure(bg=PALETTE["canvas"])
+        self.target = tk.StringVar(value=os.path.join(os.environ.get("LOCALAPPDATA", os.path.expanduser("~")), "SapphireLang"))
+        self.add_path = tk.BooleanVar(value=True)
+        self.add_shortcuts = tk.BooleanVar(value=True)
+        self.install_docs = tk.BooleanVar(value=True)
+        self.launch_studio = tk.BooleanVar(value=True)
+        self.page = 0
+        self._header()
+        self._content()
+        self._footer()
+        self.show_page(0)
 
-        # Default Install Path
-        default_target = os.path.join(os.environ.get("LOCALAPPDATA", r"C:\Users\Public"), "SapphireLang")
-        self.install_dir = tk.StringVar(value=default_target)
+    def _header(self):
+        header = tk.Frame(self, bg=PALETTE["header"], height=100)
+        header.pack(fill="x")
+        header.pack_propagate(False)
+        tk.Label(header, text="◆", font=("Segoe UI Symbol", 36, "bold"), fg=PALETTE["mint"], bg=PALETTE["header"]).pack(side="left", padx=(30, 14))
+        title = tk.Frame(header, bg=PALETTE["header"])
+        title.pack(side="left", pady=19)
+        tk.Label(title, text="SAPPHIRE", font=("Segoe UI", 22, "bold"), fg="#F4FFF8", bg=PALETTE["header"]).pack(anchor="w")
+        tk.Label(title, text="WINDOWS DEVELOPMENT RUNTIME", font=("Segoe UI", 9, "bold"), fg="#A9EBC5", bg=PALETTE["header"]).pack(anchor="w")
+        tk.Label(header, text=f"v{VERSION}", font=("Segoe UI", 11, "bold"), fg=PALETTE["mint"], bg=PALETTE["header"]).pack(side="right", padx=30)
 
-        # Options
-        self.opt_add_path = tk.BooleanVar(value=True)
-        self.opt_studio = tk.BooleanVar(value=True)
-        self.opt_docs = tk.BooleanVar(value=True)
-        self.opt_shortcuts = tk.BooleanVar(value=True)
+    def _content(self):
+        self.content = tk.Frame(self, bg=PALETTE["canvas"])
+        self.content.pack(fill="both", expand=True, padx=44, pady=28)
+        self.content.grid_columnconfigure(0, weight=1)
+        self.content.grid_rowconfigure(1, weight=1)
+        self.step_label = tk.Label(self.content, font=("Segoe UI", 9, "bold"), fg=PALETTE["mint_dark"], bg=PALETTE["canvas"])
+        self.step_label.grid(row=0, column=0, sticky="w", pady=(0, 12))
+        self.stage = tk.Frame(self.content, bg=PALETTE["canvas"])
+        self.stage.grid(row=1, column=0, sticky="nsew")
 
-        # Completion Actions
-        self.opt_launch_studio = tk.BooleanVar(value=True)
-        self.opt_open_guide = tk.BooleanVar(value=True)
+    def _footer(self):
+        footer = tk.Frame(self, bg=PALETTE["soft"], height=72)
+        footer.pack(fill="x", side="bottom")
+        footer.pack_propagate(False)
+        self.back = tk.Button(footer, text="Back", font=("Segoe UI", 10), fg=PALETTE["ink"], bg=PALETTE["line"], bd=0, padx=22, pady=9, command=self.back_page)
+        self.back.pack(side="left", padx=34, pady=15)
+        self.next = tk.Button(footer, text="Continue", font=("Segoe UI", 10, "bold"), fg="#042615", bg=PALETTE["mint"], activebackground="#7AF2B4", bd=0, padx=28, pady=9, command=self.next_page)
+        self.next.pack(side="right", padx=34, pady=15)
 
-        # 1. FIXED FOOTER BAR (Anchored at root level for 100% reliable layout)
-        self.footer = tk.Frame(self, bg="#0A0F1D", height=65)
-        self.footer.pack(fill="x", side="bottom")
+    def clear_stage(self):
+        for widget in self.stage.winfo_children():
+            widget.destroy()
 
-        self.sep = tk.Frame(self.footer, bg="#334155", height=1)
-        self.sep.pack(fill="x", side="top")
+    def label(self, parent, text, size=10, color=None, bold=False):
+        return tk.Label(parent, text=text, font=("Segoe UI", size, "bold" if bold else "normal"), fg=color or PALETTE["ink"], bg=PALETTE["canvas"])
 
-        self.btn_box = tk.Frame(self.footer, bg="#0A0F1D")
-        self.btn_box.pack(fill="x", padx=30, pady=12)
-
-        self.btn_left = tk.Button(
-            self.btn_box, text="Cancel", font=("Helvetica", 10),
-            fg="#94A3B8", bg="#1E293B", activebackground="#334155", activeforeground="#FFFFFF",
-            bd=0, padx=20, pady=7, cursor="hand2", command=self.quit
-        )
-        self.btn_left.pack(side="left")
-
-        self.btn_right = tk.Button(
-            self.btn_box, text="Next >", font=("Helvetica", 10, "bold"),
-            fg="#FFFFFF", bg="#2563EB", activebackground="#1D4ED8", activeforeground="#FFFFFF",
-            bd=0, padx=26, pady=7, cursor="hand2", command=self.on_next_click
-        )
-        self.btn_right.pack(side="right")
-
-        # 2. PAGE CONTAINER (Fills all space above the footer)
-        self.container = tk.Frame(self, bg="#0F172A")
-        self.container.pack(fill="both", expand=True)
-        self.container.grid_rowconfigure(0, weight=1)
-        self.container.grid_columnconfigure(0, weight=1)
-
-        self.frames = {}
-        for PageClass in (WelcomePage, DirectoryPage, ProgressPage, FinishPage):
-            page = PageClass(parent=self.container, controller=self)
-            self.frames[PageClass] = page
-            page.grid(row=0, column=0, sticky="nsew")
-
-        self.current_page = None
-        self.show_frame(WelcomePage)
-
-    def show_frame(self, page_class):
-        self.current_page = page_class
-        frame = self.frames[page_class]
-        frame.tkraise()
-
-        # Update Navigation Buttons dynamically
-        if page_class == WelcomePage:
-            self.btn_left.pack(side="left")
-            self.btn_left.config(text="Cancel", bg="#1E293B", command=self.quit, state="normal")
-            self.btn_right.pack(side="right")
-            self.btn_right.config(text="Next >", bg="#2563EB", activebackground="#1D4ED8", command=lambda: self.show_frame(DirectoryPage), state="normal")
-        elif page_class == DirectoryPage:
-            self.btn_left.pack(side="left")
-            self.btn_left.config(text="< Back", bg="#334155", command=lambda: self.show_frame(WelcomePage), state="normal")
-            self.btn_right.pack(side="right")
-            self.btn_right.config(text="Install Now", bg="#16A34A", activebackground="#15803D", command=lambda: self.show_frame(ProgressPage), state="normal")
-        elif page_class == ProgressPage:
-            self.btn_left.config(state="disabled")
-            self.btn_right.config(state="disabled", text="Installing...", bg="#475569")
-        elif page_class == FinishPage:
-            self.btn_left.pack_forget()
-            self.btn_right.pack(side="right")
-            self.btn_right.config(text="Finish", bg="#2563EB", activebackground="#1D4ED8", command=self.finish_app, state="normal")
-
-        if hasattr(frame, "on_show"):
-            frame.on_show()
-
-    def on_next_click(self):
-        if self.current_page == WelcomePage:
-            self.show_frame(DirectoryPage)
-        elif self.current_page == DirectoryPage:
-            self.show_frame(ProgressPage)
-        elif self.current_page == FinishPage:
-            self.finish_app()
-
-    def finish_app(self):
-        target = self.install_dir.get()
-        if self.opt_launch_studio.get():
-            studio_exe = os.path.join(target, "Emerald_Studio.exe")
-            studio_py = os.path.join(target, "emerald_studio.py")
-            if os.path.exists(studio_exe):
-                subprocess.Popen([studio_exe], cwd=target)
-            elif os.path.exists(studio_py):
-                subprocess.Popen([sys.executable, studio_py], cwd=target)
-
-        if self.opt_open_guide.get():
-            pdf_path = os.path.join(target, "Beginners_Guide_Your_First_Autonomous_AI.pdf")
-            if os.path.exists(pdf_path):
-                os.startfile(pdf_path)
-
-        self.quit()
-
-
-class WelcomePage(tk.Frame):
-    def __init__(self, parent, controller):
-        super().__init__(parent, bg="#0F172A")
-        self.controller = controller
-
-        # Main Padded Container
-        content = tk.Frame(self, bg="#0F172A")
-        content.pack(fill="both", expand=True, padx=30, pady=(20, 10))
-
-        # Title
-        lbl_title = tk.Label(content, text="💎 Sapphire Programming Language v1.0.0", font=("Helvetica", 15, "bold"), fg="#38BDF8", bg="#0F172A")
-        lbl_title.pack(anchor="w", pady=(0, 2))
-
-        lbl_sub = tk.Label(content, text="Autonomous AI/ML Programming Language, Emerald Studio & Polymorphic Compiler", font=("Helvetica", 10), fg="#10B981", bg="#0F172A")
-        lbl_sub.pack(anchor="w", pady=(0, 10))
-
-        # Description
-        desc_text = (
-            "Welcome to the official Windows Setup Wizard for Sapphire.\n\n"
-            "This installer will configure:\n"
-            "  • Sapphire Core Language Engine (.sp scripts & REPL)\n"
-            "  • Emerald Developer Studio GUI (IDE, Tool Builder & Hardware Dashboard)\n"
-            "  • Sapphire Polymorphic Compiler & JIT Studio (AST, IR, Bytecode, EXE bundler)\n"
-            "  • Sapphire Deep Learning & Tensor Stack (ml, autograd, GPU/TPU)\n"
-            "  • Sapphire Agent Architecture (memory, planning, tools, autonomy)\n"
-            "  • Interactive Voice-Guided Tutor with Q&A Mode\n"
-            "  • Sapphire Uninstaller (uninstall.exe)\n"
-            "  • System PATH Environment Registration & PDF Documentation Suite"
-        )
-        lbl_desc = tk.Label(content, text=desc_text, font=("Helvetica", 9), fg="#CBD5E1", bg="#1E293B", justify="left", anchor="nw", padx=14, pady=8, relief="solid", bd=1)
-        lbl_desc.pack(fill="x", pady=(0, 10))
-
-        # Options Checkboxes
-        opts_frame = tk.Frame(content, bg="#0F172A")
-        opts_frame.pack(fill="x")
-
-        chk_path = tk.Checkbutton(opts_frame, text="Register Sapphire in System PATH", variable=controller.opt_add_path, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
-        chk_path.pack(anchor="w", pady=1)
-
-        chk_studio = tk.Checkbutton(opts_frame, text="Install Emerald Developer Studio & Compiler Binaries", variable=controller.opt_studio, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
-        chk_studio.pack(anchor="w", pady=1)
-
-        chk_docs = tk.Checkbutton(opts_frame, text="Include Full 5-Manual PDF Documentation Suite", variable=controller.opt_docs, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
-        chk_docs.pack(anchor="w", pady=1)
-
-        chk_short = tk.Checkbutton(opts_frame, text="Create Desktop & Start Menu Shortcuts", variable=controller.opt_shortcuts, font=("Helvetica", 10), fg="#F8FAFC", bg="#0F172A", selectcolor="#1E293B", activebackground="#0F172A")
-        chk_short.pack(anchor="w", pady=1)
-
-
-class DirectoryPage(tk.Frame):
-    def __init__(self, parent, controller):
-        super().__init__(parent, bg="#0F172A")
-        self.controller = controller
-
-        content = tk.Frame(self, bg="#0F172A")
-        content.pack(fill="both", expand=True, padx=30, pady=(20, 10))
-
-        lbl_title = tk.Label(content, text="Select Destination Folder", font=("Helvetica", 14, "bold"), fg="#38BDF8", bg="#0F172A")
-        lbl_title.pack(anchor="w", pady=(0, 5))
-
-        lbl_sub = tk.Label(content, text="Choose where Sapphire Language, Tools, and Studio will be installed.", font=("Helvetica", 9), fg="#94A3B8", bg="#0F172A")
-        lbl_sub.pack(anchor="w", pady=(0, 20))
-
-        box_frame = tk.Frame(content, bg="#1E293B", padx=15, pady=15, relief="solid", bd=1)
-        box_frame.pack(fill="x", pady=10)
-
-        lbl_dir = tk.Label(box_frame, text="Install Location:", font=("Helvetica", 10, "bold"), fg="#E2E8F0", bg="#1E293B")
-        lbl_dir.pack(anchor="w", pady=(0, 5))
-
-        entry_frame = tk.Frame(box_frame, bg="#1E293B")
-        entry_frame.pack(fill="x")
-
-        ent_path = tk.Entry(entry_frame, textvariable=controller.install_dir, font=("Consolas", 10), bg="#0F172A", fg="#F8FAFC", bd=1)
-        ent_path.pack(side="left", fill="x", expand=True, padx=(0, 10))
-
-        btn_browse = tk.Button(entry_frame, text="Browse...", font=("Helvetica", 9), fg="#FFFFFF", bg="#334155", activebackground="#475569", activeforeground="#FFFFFF", bd=0, padx=12, pady=4, cursor="hand2", command=self.browse)
-        btn_browse.pack(side="right")
+    def show_page(self, page):
+        self.page = page
+        self.clear_stage()
+        self.step_label.config(text=f"STEP {page + 1} OF 3   /   {'WELCOME' if page == 0 else 'INSTALL LOCATION' if page == 1 else 'READY TO INSTALL'}")
+        if page == 0:
+            self.label(self.stage, "Build your Sapphire workspace", 24, PALETTE["mint_dark"], True).pack(anchor="w", pady=(0, 5))
+            self.label(self.stage, "A clean local runtime for scripts, AI integrations, ML experiments, and Emerald Studio.", 11, PALETTE["muted"]).pack(anchor="w", pady=(0, 22))
+            card = tk.Frame(self.stage, bg=PALETTE["surface"], highlightbackground=PALETTE["line"], highlightthickness=1)
+            card.pack(fill="x", pady=5)
+            self.label(card, "Included in this installation", 12, PALETTE["mint_dark"], True).pack(anchor="w", padx=22, pady=(18, 10))
+            for item in ("Sapphire interpreter, CLI, and .sp file association", "Emerald Studio and compiler tools", "Optional PyTorch/CUDA-compatible ML integration", "Current manuals, examples, benchmarks, and transparency notes"):
+                tk.Label(card, text=f"◆  {item}", font=("Segoe UI", 10), fg=PALETTE["ink"], bg=PALETTE["surface"]).pack(anchor="w", padx=22, pady=4)
+            tk.Label(card, text="The installer does not install Python, PyTorch, NVIDIA drivers, or AI credentials.", font=("Segoe UI", 9, "italic"), fg=PALETTE["muted"], bg=PALETTE["surface"]).pack(anchor="w", padx=22, pady=(14, 18))
+        elif page == 1:
+            self.label(self.stage, "Choose an installation location", 22, PALETTE["mint_dark"], True).pack(anchor="w", pady=(0, 5))
+            self.label(self.stage, "The runtime and tools will be copied here.", 11, PALETTE["muted"]).pack(anchor="w", pady=(0, 20))
+            card = tk.Frame(self.stage, bg=PALETTE["surface"], highlightbackground=PALETTE["line"], highlightthickness=1)
+            card.pack(fill="x", pady=5)
+            self.label(card, "INSTALL LOCATION", 9, PALETTE["muted"], True).pack(anchor="w", padx=22, pady=(20, 6))
+            row = tk.Frame(card, bg=PALETTE["surface"])
+            row.pack(fill="x", padx=22, pady=(0, 20))
+            tk.Entry(row, textvariable=self.target, font=("Consolas", 10), fg=PALETTE["ink"], bg="#FFFFFF", relief="solid", bd=1).pack(side="left", fill="x", expand=True, ipady=8)
+            tk.Button(row, text="Browse", font=("Segoe UI", 9, "bold"), fg="#042615", bg=PALETTE["mint"], bd=0, padx=15, pady=8, command=self.browse).pack(side="right", padx=(10, 0))
+            for text, variable in (("Add Sapphire to User PATH", self.add_path), ("Create Desktop and Start Menu shortcuts", self.add_shortcuts), ("Install current manuals", self.install_docs)):
+                tk.Checkbutton(card, text=text, variable=variable, font=("Segoe UI", 10), fg=PALETTE["ink"], bg=PALETTE["surface"], selectcolor=PALETTE["soft"], activebackground=PALETTE["surface"]).pack(anchor="w", padx=22, pady=3)
+        else:
+            self.label(self.stage, "Ready to install Sapphire", 22, PALETTE["mint_dark"], True).pack(anchor="w", pady=(0, 5))
+            self.label(self.stage, "Review the destination, then select Install Sapphire.", 11, PALETTE["muted"]).pack(anchor="w", pady=(0, 20))
+            card = tk.Frame(self.stage, bg=PALETTE["surface"], highlightbackground=PALETTE["line"], highlightthickness=1)
+            card.pack(fill="x", pady=5)
+            tk.Label(card, text="DESTINATION", font=("Segoe UI", 9, "bold"), fg=PALETTE["muted"], bg=PALETTE["surface"]).pack(anchor="w", padx=22, pady=(20, 3))
+            tk.Label(card, textvariable=self.target, font=("Consolas", 11), fg=PALETTE["ink"], bg=PALETTE["surface"]).pack(anchor="w", padx=22, pady=(0, 18))
+            tk.Label(card, text="INSTALLATION PLAN", font=("Segoe UI", 9, "bold"), fg=PALETTE["muted"], bg=PALETTE["surface"]).pack(anchor="w", padx=22, pady=(0, 5))
+            tk.Label(card, text="Runtime  ·  Emerald Studio  ·  CLI  ·  Documentation  ·  File association  ·  Shortcuts", font=("Segoe UI", 10), fg=PALETTE["ink"], bg=PALETTE["surface"]).pack(anchor="w", padx=22, pady=(0, 20))
+        self.back.config(state="normal" if page else "disabled")
+        self.next.config(text="Install Sapphire" if page == 2 else "Continue", command=self.install if page == 2 else self.next_page)
 
     def browse(self):
-        target = filedialog.askdirectory(initialdir=self.controller.install_dir.get())
-        if target:
-            self.controller.install_dir.set(target)
+        chosen = filedialog.askdirectory(initialdir=self.target.get())
+        if chosen:
+            self.target.set(chosen)
 
+    def next_page(self):
+        if self.page < 2:
+            self.show_page(self.page + 1)
 
-class ProgressPage(tk.Frame):
-    def __init__(self, parent, controller):
-        super().__init__(parent, bg="#0F172A")
-        self.controller = controller
+    def back_page(self):
+        if self.page > 0:
+            self.show_page(self.page - 1)
 
-        content = tk.Frame(self, bg="#0F172A")
-        content.pack(fill="both", expand=True, padx=30, pady=(25, 15))
+    def log(self, text):
+        self.log_box.insert(tk.END, text + "\n")
+        self.log_box.see(tk.END)
 
-        lbl_title = tk.Label(content, text="Installing Sapphire...", font=("Helvetica", 14, "bold"), fg="#38BDF8", bg="#0F172A")
-        lbl_title.pack(anchor="w", pady=(0, 5))
+    def install(self):
+        self.clear_stage()
+        self.step_label.config(text="INSTALLING   /   PLEASE WAIT")
+        self.back.config(state="disabled")
+        self.next.config(state="disabled", text="Installing...")
+        self.log_box = tk.Text(self.stage, font=("Consolas", 9), fg=PALETTE["mint_dark"], bg="#FFFFFF", relief="solid", bd=1)
+        self.log_box.pack(fill="both", expand=True)
+        threading.Thread(target=self._install_worker, daemon=True).start()
 
-        self.lbl_status = tk.Label(content, text="Preparing installation...", font=("Helvetica", 10), fg="#94A3B8", bg="#0F172A")
-        self.lbl_status.pack(anchor="w", pady=(0, 15))
-
-        self.progress = ttk.Progressbar(content, orient="horizontal", mode="determinate", length=620)
-        self.progress.pack(fill="x", pady=5)
-
-        self.log_box = tk.Text(content, font=("Consolas", 9), bg="#1E293B", fg="#38BDF8", bd=1, height=14)
-        self.log_box.pack(fill="both", expand=True, pady=(10, 0))
-
-    def on_show(self):
-        threading.Thread(target=self.do_install, daemon=True).start()
-
-    def update_status(self, text, val, log=None):
-        self.lbl_status.config(text=text)
-        self.progress["value"] = val
-        if log:
-            self.log_box.insert(tk.END, log + "\n")
-            self.log_box.see(tk.END)
-        self.update_idletasks()
-
-    def do_install(self):
-        target = self.controller.install_dir.get()
-        os.makedirs(target, exist_ok=True)
-
-        # 1. Copy All Executables, Scripts, and Tools
-        self.update_status("Unpacking Sapphire Binaries & Tools...", 15, f"Destination: {target}")
-        
-        all_binaries = [
-            "sapphire.exe",
-            "emerald.exe",
-            "Emerald_Studio.exe",
-            "Sapphire_Compiler.exe",
-            "compiler.exe",
-            "sapphire_voice_tutor.exe",
-            "sapphire_tutor.exe",
-            "uninstall_sapphire.exe",
-            "uninstall.exe",
-            "emerald_studio.py",
-            "sapphire_studio.py",
-            "sapphire_compiler.py",
-            "sapphire_cli.py",
-            "sapphire_voice_tutor.py",
-            "sapphire_tutor.py",
-            "uninstall_sapphire.py",
-            "install_sapphire.bat",
-        ]
-
-        for fname in all_binaries:
-            src = find_source_item(fname)
-            if src and os.path.exists(src):
-                shutil.copy2(src, os.path.join(target, fname))
-                self.log_box.insert(tk.END, f"  ✅ Unpacked: {fname}\n")
-                self.log_box.see(tk.END)
-            else:
-                self.log_box.insert(tk.END, f"  ⚠️ Skipped: {fname} (not found in bundle)\n")
-
-        # 2. Copy All 5 PDF Manuals & Markdown Guides
-        self.update_status("Unpacking PDF Developer Documentation...", 45, "Copying PDF documentation suite")
-        all_docs = [
-            "Sapphire_Coding_and_Usage_Guide.pdf",
-            "Building_Advanced_Autonomous_AI.pdf",
-            "Sapphire_Autonomy_and_Performance_Benchmarks.pdf",
-            "Beginners_Guide_Your_First_Autonomous_AI.pdf",
-            "Sapphire_Language_Specification_and_Automation_Manual.pdf",
-            "INSTALLATION_AND_USAGE_GUIDE.md",
-            "README.md",
-        ]
-        for doc_name in all_docs:
-            src = find_source_item(doc_name)
-            if src and os.path.exists(src):
-                shutil.copy2(src, os.path.join(target, doc_name))
-                self.log_box.insert(tk.END, f"  📄 Document: {doc_name}\n")
-                self.log_box.see(tk.END)
-
-        # 3. Copy sapphire_lang Core Engine
-        src_lang = find_source_item("sapphire_lang")
-        if src_lang and os.path.exists(src_lang):
-            dst_lang = os.path.join(target, "sapphire_lang")
-            if os.path.exists(dst_lang):
-                shutil.rmtree(dst_lang, ignore_errors=True)
-            shutil.copytree(src_lang, dst_lang)
-            self.log_box.insert(tk.END, "  📦 Unpacked: sapphire_lang ML, Agent & Stdlib Engine\n")
-
-        # 4. Configure PATH
-        if self.controller.opt_add_path.get():
-            self.update_status("Registering Sapphire in System PATH...", 70, "Executing PowerShell PATH registration")
-            try:
-                ps_cmd = f"$oldPath = [Environment]::GetEnvironmentVariable('Path', 'User'); if ($oldPath -notlike '*{target}*') {{ [Environment]::SetEnvironmentVariable('Path', $oldPath + ';{target}', 'User') }}"
-                subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True)
-                self.log_box.insert(tk.END, "  ⚡ PATH updated: Added Sapphire to User PATH\n")
-            except Exception as e:
-                self.log_box.insert(tk.END, f"  PATH error: {e}\n")
-
-        # 5. Create Desktop & Start Menu Shortcuts
-        if self.controller.opt_shortcuts.get():
-            self.update_status("Creating Desktop Shortcuts...", 90, "Generating Desktop shortcuts")
-            try:
-                desktop = os.path.join(os.environ.get("USERPROFILE", "C:\\Users\\Public"), "Desktop")
-                
-                def create_vbs_shortcut(shortcut_name, target_exe_name, fallback_script):
-                    target_exe = os.path.join(target, target_exe_name)
-                    script_file = os.path.join(target, fallback_script)
-                    
-                    if os.path.exists(target_exe):
-                        t_path = target_exe
-                        args = ""
-                    elif os.path.exists(script_file):
-                        t_path = "python.exe"
-                        args = f'"{script_file}"'
+    def _install_worker(self):
+        target = os.path.abspath(self.target.get())
+        try:
+            os.makedirs(target, exist_ok=True)
+            for name in FILES:
+                source = source_path(name)
+                if source:
+                    destination = os.path.join(target, name)
+                    if os.path.isdir(source):
+                        shutil.copytree(source, destination, dirs_exist_ok=True)
                     else:
-                        return
+                        shutil.copy2(source, destination)
+                    self.after(0, self.log, f"Installed  {name}")
+            language = source_path("sapphire_lang")
+            if language:
+                shutil.copytree(language, os.path.join(target, "sapphire_lang"), dirs_exist_ok=True)
+                self.after(0, self.log, "Installed  sapphire_lang runtime")
+            for directory in ("apps", "benchmarks"):
+                source_directory = source_path(directory)
+                if source_directory and os.path.isdir(source_directory):
+                    shutil.copytree(source_directory, os.path.join(target, directory), dirs_exist_ok=True)
+                    self.after(0, self.log, f"Installed  {directory} assets")
+            compiler = os.path.join(target, "Sapphire_Compiler.exe")
+            icon = os.path.join(target, "Sapphire_Icon.ico")
+            if os.path.exists(compiler):
+                command = (
+                    "$k='HKCU:\\Software\\Classes\\SapphireScript'; New-Item $k -Force | Out-Null; "
+                    f"New-Item ($k+'\\DefaultIcon') -Force | Out-Null; Set-ItemProperty ($k+'\\DefaultIcon') -Name '(default)' -Value '{icon}'; "
+                    "New-Item ($k+'\\shell\\open\\command') -Force | Out-Null; "
+                    f"Set-ItemProperty ($k+'\\shell\\open\\command') -Name '(default)' -Value '\"{compiler}\" \"%1\"'; "
+                    "New-Item 'HKCU:\\Software\\Classes\\.sp' -Force | Out-Null; Set-ItemProperty 'HKCU:\\Software\\Classes\\.sp' -Name '(default)' -Value 'SapphireScript'"
+                )
+                subprocess.run(["powershell", "-NoProfile", "-Command", command], capture_output=True)
+                self.after(0, self.log, "Registered .sp file association")
+            if self.add_path.get():
+                command = f"$p=[Environment]::GetEnvironmentVariable('Path','User'); if($p -notlike '*{target}*'){{[Environment]::SetEnvironmentVariable('Path',$p+';{target}','User')}}"
+                subprocess.run(["powershell", "-NoProfile", "-Command", command], capture_output=True)
+                self.after(0, self.log, "Updated   User PATH")
+            if self.add_shortcuts.get():
+                self._shortcuts(target)
+            self.after(0, self._complete)
+        except Exception as error:
+            self.after(0, self._failed, str(error))
 
-                    vbs_cmd = f'''
-                    $ws = New-Object -ComObject WScript.Shell
-                    $s = $ws.CreateShortcut("{desktop}\\{shortcut_name}.lnk")
-                    $s.TargetPath = "{t_path}"
-                    $s.Arguments = '{args}'
-                    $s.WorkingDirectory = "{target}"
-                    $s.Save()
-                    '''
-                    subprocess.run(["powershell", "-NoProfile", "-Command", vbs_cmd], capture_output=True)
-                    self.log_box.insert(tk.END, f"  🔗 Shortcut: {shortcut_name}\n")
+    def _shortcuts(self, target):
+        desktop = shell_folder("Desktop", os.path.join(os.path.expanduser("~"), "Desktop"))
+        start = os.path.join(os.environ.get("APPDATA", os.path.expanduser("~")), "Microsoft", "Windows", "Start Menu", "Programs", "Sapphire")
+        os.makedirs(desktop, exist_ok=True)
+        os.makedirs(start, exist_ok=True)
+        ps = "New-Object -ComObject WScript.Shell"
+        for folder in (desktop, start):
+            path = os.path.join(folder, "Emerald Developer Studio.lnk").replace("'", "''")
+            exe = os.path.join(target, "Emerald_Studio.exe").replace("'", "''")
+            command = f"$w={ps}; $s=$w.CreateShortcut('{path}'); $s.TargetPath='{exe}'; $s.WorkingDirectory='{target.replace(chr(39), chr(39)*2)}'; $s.IconLocation='{os.path.join(target, 'Emerald_Icon.ico').replace(chr(39), chr(39)*2)}'; $s.Save()"
+            result = subprocess.run(["powershell", "-NoProfile", "-Command", command], capture_output=True, text=True)
+            if result.returncode:
+                raise RuntimeError(result.stderr.strip() or "Shortcut creation failed")
+        self.after(0, self.log, "Created   Desktop and Start Menu shortcuts")
 
-                create_vbs_shortcut("Emerald Developer Studio", "Emerald_Studio.exe", "emerald_studio.py")
-                create_vbs_shortcut("Sapphire Compiler Studio", "Sapphire_Compiler.exe", "sapphire_compiler.py")
-                create_vbs_shortcut("Sapphire Language Tutor", "sapphire_voice_tutor.exe", "sapphire_voice_tutor.py")
-                create_vbs_shortcut("Uninstall Sapphire", "uninstall.exe", "uninstall_sapphire.py")
+    def _complete(self):
+        self.step_label.config(text="COMPLETE   /   SAPPHIRE IS READY")
+        self.log("\nInstallation completed successfully.")
+        self.next.config(state="normal", text="Finish", command=self.destroy)
+        self.back.config(state="disabled")
 
-            except Exception as e:
-                self.log_box.insert(tk.END, f"  Shortcut notice: {e}\n")
+    def _failed(self, error):
+        self.log(f"\nInstallation failed: {error}")
+        self.next.config(state="normal", text="Close", command=self.destroy)
 
-        self.update_status("Installation Complete!", 100, "✨ All Sapphire components unpacked and installed successfully.")
-        time.sleep(0.8)
-        self.controller.show_frame(FinishPage)
-
-
-class FinishPage(tk.Frame):
-    def __init__(self, parent, controller):
-        super().__init__(parent, bg="#0F172A")
-        self.controller = controller
-
-        content = tk.Frame(self, bg="#0F172A")
-        content.pack(fill="both", expand=True, padx=30, pady=(25, 10))
-
-        lbl_title = tk.Label(content, text="🎉 Sapphire Installation Complete!", font=("Helvetica", 16, "bold"), fg="#10B981", bg="#0F172A")
-        lbl_title.pack(anchor="w", pady=(0, 5))
-
-        lbl_sub = tk.Label(content, text="Sapphire Language, Emerald Studio, and Compiler are ready to use.", font=("Helvetica", 10), fg="#CBD5E1", bg="#0F172A")
-        lbl_sub.pack(anchor="w", pady=(0, 20))
-
-        box_frame = tk.Frame(content, bg="#1E293B", padx=15, pady=15, relief="solid", bd=1)
-        box_frame.pack(fill="x", pady=10)
-
-        chk_launch = tk.Checkbutton(box_frame, text="Launch Emerald Developer Studio GUI Now", variable=controller.opt_launch_studio, font=("Helvetica", 10, "bold"), fg="#38BDF8", bg="#1E293B", selectcolor="#0F172A", activebackground="#1E293B")
-        chk_launch.pack(anchor="w", pady=4)
-
-        chk_guide = tk.Checkbutton(box_frame, text="Open Sapphire Documentation & AI Manual", variable=controller.opt_open_guide, font=("Helvetica", 10), fg="#F8FAFC", bg="#1E293B", selectcolor="#0F172A", activebackground="#1E293B")
-        chk_guide.pack(anchor="w", pady=4)
-
-        lbl_cmd = tk.Label(box_frame, text="\nTerminal Commands: 'sapphire run file.sp' | 'sapphire compiler' | 'sapphire studio' | 'sapphire tutor'", font=("Consolas", 9), fg="#94A3B8", bg="#1E293B")
-        lbl_cmd.pack(anchor="w")
 
 if __name__ == "__main__":
-    app = SapphireSetupWizard()
-    app.mainloop()
+    Wizard().mainloop()
