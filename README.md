@@ -4,9 +4,10 @@ Sapphire is a Python-based interpreted programming language and Windows distribu
 
 ## Current release
 
-- Language and installer version: 1.0.5
+- Language and installer version: 1.0.7
 - Tested interpreter: Python 3.12.10
 - Primary distribution: Windows setup wizard, CLI tools, and bundled documentation
+- Bundle status: compact single-page PDF manuals regenerated and published
 - Optional integrations: NumPy, PyTorch, psutil, requests, audio packages, and configured AI service backends
 
 ## What Sapphire includes
@@ -57,7 +58,7 @@ python -m unittest sapphire_lang.tests.test_sapphire sapphire_lang.tests.test_in
 
 ## Included documentation bundle
 
-The project root includes the following manuals and guides:
+The project root includes the following compact single-page manuals and guides:
 
 - [Sapphire_Coding_and_Usage_Guide.pdf](Sapphire_Coding_and_Usage_Guide.pdf) — practical coding reference and usage guide
 - [Building_Advanced_Autonomous_AI.pdf](Building_Advanced_Autonomous_AI.pdf) — advanced automation and autonomous AI patterns
@@ -65,6 +66,8 @@ The project root includes the following manuals and guides:
 - [Beginners_Guide_Your_First_Autonomous_AI.pdf](Beginners_Guide_Your_First_Autonomous_AI.pdf) — beginner-facing onboarding guide
 - [Sapphire_Language_Specification_and_Automation_Manual.pdf](Sapphire_Language_Specification_and_Automation_Manual.pdf) — specification and automation reference
 - [Sapphire_Capabilities_and_Transparency_Manual.pdf](Sapphire_Capabilities_and_Transparency_Manual.pdf) — current scope, transparency notes, and known limitations
+
+The bundle has been regenerated to reduce large blank areas and fit the content into a tighter one-page format for easier browsing.
 
 Additional project documentation:
 
